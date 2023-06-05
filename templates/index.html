@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
 	<title>Unrols</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
-<link type="image/png" sizes="96x96" rel="icon" href="../static/img/favicon2.png">
+<link type="image/png" sizes="96x96" rel="icon" href="{% static 'img/favicon2.png' %}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../static/comingsoon_02/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/bootstrap5/css/bootstrap.min.css">
@@ -49,13 +50,13 @@
 
 				<div class="flex-col-c-m size2 m-l-15 m-r-15 m-b-20">
                     <a href="https://www.instagram.com/unrols_/" class="social-icon">
-                        <img src="../static/img/instagram.png" alt="" width="100" height="100"> 
+                        <img src="{% static 'img/facebook.png' %}" alt="" width="100" height="100"> 
                     </a>
 				</div>
 
 				<div class="flex-col-c-m size2 m-l-15 m-r-15 m-b-20">
                     <a href="https://www.facebook.com/unrols/" class="social-icon">
-                        <img src="../static/img/facebook.png" alt="" width="100" height="100">
+                        <img src="{% static 'img/instagram.png' %}" alt="" width="100" height="100">
                     </a>
 				</div>
 
