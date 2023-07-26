@@ -1,0 +1,38 @@
+.category-title{
+    margin: 16px 0px;
+}
+
+.page-link{
+    border: 0;
+}
+
+.page-link:hover{
+    border-bottom: 1px solid black;
+}
+.products-container{
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 4px;
+    row-gap: 12px;
+}
+
+.product-image-container img{
+    height: 200px;
+    object-fit: cover;
+}
+
+.filters div {
+    font-size: small;
+}
+
+@media only screen and (min-width: 768px){
+    .products-container{
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@media only screen and (min-width: 1024px){
+    .products-container{
+        grid-template-columns: auto auto auto auto;
+    }   
+}

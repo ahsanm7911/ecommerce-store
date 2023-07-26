@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container py-5">
         {% autoescape off %}
-            {{ refund_policy.description }}
+            {{ refund_policy.description | default:' ' }}
         {% endautoescape %}
     </div>
 {% endblock content %}
