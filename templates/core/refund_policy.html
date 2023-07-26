@@ -1,0 +1,9 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <div class="container py-5">
+        {% autoescape off %}
+            {{ refund_policy.description }}
+        {% endautoescape %}
+    </div>
+{% endblock content %}

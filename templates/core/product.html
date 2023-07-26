@@ -1,0 +1,396 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+<style>
+    .slider-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .slider {
+        display: flex;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .slide {
+        width: 100%;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .slider-controls {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .prev-button,
+    .next-button {
+        padding: 5px 10px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .prev-button {
+        margin-right: 10px;
+    }
+
+    .next-button:hover,
+    .prev-button:hover {
+        background-color: #555;
+    }
+
+    .other-product-image img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .main-product-image img {
+        height: 340px;
+        object-fit: cover;
+    }
+
+    #productBannerContainer .image-container image {
+        object-fit: cover;
+        height: 102px;
+    }
+    a.customBtnDark{
+        text-decoration: none;
+    }
+    button.cartBtn:hover{
+        margin: -1px;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+
+<!-- TOP BANNER CONTAINER -->
+<!-- PRODUCT DISPLAY CONTAINER FOR LARGE SCREENS -->
+<div class="container my-5 d-none d-lg-block">
+    <div class="row">
+        <div class="col-8">
+            <div class="row main-product-image mb-2">
+                <img src="{{ primary_image.url }}" alt="" class="w-100 pe-0">
+            </div>
+            <div class="row row-cols-2 mb-2">
+
+                {% for image in images %}
+
+                <div class="col other-product-image pe-0 mb-2">
+                    <img src="{{ image.image.url }}" alt="" class="w-100">
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+        <div class="col-4">
+            <div class="product-details">
+                <div class="row">
+                    <h2>{{ product_name }}</h2>
+                </div>
+                <div class="row">
+                    <p class="text-secondary mb-0 product-price">{{ product_price }} PKR</p>
+                </div>
+                <div class="row">
+                    <p class="text-secondary"></p>
+                </div>
+
+                <form action="" method="post" class="addToCartForm mb-0">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <p class="text-secondary mb-1">Color</p>
+                        <div class="container d-flex flex-row" id="colorBtnsContainer">
+                            <select name="color" id="" class="form-select w-25 fs-6" required>
+                                <option value="">Color</option>
+                                {% for color in product_colors %}
+                                    <option value="{{ color }}">{{ color |capfirst }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="container-fluid mb-1 px-0">
+                        <input type="hidden" name="product_id" value="{{ product_id }}"
+                            class="id_product">
+                        <input type="hidden" name="action" value="add">
+                        <button type="submit" class="customBtnDark py-2 cartBtn" id="addToCartBtn">Add to cart</button>
+                    </div>
+                </form>
+                <div class="container-fluid px-0 mb-2">
+                    <button class="customBtnBlack py-2 px-0" id="buyNowBtn">Buy it now</button>
+                </div>
+                <div class="container-fluid product-desc px-0 mt-4">
+                    <p>{{ product_desc }}</p>
+                </div>
+
+                <!-- PRODUCT Instructions and information dropdown -->
+                <div class="container-fluid mt-4 px-0">
+                    <hr>
+                    <p class="mb-0">
+                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
+                            data-bs-toggle="collapse" href="#general" role="button" aria-expanded="false"
+                            aria-controls="collapseExample">
+                            General
+                            <i class="bi bi-plus float-end"></i>
+                        </a>
+                    <p>
+                    <div class="collapse" id="general">
+                        <div class="bg-white">
+                            &nbsp;
+                        </div>
+                    </div>
+                    <hr>
+
+                    <p class="mb-0">
+                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
+                            data-bs-toggle="collapse" href="#movement" role="button" aria-expanded="false"
+                            aria-controls="collapseExample">
+                            Movement
+                            <i class="bi bi-plus float-end"></i>
+                        </a>
+                    <p>
+                    <div class="collapse" id="movement">
+                        <div class="bg-white">
+                            &nbsp;
+                        </div>
+                    </div>
+                    <hr>
+
+                    <p class="mb-0">
+                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
+                            data-bs-toggle="collapse" href="#case" role="button" aria-expanded="false"
+                            aria-controls="collapseExample">
+                            Case
+                            <i class="bi bi-plus float-end"></i>
+                        </a>
+                    <p>
+                    <div class="collapse" id="case">
+                        <div class="bg-white">
+                            &nbsp;
+                        </div>
+                    </div>
+                    <hr>
+
+                    <p class="mb-0">
+                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
+                            data-bs-toggle="collapse" href="#dial" role="button" aria-expanded="false"
+                            aria-controls="collapseExample">
+                            Dial
+                            <i class="bi bi-plus float-end"></i>
+                        </a>
+                    <p>
+                    <div class="collapse" id="dial">
+                        <div class="bg-white">
+                            &nbsp;
+                        </div>
+                    </div>
+                    <hr>
+
+                    <p class="mb-0 mt-4">
+                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
+                            data-bs-toggle="collapse" href="#share-link" role="button" aria-expanded="false"
+                            aria-controls="collapseExample">
+                            <i class="bi bi-share fs-6">&nbsp;Share</i>
+                        </a>
+                    <p>
+                    <div class="collapse mt-0 mb-2" id="share-link">
+                        <div class="bg-light">
+                            <input type="text" class="form-control" value="{{ product_url }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- PRODUCT DISPLAY CONTAINER -->
+
+<div class="container-fluid mt-3 d-lg-none" id="productDisplayContainer">
+    <div class="slider-container">
+        <div class="slider">
+            <img src="{{ primary_image.url }}" alt="Image 1" class="slide">
+        </div>
+        <div class="slider-controls">
+            <button class="btn btn-sm btn-dark prev-button"><i class="bi bi-caret-left-fill"></i></button>
+            <button class="btn btn-sm btn-dark next-button"><i class="bi bi-caret-right-fill"></i></button>
+        </div>
+    </div>
+
+    <div class="product-details mt-4">
+        <div class="row">
+            <h2>{{ product_name }}</h2>
+        </div>
+        <div class="row">
+            <p class="text-secondary mb-0">{{ product_price }} PKR</p>
+        </div>
+        <div class="row">
+            <p class="text-secondary"></p>
+        </div>
+
+        <form action="" method="post" class="addToCartForm mb-0">
+            {% csrf_token %}
+            <div class="row mb-3 colo-div">
+                <p class="text-secondary mb-1">Color</p>
+                <div class="container d-flex flex-row" id="colorBtnsContainer">
+                    <select name="color" id="" class="form-select w-50 fs-6" required>
+                        <option value="">Color</option>
+                        {% for color in product_colors %}
+                            <option value="{{ color }}">{{ color |capfirst }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="container-fluid mb-2 px-0">
+                <input type="hidden" name="product_id" value="{{ product_id }}" class="id_product">
+                <input type="hidden" name="action" value="add">
+                <button type="submit" class="customBtnDark py-2 cartBtn" id="addToCartBtn">Add to cart</button>
+            </div>
+        </form>
+        <div class="container-fluid px-0 mb-2">
+            <button class="customBtnBlack py-2" id="buyNowBtn">Buy it now</button>
+        </div>
+        <div class="container-fluid product-desc px-0 mt-4">
+            <p>{{ product_desc }}</p>
+        </div>
+
+        <!-- PRODUCT Instructions and information dropdown -->
+        <div class="container-fluid mt-4 px-0">
+            <hr>
+            <p class="mb-0">
+                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
+                    href="#general" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    General
+                    <i class="bi bi-plus float-end"></i>
+                </a>
+            <p>
+            <div class="collapse" id="general">
+                <div class="bg-light">
+                    &nbsp;
+                </div>
+            </div>
+            <hr>
+
+            <p class="mb-0">
+                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
+                    href="#movement" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Movement
+                    <i class="bi bi-plus float-end"></i>
+                </a>
+            <p>
+            <div class="collapse" id="movement">
+                <div class="bg-light">
+                    &nbsp;
+                </div>
+            </div>
+            <hr>
+
+            <p class="mb-0">
+                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
+                    href="#case" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Case
+                    <i class="bi bi-plus float-end"></i>
+                </a>
+            <p>
+            <div class="collapse" id="case">
+                <div class="bg-light">
+                    &nbsp;
+                </div>
+            </div>
+            <hr>
+
+            <p class="mb-0">
+                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
+                    href="#dial" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Dial
+                    <i class="bi bi-plus float-end"></i>
+                </a>
+            <p>
+            <div class="collapse" id="dial">
+                <div class="bg-light">
+                    &nbsp;
+                </div>
+            </div>
+            <hr>
+
+            <p class="mb-0 mt-4">
+                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
+                    href="#share-link" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="bi bi-share fs-6">&nbsp;Share</i>
+                </a>
+            <p>
+            <div class="collapse mt-0 mb-2" id="share-link">
+                <div class="bg-light">
+                    <input type="text" class="form-control" value="{{ product_url }}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- PRODUCT BANNER -->
+<div class="container-fluid my-2 container-lg d-lg-flex flex-row-reverse" id="productBannerContainer">
+    <div class="image-container">
+        <img src="{{ primary_image.url }}" alt="" class="w-100">
+    </div>
+    <div class="banner-desc bg-light p-4 text-dark" style="height: 300px;">
+        <h3>A new kind of {{ product.category.slug }}.</h3>
+            {% autoescape off %}
+                {{ product.category.description }}
+            {% endautoescape %}
+    </div>
+</div>
+
+<!-- CUSTOMER SERVICE -->
+{% include 'partials/policy.html' %}
+
+<!-- RECOMMENDED PRODUCTS CONTAINER -->
+
+{% include 'partials/recommended_products.html' %}
+
+{% endblock content %}
+
+{% block js %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const slider = document.querySelector(".slider");
+        const prevButton = document.querySelector(".prev-button");
+        const nextButton = document.querySelector(".next-button");
+        let slideIndex = 0;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll(".slide");
+            if (n >= slides.length) {
+                slideIndex = 0;
+            } else if (n < 0) {
+                slideIndex = slides.length - 1;
+            }
+            slider.style.transform = `translateX(-${slideIndex * 100}%)`;
+        }
+
+        function nextSlide() {
+            slideIndex++;
+            showSlide(slideIndex);
+        }
+
+        function prevSlide() {
+            slideIndex--;
+            showSlide(slideIndex);
+        }
+
+        nextButton.addEventListener("click", nextSlide);
+        prevButton.addEventListener("click", prevSlide);
+    });
+
+</script>
+
+<script src="{% static 'js/cart.js' %}"></script>
+{% endblock js %}

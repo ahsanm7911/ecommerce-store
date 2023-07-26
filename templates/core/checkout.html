@@ -1,0 +1,199 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+<style>
+    .cart-item-image img{
+        height: 100px;
+        width: 100px;
+        object-fit: cover;
+    }
+    input[type="radio"]{
+        padding: 4px;
+    }
+    input[type="radio"]:checked{
+        border: 2px solid black;
+        background-color: white;
+        background-image: url(../../static/icons/dot.png);
+        background-size: 6px 6px;
+    }
+    span.default{
+        font-size: x-small;
+        border-bottom-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+</style>
+{% endblock css %}
+{% block content %}
+<div class="container my-5">
+
+    <div class="row row-cols-1 row-cols-md-2 ">
+
+        <!-- ORDER SUMMARY CONTAINER -->
+        <div class="col mb-4">
+            <h4 class="text-center mb-3">Order Summary</h4>
+            <div class="container shadow-sm pt-2">
+                {% for item in items %}
+                <div class="row cart-item mb-2">
+                    <div class="col col-md-4 cart-item-image">
+                        <img src="{{ item.product_image.url }}" alt="" class="w-100">
+                    </div>
+                    <div class="col col-md-4 cart-item-details">
+                        <div class="row">
+                            <p class="mb-0 fs-6">{{ item.product_name }}</p>
+                        </div>
+                        <div class="row">
+                            <p class="mb-0 text-secondary">{{ item.product_price }} PKR</p>
+                        </div>
+                        <div class="row">
+                            <p class="mb-0 text-secondary">Color:</p>
+                        </div>
+                        <div class="row">
+                            <p class="mb-0 text-secondary">{{ item.product_color | capfirst}}</p>
+                        </div>
+                        <br>
+                        <div class="row d-md-none">
+                            <p class="qtyBar fw-semibold">x{{ item.product_quantity }}</p>
+                        </div>
+                    </div>
+                    <div class="col d-none d-lg-block"></div>
+                    <div class="col d-none d-md-block" id="qtyBox">
+                        <div class="d-flex flex-row align-items-center">
+                            <p class="qtyBar fw-semibold">x{{ item.product_quantity }}</p>
+                        </div>
+                    </div>
+                    <div class="col-2 item-total">
+                        <p class="float-end"><span>{{ item.item_total }}</span> PKR</p>
+                    </div>
+                </div>
+                {% endfor %}
+
+
+                <div class="row cart-item mb-2">
+                    <div class="col col-md-4 cart-item-image">
+                        <img src="{% static 'img/watch.jpg' %}" alt="" class="w-100">
+                    </div>
+                    <div class="col col-md-4 cart-item-details">
+                        <div class="row">
+                            <p class="mb-0 fs-6">Rolex Watch</p>
+                        </div>
+                        <div class="row">
+                            <p class="mb-0 text-secondary">2500.00 PKR</p>
+                        </div>
+                        <div class="row">
+                            <p class="mb-0 text-secondary">Color:</p>
+                        </div>
+                        <div class="row">
+                            <p class="mb-0 text-secondary">{{ product_color }}</p>
+                        </div>
+                        <br>
+                        <div class="row d-md-none">
+                            <p class="qtyBar fw-semibold">x1</p>
+                        </div>
+                    </div>
+                    <div class="col d-none d-lg-block"></div>
+                    <div class="col d-none d-md-block" id="qtyBox">
+                        <div class="d-flex flex-row align-items-center">
+                            <p class="qtyBar fw-semibold">x1</p>
+                        </div>
+                    </div>
+                    <div class="col-2 item-total">
+                        <p class="float-end"><span>2500</span> PKR</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row mb-2">
+                    <p><span class="fw-semibold">Items: </span>{{ item_count | default:'0' }}</p>
+                    <br>
+                    <p><span class="fw-semibold">Total: </span>{{ order_total | default:'0.00' }} PKR</p>
+                </div>
+            </div>
+        </div>
+
+        <br class="d-md-none"><br class="d-md-none">
+
+        <!-- SHIPPING INFORMATION CONTAINER -->
+        <div class="col">
+            <div class="container">
+                <h4 class="text-center mb-3">Shipping information</h4>
+                <form action="" id="checkoutForm">
+                    {% csrf_token %}
+                    {% if not request.user.is_authenticated %}
+                    <div class="row mb-3">
+                        <input type="text" name="full_name" class="form-control w-100" id="" placeholder="Full Name"
+                            required>
+                    </div>
+                    <div class="row mb-3">
+                        <input type="email" name="email" id="" class="form-control" placeholder="Email (optional)">
+                    </div>
+                    <div class="row mb-3">
+                        <textarea name="street" id="" cols="30" rows="3" class="form-control"
+                            placeholder="Complete Street Address" required></textarea>
+                        </div>
+                    <div class="row mb-3">
+                        <input type="text" class="form-control" name="city" placeholder="City" required>
+                    </div>
+                    <div class="row mb-3">
+                        <select name="country" id="" class="form-select">
+                            <option value="blank" selected>Select a country</option>
+                            <option value="Pakistan">Pakistan</option>
+                        </select>
+                    </div>
+                    <div class="row mb-3">
+                        <input type="text" name="phone" id="" class="form-control" placeholder="Phone Number">
+                    </div>
+                    <div class="row mb-3">
+                        <input type="text" name="postal_code" id="" class="form-control" placeholder="Postal/Zip Code">
+                    </div>
+                    {% else %}
+                    
+                    <div class="row mb-2">
+                        <h6 class="px-0 fw-semibold">Choose Shipping Address</h6>
+                        {% for address in addresses %}
+                            <div class="form-check mb-2 bg-light rounded-3 py-2 px-2 d-flex flex-row align-items-center position-relative" style="height: fit-content;">
+                                <input type="radio" name="address_id" class="form-check-input mx-0" value="{{ address.id }}" checked>
+                                <label for="form-check-label" class="ms-2">
+                                    <p class="mb-0">{{ address.user.first_name }} {{ address.user.last_name }}, {{ address.phone }} <br> <span class="fw-semibold">{{ address.street }}, {{ address.city }}, {{ address.country }} - {{ address.postal_code }}</span><br><a href="">Edit</a></p>
+                                </label>
+                                {% if address.is_default %}
+                                    <span class="default text-light bg-danger px-2 py-1 fw-semibold position-absolute top-0 end-0 ">Default</span>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                    
+                    {% endif %}
+                    
+                    <div class="row mb-2">
+                        <h6 class="px-0 fw-semibold">Choose Payment Method</h6>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment_method" id="flexRadioDefault1" value="COD">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Cash on Delivery
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="payment_method" id="flexRadioDefault2"
+                                value="debit_card" disabled>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Debit Card
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <input type="submit" value="Proceed to payment" class="btn btn-dark w-100">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/checkout.js' %}"></script>
+{% endblock js %}

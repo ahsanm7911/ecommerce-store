@@ -1,0 +1,145 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+<style>
+    .cart-item-image img {
+        height: 100px;
+        object-fit: cover;
+    }
+    .qtyForm button:hover{
+        color: gray
+    }
+    .item-delete-btn:hover{
+        opacity: 90%;
+    }
+</style>
+{% endblock css %}
+{% block content %}
+
+<div class="container py-4 px-2" id="cartMainContainer">
+    <div class="row">
+        <div class="col">
+            <h3>Your cart</h3>
+        </div>
+        <div class="col">
+            <a href="{% url 'home' %}" class="text-secondary float-end">Continue shopping</a>
+        </div>
+    </div>
+    <br>
+    <div class="row" style="font-size: x-small;">
+        <div class="col">
+            <p>PRODUCT</p>
+        </div>
+        <div class="col-6 d-none d-md-block"></div>
+        <div class="col d-none d-md-block float-end ms-3">
+            <p>QUANTITY</p>
+        </div>
+        <div class="col">
+            <p class="float-end">TOTAL</p>
+        </div>
+    </div>
+    <hr>
+    <p id="cart-empty"></p>
+    {% if not items %}
+    <p id="cart-empty-para">Your cart is empty.</p>
+    {% else %}
+    {% for item in items %}
+    <div class="row cart-item mb-2">
+        <div class="col col-md-2 cart-item-image">
+            <img src="{{ item.product_image.url }}" alt="" class="w-100">
+        </div>
+        <div class="col cart-item-details">
+            <div class="row">
+                <p class="mb-0 fs-6">{{ item.product_name }}</p>
+            </div>
+            <div class="row">
+                <p class="mb-0 text-secondary">{{ item.product_price }} PKR</p>
+            </div>
+            <div class="row">
+                <p class="mb-0 text-secondary">Color:</p>
+            </div>
+            <div class="row">
+                <p class="mb-0 text-secondary">{{ item.product_color | capfirst }}</p>
+            </div>
+            <br>
+            <div class="row d-md-none">
+                <div class="d-flex flex-row align-items-center ps-0">
+                    <form action="" class="qtyForm" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="color" value="{{ item.product_color }}">
+                        <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                        <input type="hidden" name="action" value="remove">
+                        <button type="submit" class="bg-white ps-0"><i class="bi bi-caret-left-fill float-left"></i></button>
+                    </form>
+                    <p class="qtyBar">{{ item.product_quantity }}</p>
+                    <form action="" class="qtyForm" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="color" value="{{ item.product_color }}">
+                        <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                        <input type="hidden" name="action" value="add">
+                        <button type="submit" class="bg-white"><i class="bi bi-caret-right-fill"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 d-none d-md-block"></div>
+        <div class="col d-none d-md-block" id="qtyBox">
+            <div class="d-flex flex-row align-items-center">
+                <form action="" class="qtyForm" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="color" value="{{ item.product_color }}">
+                    <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                    <input type="hidden" name="action" value="remove">
+                    <button type="submit" class="bg-white"><i class="bi bi-caret-left-fill"></i></button>
+                </form>
+                <p class="qtyBar" >{{ item.product_quantity }}</p>
+                <form action="" class="qtyForm" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="color" value="{{ item.product_color }}">
+                    <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                    <input type="hidden" name="action" value="add">
+                    <button type="submit" class="bg-white"><i class="bi bi-caret-right-fill"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="col-2 item-total d-flex flex-column align-items-end justify-content-between">
+            <p class="float-end"><span>{{ item.item_total | default:'0.00' }}</span> PKR</p>
+            <p class="float-end" title="Delete">
+                <form action="" method="post" class="item-delete-btn">
+                    {% csrf_token %}    
+                    <input type="hidden" name="color" value="{{ item.product_color }}">
+                    <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                    <input type="hidden" name="action" value="delete">
+                    <button type="submit" class="nav-link text-decoration-none"><i class="bi bi-trash-fill"></i></button>
+                </form>
+                </p>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <hr>
+    <div class="container py-3 d-lg-flex flex-column align-items-end justify-content-end">
+        <div class="row subtotal">
+            <div class="col">
+                <p class="float-end float-lg-start">Subtotal</p>
+            </div>
+            <div class="col order-total">
+                <p class="float-start text-lg-end w-100 fw-semibold" style="width: max-content !important;"><span>{{ order_total| default:'0.00' }}</span> PKR</p>  
+            </div>
+        </div>
+        <div class="row tax-info">
+            <p style="font-size: small;" class="text-center text-secondary">Taxes and shipping calculated at checkout
+            </p>
+        </div>
+        <div class="row">
+            <a href='{% url 'checkout' %}' class="customBtnBlack py-2 w-100 text-decoration-none text-center" id="checkoutBtn">Checkout</a>
+        </div>
+    </div>
+</div>
+<!-- Recommended Products Container -->
+{% include 'partials/recommended_products.html' %}
+
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/cart.js' %}"></script>
+{% endblock js %}

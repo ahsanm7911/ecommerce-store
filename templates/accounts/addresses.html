@@ -1,0 +1,66 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %} 
+    <div class="container my-3">
+        <h3 class="mb-2">MY ACCOUNT</h3><br>
+        <div class="conatiner-fluid">
+            <a href="{% url 'add_address' %}" class="customBtnBlack p-3 text-decoration-none">ADD NEW ADDRESS</a><br><br>
+            <a href="{% url 'myaccount' %}" class="">Return to account details</a>
+        </div>
+        <br>
+        <div class="container-fluid px-0">
+            <h3 class="fs-6 fw-semibold">CUSTOMER ADDRESS BOOK</h3>
+            <hr>
+            {% if addresses %}
+                {% for address in addresses %}
+                <p class="mb-0">{{ address.full_name }} {% if address.is_default %}(Default){% endif %}</p>
+                <p class="text-secondary mb-0">{{ address.street }}</p>
+                <p class="text-secondary mb-0">{{ address.city }}</p>
+                <p class="text-secondary mb-2">{{ address.phone }}</p><br>
+                <div class="d-flex flex-row">
+                    <form action="{% url 'edit_address' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="address_id" value="{{ address.id }}">
+                        <input type="submit" class="customBtnBlack px-4 py-2 text-decoration-none h-100 border-0" value="EDIT">
+                    </form>
+                    <form action="{% url 'delete_address' %}" method="post" id="removeForm{{address.id}}" class="mx-2 removeForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="address_id" value='{{ address.id }}'>
+                        <button type='submit' class="customBtnBlack px-4 py-2 border-0" id="removeBtn">REMOVE</button>
+                    </form>
+                </div>
+                <br><br>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <br><br>
+    </div>
+    <br><br><br>
+{% endblock content %}
+{% block js %}
+<script>    
+    $(document).ready(function(){
+        console.log("Jquery working...")
+        $('.removeForm').submit(function(e){
+            e.preventDefault()
+            if(confirm("Are you sure to remove the address?")){
+                // Serialize the form data
+                let formData = $(this).serialize()
+
+                // Make the AJAX request
+                $.ajax({
+                    url: 'delete-address/',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response){
+                        console.log(response.message)
+                        location.reload()
+                    }
+                })
+            }
+        })
+    })
+</script>
+
+{% endblock js %}

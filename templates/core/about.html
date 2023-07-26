@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block css %}
+    <style>
+        .image-container img{
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        @media only screen and (min-width: 1024px){
+            .image-container{
+                display: grid;
+                grid-template-columns: auto auto auto;
+                column-gap: 10px;
+                margin-bottom: 0px;
+                height: 50%;
+                /* width: 100%; */
+            }
+            .image-container img{
+                height: 100% !important;
+            }
+            .quality-para p{
+                width: 50%;
+                margin: 0 auto !important;
+            }
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
+    <div class="container my-4">
+        <div class="image-container">
+            <img src="{% static '/img/watch.jpg' %}" alt="" class="w-100 h-75">
+            <img src="{% static '/img/image1.webp' %}" alt="" class="w-100 h-75">
+            <img src="{% static 'img/image2.webp' %}" alt="" class="w-100 h-75">
+        </div>
+
+        <h1 class="mt-5 mb-3">About</h1>
+
+        <p>Welcome to our online fashion accessories store, where style meets individuality, and self-expression knows no bounds. We are your one-stop destination for all things chic and trendy, offering an exquisite array of fashion accessories that cater to every taste and occasion.</p>
+
+        <p>At Unrols, we believe that fashion is not just about following the latest trends but also about embracing your uniqueness. Our curated collection showcases a wide spectrum of accessories, carefully handpicked to complement diverse styles and personalities. From classic elegance to bold and edgy designs, we have something for everyone.</p>
+
+        <p>Founded by passionate fashion enthusiasts, our store has a deep-rooted commitment to providing our customers with exceptional quality and unparalleled service. We collaborate with renowned designers and emerging talents alike, ensuring that each piece in our collection reflects the finest craftsmanship and attention to detail.</p>
+
+        <p>Indulge yourself in a delightful shopping experience from the comfort of your home. Our user-friendly interface makes navigating our virtual aisles a breeze, and our secure checkout process guarantees a worry-free transaction.</p>
+
+        <div class="bg-light container py-3 px-4 quality-para">
+            <h5 class="text-center mb-4">Our quality promise</h5>
+            <p class="text-center">Customer satisfaction is our utmost priority, and we take pride in our personalized approach to service. Our dedicated support team is always ready to assist you, whether you need style advice, assistance with your purchase, or any other inquiries.
+            </p>
+        </div>
+
+        <br>
+        <p class="text-center">Thank you for being a part of the Unrols family. We cherish the opportunity to play a role in enhancing your personal style and making your fashion dreams a reality. Happy shopping!</p>
+    </div>
+{% endblock content %}

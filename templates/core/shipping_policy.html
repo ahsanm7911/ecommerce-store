@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+{% block css %}
+    <style>
+        #shippingPolicy ul{
+            list-style: disc;
+        }
+    </style>
+{% endblock css %}
+{% block content %}
+    <div class="container my-5" id="shippingPolicy">
+        {% autoescape off %}
+            {{ shipping_policy.description }}
+        {% endautoescape %}
+    </div>
+{% endblock content %}

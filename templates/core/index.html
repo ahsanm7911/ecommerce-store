@@ -1,0 +1,186 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+    <style>
+        .product-image-container img{
+            height: 200px;
+            object-fit: cover;
+        }
+        a.product:hover{
+            text-decoration: underline;
+        }
+        a.customBtn:hover{
+            border: 2px solid white;
+            margin: -1px;
+        }
+        @media only screen and (min-width:768px){
+            .customBtnDark{
+                width: 25% !important;
+            }
+        }
+    </style>
+{% endblock css %}
+{% block content %}
+
+
+
+    <!-- TOP BANNER CONTAINER -->
+    <div class="container-fluid px-0" id="top-banner">
+        <div class="top-banner-image position-relative text-light">
+            <img src="{% static '/img/watch.jpg' %}" alt="" class="w-100 h-100 d-md-none">
+            <img src="{% static '/img/image1.webp' %}" class="w-100 d-none d-md-block" alt="">
+            <div class="container position-absolute top-banner-info translate-middle-x d-flex flex-column align-items-center">
+                <h1 class="text-center mb-3 fw-bold lh-base">Introducing the Ultimate Style Destination for Fashion Accessories!</h1>
+                <p class="w-75 text-center d-none d-md-block text-light fw-semibold">Welcome to Unrols, your one-stop shop for exquisite fashion accessories that will elevate your style to new heights. We believe that every outfit deserves the perfect finishing touch, and our curated collection of accessories promises to dazzle and delight.
+                </p>
+                <a href="{% url 'products' slug=watch_category %}" class="customBtn text-center px-4 py-2 text-decoration-none">Discover</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="container bg-white py-4 d-flex flex-column align-items-center text-center" id="mainContentContainer">
+        <h1 class="w-75 fw-medium">Discover Endless Elegance</h1>
+        <p class="my-3">
+            Indulge in our luxurious selection of watches and sunglasses, each meticulously crafted to complement your unique personality and flair. From sleek classics to statement pieces, our collection has something to suit every occasion and mood.
+        </p>
+
+        <div class="container-fluid my-4 px-0">
+            <h3 class="mb-4">Watches</h3>
+            <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2">
+
+                {% for product in watches %}
+                    <a class="product col product2 pe-1 ps-1 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug %}">
+                        <div class="product-image-container">
+                            <img src="{{ product.image.url }}" class="w-100" alt="">
+                        </div>
+                        <div class="product-info">
+                            <p class="product-title mt-2 mb-1">{{ product.name }}</p>
+                            <p class="product-price text-start">{{ product.price }} PKR</p>
+                        </div>
+                    </a>
+                {% endfor %}
+                
+            </div>
+
+            
+            <div class="row">
+                <a href="{% url 'products' slug=watch_category %}" class="customBtnDark py-2 mx-auto w-50" style="font-size: small;">Discover
+                    Watches</a>
+            </div>
+        </div>
+        <br>
+
+        <div class="container-fluid my-4 px-0">
+            <h3 class="mb-4">Sunglasses</h3>
+            <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2">
+
+                {% for product in sunglasses %}
+                    <a class="product col product2 pe-1 ps-1 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug %}">
+                        <div class="product-image-container">
+                            <img src="{{ product.image.url }}" class="w-100" alt="">
+                        </div>
+                        <div class="product-info">
+                            <p class="product-title mt-2 mb-1">{{ product.name }}</p>
+                            <p class="product-price text-start">{{ product.price }} PKR</p>
+                        </div>
+                    </a>
+                {% endfor %}
+                
+            </div>
+
+            
+            <div class="row">
+                <a href="{% url 'products' slug=sunglass_category %}" class="customBtnDark py-2 mx-auto w-50" style="font-size: small !important;">Discover
+                    Sunglasses</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container-fluid bg-dark text-light py-5" id="latestProducts">
+        <h1 class="text-center">Explore our latest creations</h1>
+        <p class="text-center text-light">Step into a realm of captivating style as we proudly present our New Products Arrival at Unrols. Prepare to be dazzled by a handpicked selection of fashion accessories that exude elegance, trendiness, and timeless charm. With each piece carefully curated to elevate your wardrobe, our latest arrivals promise to be the epitome of sartorial excellence.</p>
+            
+        <!-- NEW PRODUCTS CAROUSEL -->
+        <div id="carouselExampleAutoplaying" class="carousel slide latest-products-container" data-bs-ride="carousel">
+            <div class="carousel-inner">
+
+                {% for product in watches %}
+                <div class="carousel-item active">
+                    <img src="{{ product.image.url }}" class="d-block w-100" alt="...">
+                </div>
+                {% endfor %}
+
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- CUSTOMER REVIEWS CONTAINER -->
+    <div class="container-fluid bg-light text-center pt-5 pb-2" id="customerReview">
+        <h2>Hear What Our Customers Are Saying!</h2>
+        <p class="mx-auto w-75">Discover why our online store is a shopper's paradise through the heartfelt words of our valued customers. At Unrols, we take pride in delivering exceptional products and top-notch service, and our customer reviews are a testament to the satisfaction and joy we bring to each shopping experience.</p>
+            
+        <div id="carouselExampleAutoplaying" class="carousel slide mt-5" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for review in reviews %}
+                <div class="carousel-item active bg-dark py-3">
+                    <figure class="px-3 mx-auto">
+                        <blockquote class="blockquote">
+                            <p class="text-light">{{ review.content }}</p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer">
+                            <cite title="Source Title">{{ review.author }}</cite>
+                        </figcaption>
+                    </figure>
+                </div>
+                {% endfor %}
+                <div class="carousel-item bg-dark py-3">
+                    <figure class="px-3 mx-auto">
+                        <blockquote class="blockquote">
+                            <p class="text-light">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam sint beatae sit quis qui nobis iure sapiente soluta. Facere, totam.</p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer">
+                            <cite title="Source Title">Ubaid Shakeel</cite>
+                        </figcaption>
+                    </figure>
+                </div>
+                <div class="carousel-item bg-dark py-3">
+                    <figure class="px-3 mx-auto">
+                        <blockquote class="blockquote">
+                            <p class="text-light">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint ad repellat, blanditiis minima dignissimos dolorum at quod veritatis commodi porro.</p>
+                        </blockquote>
+                        <figcaption class="blockquote-footer">
+                            <cite title="Source Title">Maha Khan</cite>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+    </div>
+    <!-- CUSTOMER SERVICE -->
+    {% include 'partials/policy.html' %}
+        
+{% endblock content %}

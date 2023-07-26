@@ -1,0 +1,120 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block css %}
+<style>
+    .image-container img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .product-image-container img {
+        height: 200px;
+        object-fit: cover;
+    }
+    @media only screen and (max-width:425px) {
+
+        .product:nth-child(odd) {
+            padding-right: 2px;
+        }
+
+        .product:nth-child(even) {
+            padding-left: 2px;
+        }
+    }
+
+    @media only screen and (min-width:1024px) {
+        .product{
+            padding-right: 8px;
+        }
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-3">Summer Inspiration</h1>
+    <div class="image-container">
+
+        <div class="row mb-4">
+            <div class="col pe-2">
+                <img src="{% static '/img/watch.jpg' %}" alt="" class="w-100">
+            </div>
+            <div class="col ps-0">
+                <img src="{% static '/img/image1.webp' %}" alt="" class="w-100">
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col">
+                <img src="{% static '/img/image1.webp' %}" alt="" class="w-100">
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col pe-2">
+                <img src="{% static '/img/image1.webp' %}" alt="" class="w-100">
+            </div>
+            <div class="col ps-0">
+                <img src="{% static '/img/watch.jpg' %}" alt="" class="w-100">
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col pe-2">
+                <img src="{% static '/img/image2.webp' %}" alt="" class="w-100">
+            </div>
+        </div>
+
+        <div class="col mb-4">
+            <div class="row mb-2">
+                <img src="{% static '/img/watch.jpg' %}" alt="" class="w-100">
+            </div>
+            <div class="row">
+                <img src="{% static '/img/image1.webp' %}" alt="" class="w-100">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col pe-2">
+                <img src="{% static '/img/watch.jpg' %}" alt="" class="w-100">
+            </div>
+            <div class="col ps-0 mb-2">
+                <img src="{% static '/img/image1.webp' %}" alt="" class="w-100">
+            </div>
+
+            <div class="row pe-0">
+                <img src="{% static '/img/image1.webp' %}" alt="" class="w-100 pe-0">
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- RECOMMENDED PRODUCTS CONTAINER -->
+    <div class="container-fluid container-lg my-5">
+        <div class="row">
+            <p class="px-0 fs-4">Featured</p>
+        </div>
+        <div class="row row-cols-lg-4 mb-2 row-cols-2 px-0">
+
+            {% for product in recommended_products %}
+            <a href="{% url 'product' cat=product.category.slug slug=product.slug %}"
+                class="product col product1 nav-link">
+                <div class="product-image-container">
+                    <img src="{{ product.image.url }}" class="w-100" alt="">
+                </div>
+                <div class="product-info">
+                    <p class="product-title mt-2 mb-1">{{ product.name }}</p>
+                    <p class="product-price text-start">{{ product.price }} PKR</p>
+                </div>
+            </a>
+            {% endfor %}
+
+        </div>
+
+        <div class="row text-center mb-4 d-lg-none">
+            <a class="customBtnDark py-2 w-50 mx-auto text-decoration-none" role="button" id="viewAllBtn" href="{% url 'products' slug=category %}">View All</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

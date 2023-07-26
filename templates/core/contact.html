@@ -1,0 +1,108 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block css %}
+<style>
+    input,
+    textarea {
+        border-radius: 0 !important;
+        border: 1px solid darkgray !important;
+    }
+
+    input:hover,
+    textarea:hover {
+        border: 2px solid black !important;
+    }
+    input:hover{
+        margin: -1px;
+    }
+    .customBtnBlack:hover{
+        margin: -1px;
+    }
+    @media only screen and (min-width:768px) {
+        #contactMainContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        form {
+            width: 75%;
+        }
+
+        .name-email-desktop {
+            display: grid;
+            grid-template-columns: auto auto;
+            column-gap: 4px;
+        }
+    }
+
+    @media only screen and (min-width:1024px) {
+        #contactMainContainer {
+            margin-top: 70px !important;
+        }
+
+        form {
+            width: 50%;
+        }
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+<div class="container my-4" id="contactMainContainer">
+    <div class="">
+
+        <h1>Contact Us</h1>
+        <p class="lh-lg text-secondary">
+            Phone number: +92 03198092449 <br>
+            Email: orders@unrols.com <br>
+            Physical address: Rawalpindi, Pakistan - 46000 <br>
+    </div>
+
+    <form action="" class="form my-4" method='post' id='contactForm'>
+        {% csrf_token %}
+        <div class="name-email-desktop">
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="floatingName" placeholder="Name" name="name" required>
+                <label for="floatingName">Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="floatingEmail" placeholder="Email" name="email" required>
+                <label for="floatingEmail">Email</label>
+            </div>
+
+        </div>
+        <div class="form-floating mb-3">
+            <textarea name="comment" id="floatingTextarea" cols="30" rows="30" class="form-control" placeholder="Comment..."
+                style="height: 100px;" required></textarea>
+            <label for="floatingTextarea">Comment</label>
+        </div>
+        <div class="mb-2 text-success message">
+            <p></p>
+        </div>
+        <div class="mb-3">
+            <input class="customBtnBlack py-3 px-4 fw-medium" type="submit" value="Submit">
+        </div>
+    </form>
+</div>
+{% endblock content %}
+{% block js %}
+    <script>
+        $(document).ready(function(){
+            $('#contactForm').submit(function(e){
+                e.preventDefault()
+                let formData = $(this).serialize()
+                $.ajax({
+                    url: '/contact/',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response){
+                        $('.message p').text(response)
+                    }
+                })
+            })
+        })
+    </script>
+{% endblock js %}
