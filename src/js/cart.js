@@ -1,17 +1,15 @@
-console.log('Cart working...')
 $(document).ready(function () {
-    let cartCountEle = $('a#cart-item-count').children('span.badge')
     let orderTotalEle = $('div.order-total').children('p').children('span')
+    let cartCountEle = $('a#cart-item-count').children('span.badge')
+    let itemAdded = $('p.item-added').hide()
 
     $('.addToCartForm').submit(function (e) {
         e.preventDefault()
-
+        itemAdded.show(600)
         let formData = $(this).serialize()
-        console.log(formData)
         if (user === 'AnonymousUser') {
             // Updating cookie
             arr = formData.split('&')
-            console.log(arr)
             color = arr[1].split('=')[1]
             productId = arr[2].split('=')[1]
             action = arr[3].split('=')[1]
@@ -25,6 +23,7 @@ $(document).ready(function () {
                 data: formData,
                 success: function (response) {
                     cartCountEle.text(response['item_count'])
+
                 }
             })
         }
@@ -50,18 +49,15 @@ $(document).ready(function () {
                 type: 'POST',
                 data: formData,
                 success: function (response) {
-                    console.log(response)
                     itemTotalEle.text(response['item_total'])
                     let qty = String(response['item_quantity'])
                     qtyEle.text(qty)
                     orderTotalEle.text(response['order_total'])
                     if (response['item_quantity'] == null) {
-                        console.log('Hiding cart-item')
                         $(thisForm).parents('.cart-item').hide()
                         updateCartData()
                     }
                     if (Object.keys(cart).length === 0) {
-                        console.log('Cart is empty.')
                         $('#cart-empty').text('Your cart is empty.')
                     }
                 }
@@ -74,7 +70,6 @@ $(document).ready(function () {
                 data: formData,
                 success: function (response) {
                     // update_cart 
-                    console.log(response)
                     if (response['qty'] <= 0) {
                         $(thisForm).parents('.cart-item').hide()
                     } else {
@@ -96,7 +91,6 @@ $(document).ready(function () {
         e.preventDefault()
         let thisForm = $(this)
         let formData = $(this).serialize()
-        console.log(formData)
         if (user == 'AnonymousUser') {
             let itemTotalEle = $(this).parents('.cart-item').children('div.item-total').children('p').children('span')
             let qtyEle = $(this).siblings('p.qtyBar')
@@ -119,7 +113,6 @@ $(document).ready(function () {
                     if (response['order_total'] <= 0) {
                         $('#cart-empty').text('Your cart is empty.')
                     }
-                    console.log(response)
                 }
             })
         } else {
@@ -129,7 +122,6 @@ $(document).ready(function () {
                 data: formData,
                 success: function (response) {
                     // update_cart 
-                    console.log(response)
                     $(thisForm).parents('.cart-item').hide()
 
                     if (response['item_count'] <= 0) {
@@ -141,18 +133,18 @@ $(document).ready(function () {
             })
         }
     })
-
-    function updateCartData() {
-        let cart = JSON.parse(getCookie('cart'))
-        let cart_length = Object.keys(cart).length
-        cartCountEle.text(String(cart_length))
-    }
-
+    $('#checkoutBtn').click(function(e){
+        e.preventDefault()
+        if(Object.keys(cart).length <= 0){
+            alert("Can't proceed. Your cart is empty.")
+        } else {
+            location.href = "/checkout/"
+        }
+    })
 })
 
 
 function updateCookieItem(productId, action, color) {
-    console.log("not logged in...")
 
     if (action == 'add') {
         if (cart[productId] == undefined) {
@@ -175,7 +167,6 @@ function updateCookieItem(productId, action, color) {
     }
 
 
-    console.log('Cart:', cart)
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
 
 }

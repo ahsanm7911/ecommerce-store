@@ -30,7 +30,7 @@
         padding: 5px 10px;
         font-size: 16px;
         cursor: pointer;
-        background-color: #333;
+        background-color: white;
         color: #fff;
         border: none;
         border-radius: 4px;
@@ -42,7 +42,7 @@
 
     .next-button:hover,
     .prev-button:hover {
-        background-color: #555;
+        background-color: lightgrey;
     }
 
     .other-product-image img {
@@ -63,7 +63,7 @@
         text-decoration: none;
     }
     button.cartBtn:hover{
-        margin: -1px;
+        margin: 0px;
     }
 </style>
 {% endblock css %}
@@ -120,10 +120,13 @@
                         <input type="hidden" name="product_id" value="{{ product_id }}"
                             class="id_product">
                         <input type="hidden" name="action" value="add">
-                        <button type="submit" class="customBtnDark py-2 cartBtn" id="addToCartBtn">Add to cart</button>
+                        <button type="submit" class="customBtnBlack py-2 cartBtn" id="addToCartBtn">Add to cart</button>
+                        <p class="text-success mt-1 item-added">Added to cart.&nbsp;<i class="bi bi-check-circle"></i> </p>
                     </div>
                 </form>
-                <div class="container-fluid px-0 mb-2">
+                <div class="container-fluid px-0 mb-2 d-none">
+                    <input type="hidden" name="product_id" value="{{ product_id }}">
+                    <input type="hidden" name="action" value="add">
                     <button class="customBtnBlack py-2 px-0" id="buyNowBtn">Buy it now</button>
                 </div>
                 <div class="container-fluid product-desc px-0 mt-4">
@@ -210,16 +213,19 @@
         </div>
     </div>
 </div>
-<!-- PRODUCT DISPLAY CONTAINER -->
+<!-- PRODUCT DISPLAY CONTAINER Small Screens -->
 
 <div class="container-fluid mt-3 d-lg-none" id="productDisplayContainer">
     <div class="slider-container">
         <div class="slider">
             <img src="{{ primary_image.url }}" alt="Image 1" class="slide">
+            {% for image in images %}
+                <img src="{{ image.image.url }}" alt="Image 1" class="slide">
+            {% endfor %}
         </div>
         <div class="slider-controls">
-            <button class="btn btn-sm btn-dark prev-button"><i class="bi bi-caret-left-fill"></i></button>
-            <button class="btn btn-sm btn-dark next-button"><i class="bi bi-caret-right-fill"></i></button>
+            <a class="prev-button"><i class="bi bi-chevron-left text-dark"></i></a>
+            <a class="next-button"><i class="bi bi-chevron-right text-dark"></i></a>
         </div>
     </div>
 
@@ -252,10 +258,11 @@
             <div class="container-fluid mb-2 px-0">
                 <input type="hidden" name="product_id" value="{{ product_id }}" class="id_product">
                 <input type="hidden" name="action" value="add">
-                <button type="submit" class="customBtnDark py-2 cartBtn" id="addToCartBtn">Add to cart</button>
+                <button type="submit" class="customBtnBlack py-2 cartBtn" id="addToCartBtn">Add to cart</button>
+                <p class="text-success mt-1 item-added">Added to cart.&nbsp;<i class="bi bi-check-circle"></i> </p>
             </div>
         </form>
-        <div class="container-fluid px-0 mb-2">
+        <div class="container-fluid px-0 mb-2 d-none">
             <button class="customBtnBlack py-2" id="buyNowBtn">Buy it now</button>
         </div>
         <div class="container-fluid product-desc px-0 mt-4">
@@ -341,7 +348,7 @@
         <img src="{{ primary_image.url }}" alt="" class="w-100">
     </div>
     <div class="banner-desc bg-light p-4 text-dark" style="height: 300px;">
-        <h3>A new kind of {{ product.category.slug }}.</h3>
+        <h3 class="overflow-hidden">A new kind of {{ product.category.slug }}.</h3>
             {% autoescape off %}
                 {{ product.category.description }}
             {% endautoescape %}

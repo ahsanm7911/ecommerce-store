@@ -23,12 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e+)qucqoxo=d6s*-wmk+tqqw4d*e8&gh#u#x-ewexot$9$=c#^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #development ONLY
 
-ALLOWED_HOSTS = ['3.106.96.40',"unrols.com"]
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = ['3.106.96.40',"unrols.com"]
 
 AUTH_USER_MODEL = 'accounts.Account'
 AUTHENTICATION_BACKENDS = (
@@ -91,16 +94,24 @@ WSGI_APPLICATION = 'unrols.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'unrols',
-	'USER': 'unrols_admin',
-	'PASSWORD': 'Cad@12345',
-	'HOST': 'localhost',
-	'PORT': '',
+    	'USER': 'unrols_admin',
+    	'PASSWORD': 'Cad@12345',
+    	'HOST': 'localhost',
+    	'PORT': '',
+        }
     }
-}
 
 
 # Password validation

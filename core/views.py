@@ -245,9 +245,7 @@ def process_checkout(request):
             new_order = ConfirmedOrder.objects.create(shippingAddress=shipping_address, order_details=order_details, bill=order_total, payment_method=payment_method)
             new_order.save()
 
-
-
-    return JsonResponse('Order confirmed.', safe=False)
+    return JsonResponse(new_order.transaction_id, safe=False)
 
 def checkout(request):
     context = {}
@@ -259,6 +257,7 @@ def checkout(request):
     else:
         context = get_cart_data(request)
     return render(request, 'core/checkout.html', context)
+
 
 def refund_policy(request):
     context = {}

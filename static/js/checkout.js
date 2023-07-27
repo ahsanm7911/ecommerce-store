@@ -1,21 +1,32 @@
-console.log('Checkout js working...')
+$(document).ready(function () {
+    let orderCompleteContainer = $('div#orderCompleteContainer')
+    orderCompleteContainer.addClass('d-none')
 
-$(document).ready(function(){
-    $('#checkoutForm').submit(function(e){
+    let checkoutContainer = $('div#checkoutContainer')
+    let orderId = $('span.order-id')
+
+
+    $('#checkoutForm').submit(function (e) {
         e.preventDefault()
+        if (Object.keys(cart).length <= 0) {
+            alert("Can't proceed. Your cart is empty.")
+        } else {
 
-        let formData = $(this).serialize()
+            let formData = $(this).serialize()
 
-        $.ajax({
-            url: 'process-checkout/',
-            type: 'POST',
-            data: formData,
-            success: function(response){
-                console.log('Transaction complete!')
-                cart = {}
-                document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-                window.location.href = "/"
-            }
-        })
+            $.ajax({
+                url: 'process-checkout/',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    cart = {}
+                    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+                    checkoutContainer.hide()
+                    orderCompleteContainer.removeClass('d-none');
+                    orderId.text(response)
+                    updateCartData()
+                }
+            })
+        }
     })
 })

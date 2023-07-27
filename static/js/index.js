@@ -1,4 +1,3 @@
-console.log("index.js working....")
 let sidebarContainer = document.getElementById('sidebarContainer')
 let navbarContainer = document.getElementById('navbarContainer')
 
