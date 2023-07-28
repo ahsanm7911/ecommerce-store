@@ -134,10 +134,16 @@ class ShippingAddress(models.Model):
         return f'{self.full_name} | {self.phone}' 
 
 ORDER_STATUS = [
-    ('Order Confirmed', 'Order Confirmed'),
-    ('Shipped to Courier', 'Shipped to Courier'),
-    ('Received by Customer', 'Received by Customer'),
+    ('OC', 'Order Confirmed'),
+    ('SC', 'Shipped to Courier'),
+    ('RC', 'Received by Customer'),
     ]
+CHANNEL = [
+    ('WB', 'Website'),
+    ('IN', 'Instagram'),
+    ('FB', 'Facebook'),
+    ('TK', 'Tiktok'),
+]
 
 class ConfirmedOrder(models.Model):
     prefix = 'PKUN'
@@ -148,7 +154,8 @@ class ConfirmedOrder(models.Model):
     order_details = models.TextField(default=' ')
     bill = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     payment_method = models.CharField(max_length=40, default='COD')
-    status = models.CharField(max_length=30, choices=ORDER_STATUS, default=ORDER_STATUS[0])
+    status = models.CharField(max_length=255, choices=ORDER_STATUS, default=ORDER_STATUS[0])
+    channel = models.CharField(max_length=255, choices=CHANNEL, default=CHANNEL[0])
     registered_user = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)

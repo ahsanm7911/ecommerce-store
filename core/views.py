@@ -261,14 +261,30 @@ def checkout(request):
 
 def refund_policy(request):
     context = {}
-    refund_policy = RefundPolicy.objects.filter(is_active=True)
-    context['refund_policy'] = refund_policy[0]
+    try:
+        refund_policy = RefundPolicy.objects.filter(is_active=True)
+        context['refund_policy'] = refund_policy[0]
+    except IndexError as e:
+        print(e)
+        context['refund_policy'] = e
+    except RefundPolicy.DoesNotExist as e:
+        print(e)
+        refund_policy = None
+        context['refund_policy'] = refund_policy
+
     return render(request, 'core/refund_policy.html', context)
 
 def shipping_policy(request):
     context = {}
-    shipping_policy = ShippingPolicy.objects.filter(is_active=True)
-    context['shipping_policy'] = shipping_policy[0]
+    try:
+        shipping_policy = ShippingPolicy.objects.filter(is_active=True)
+        context['shipping_policy'] = shipping_policy[0]
+    except IndexError as e:
+        print(e)
+        context['shipping_policy'] = e
+    except ShippingPolicy.DoesNotExist:
+        shipping_policy = None
+        context['shipping_policy'] = shipping_policy
     return render(request, 'core/shipping_policy.html', context)
 
 def store_policy(request):

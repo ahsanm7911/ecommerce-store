@@ -130,7 +130,10 @@
                     <button class="customBtnBlack py-2 px-0" id="buyNowBtn">Buy it now</button>
                 </div>
                 <div class="container-fluid product-desc px-0 mt-4">
-                    <p>{{ product_desc }}</p>
+                    <h4 class="mb-2">Description</h4>
+                    {% autoescape off %}
+                        {{ product_desc }}
+                    {% endautoescape %}
                 </div>
 
                 <!-- PRODUCT Instructions and information dropdown -->
@@ -266,7 +269,10 @@
             <button class="customBtnBlack py-2" id="buyNowBtn">Buy it now</button>
         </div>
         <div class="container-fluid product-desc px-0 mt-4">
-            <p>{{ product_desc }}</p>
+            <h4 class="mb-2">Description</h4>
+            {% autoescape off %}
+                {{ product_desc }}
+            {% endautoescape %}
         </div>
 
         <!-- PRODUCT Instructions and information dropdown -->

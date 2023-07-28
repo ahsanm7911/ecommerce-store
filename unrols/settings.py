@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from database_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,22 +95,14 @@ WSGI_APPLICATION = 'unrols.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'db.sqlite3',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'unrols',
-    	'USER': 'unrols_admin',
-    	'PASSWORD': 'Cad@12345',
-    	'HOST': 'localhost',
-    	'PORT': '',
+DATABASES = {
+    'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': DB_NAME,
+    'USER': DB_USER,
+    'PASSWORD': DB_PASSWORD,
+    'HOST': DB_HOST,
+    'PORT': '',
         }
     }
 

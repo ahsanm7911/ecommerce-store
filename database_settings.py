@@ -1,0 +1,5 @@
+DB_NAME = 'unrols'
+DB_USER = 'unrols_admin'
+DB_PASSWORD = 'Cad@12345'
+DB_HOST = 'localhost'
+PORT = ''
