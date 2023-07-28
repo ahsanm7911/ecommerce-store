@@ -21,6 +21,10 @@ def test(request):
 def home(request):
     context = {}
     try:
+        products = Product.objects.all()[:4]
+    except Product.DoesNotExist:
+        products = None
+    try:
         watches = Product.objects.filter(category__slug='watches')
     except:
         watches = None
@@ -38,6 +42,7 @@ def home(request):
         sunglasses_category = None
     reviews = CustomerReview.objects.all()
 
+    context['products'] = products
     context['watches'] = watches
     context['sunglasses'] = sunglasses
     context['watch_category'] = watches_category
