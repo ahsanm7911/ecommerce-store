@@ -22,15 +22,15 @@ def home(request):
     context = {}
     page = "Home"
     try:
-        products = Product.objects.all()[:4]
+        products = Product.objects.all().order_by('-created_at')[:4]
     except Product.DoesNotExist:
         products = None
     try:
-        watches = Product.objects.filter(category__slug='watches').order_by('created_at')
+        watches = Product.objects.filter(category__slug='watches').order_by('created_at')[:8]
     except:
         watches = None
     try:
-        sunglasses = Product.objects.filter(category__slug='sunglasses').order_by('-created_at')
+        sunglasses = Product.objects.filter(category__slug='sunglasses').order_by('-created_at')[:8]
     except:
         sunglasses = None
     try:
@@ -84,12 +84,12 @@ def product(request, cat, slug):
         product = None
 
     try:    
-        recommended_products = Product.objects.all().exclude(id=product.id)[:4]
+        recommended_products = Product.objects.filter(category__slug=cat).exclude(id=product.id)[:4]
         images = ProductImage.objects.filter(product=product)
 
         product_name = product.name
         product_price = product.price
-        product_url = f'www.unrols.com/products/{product.category.slug}/{product.slug}/'
+        product_url = f'https://unrols.com/products/{product.category.slug}/{product.slug}/'
         product_colors = product.color.split(':')
         context['product_id'] = product.id
         context['product_name'] = product_name
