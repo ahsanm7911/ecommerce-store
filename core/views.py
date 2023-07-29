@@ -336,11 +336,7 @@ def contact(request):
     return render(request, 'core/contact.html', context)
 
 def about(request):
-<<<<<<< HEAD
     page = 'About'
     context = {}
     context['page'] = page
     return render(request, 'core/about.html', context)
-=======
-    return render(request, 'core/about.html')
->>>>>>> f36632f135f280b8d173a16c6353f21ea9f9b812
