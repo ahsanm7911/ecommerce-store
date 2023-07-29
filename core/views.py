@@ -20,16 +20,17 @@ def test(request):
 
 def home(request):
     context = {}
+    page = "Home"
     try:
         products = Product.objects.all()[:4]
     except Product.DoesNotExist:
         products = None
     try:
-        watches = Product.objects.filter(category__slug='watches')
+        watches = Product.objects.filter(category__slug='watches').order_by('created_at')
     except:
         watches = None
     try:
-        sunglasses = Product.objects.filter(category__slug='sunglasses')
+        sunglasses = Product.objects.filter(category__slug='sunglasses').order_by('-created_at')
     except:
         sunglasses = None
     try:
@@ -48,16 +49,18 @@ def home(request):
     context['watch_category'] = watches_category
     context['sunglass_category'] = sunglasses_category
     context['reviews'] = reviews
+    context['page'] = page
     return render(request, 'core/index.html', context)
 
 def products(request, slug):
+    page = slug
     context = {}
     try:
         products = Product.objects.filter(category__slug=slug)
     except:
         products = None
     try:        
-        paginator = Paginator(products, 4)
+        paginator = Paginator(products, 8)
     except:
         pass
     
@@ -68,6 +71,8 @@ def products(request, slug):
     context['page_obj'] = page_obj
     context['product_count'] = product_count
     context['category'] = category
+    context['page'] = page
+
     return render(request, 'core/products.html', context)
 
 def product(request, cat, slug):
@@ -95,6 +100,9 @@ def product(request, cat, slug):
         context['product_desc'] = product.description
         context['product'] = product
         context['images'] = images
+        page = product_name
+        context['page'] = page
+
         context['recommended_products'] = recommended_products
     except:
         pass
@@ -102,6 +110,7 @@ def product(request, cat, slug):
     return render(request, 'core/product.html', context)
 
 def lookbook(request):
+    page = 'Lookbook'
     context = {}
     try:
         recommended_products = Product.objects.all()[:4]
@@ -114,6 +123,8 @@ def lookbook(request):
 
     context['recommended_products'] = recommended_products
     context['category'] = category
+    context['page'] = page
+
     return render(request, 'core/lookbook.html', context)
 
 def add_to_cart(request):
@@ -194,6 +205,7 @@ def updating_cart_total(request):
 
 
 def cart(request):
+    page = 'Cart'
     context = {}
     recommeded_products = Product.objects.all()[:4]
     if request.user.is_authenticated: # cart functionality for logged in user
@@ -203,6 +215,7 @@ def cart(request):
         context = get_cart_data(request)
         # data to send as response for ajax
     context['recommended_products'] = recommeded_products
+    context['page'] = page
     return render(request, 'core/cart.html', context)
 
 def process_checkout(request):
@@ -253,6 +266,7 @@ def process_checkout(request):
     return JsonResponse(new_order.transaction_id, safe=False)
 
 def checkout(request):
+    page = 'Checkout'
     context = {}
     if request.user.is_authenticated:
         customer = request.user
@@ -261,10 +275,13 @@ def checkout(request):
         context['addresses'] = addresses
     else:
         context = get_cart_data(request)
+    context['page'] = page
+    
     return render(request, 'core/checkout.html', context)
 
 
 def refund_policy(request):
+    page = 'Refund Policy'
     context = {}
     try:
         refund_policy = RefundPolicy.objects.filter(is_active=True)
@@ -276,10 +293,12 @@ def refund_policy(request):
         print(e)
         refund_policy = None
         context['refund_policy'] = refund_policy
+    context['page'] = page
 
     return render(request, 'core/refund_policy.html', context)
 
 def shipping_policy(request):
+    page = 'Shipping Details'
     context = {}
     try:
         shipping_policy = ShippingPolicy.objects.filter(is_active=True)
@@ -290,12 +309,20 @@ def shipping_policy(request):
     except ShippingPolicy.DoesNotExist:
         shipping_policy = None
         context['shipping_policy'] = shipping_policy
+    context['page'] = page
+
     return render(request, 'core/shipping_policy.html', context)
 
 def store_policy(request):
-    return render(request, 'core/store_policy.html')
+    page = 'Policy'
+    context = {}
+    context['page'] = page
+
+    return render(request, 'core/store_policy.html', context)
 
 def contact(request):
+    page = 'Contact'
+    context = {}
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')
@@ -305,7 +332,11 @@ def contact(request):
         enquiry.save()
         message = "Your message have been submitted. We'll reach out to you shortly."
         return JsonResponse(message, safe=False)
-    return render(request, 'core/contact.html')
+    context['page'] = page
+    return render(request, 'core/contact.html', context)
 
 def about(request):
-    return render(request, 'core/about.html')
+    page = 'About'
+    context = {}
+    context['page'] = page
+    return render(request, 'core/about.html', context)
