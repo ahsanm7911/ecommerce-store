@@ -29,7 +29,7 @@ def home(request):
     except:
         watches = None
     try:
-        sunglasses = Product.objects.filter(category__slug='sunglasses')
+        sunglasses = Product.objects.filter(category__slug='sunglasses').order_by('-created_at')
     except:
         sunglasses = None
     try:
