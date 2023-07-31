@@ -99,7 +99,7 @@ def product(request, cat, slug):
         product = None
 
     try:    
-        recommended_products = Product.objects.filter(category__slug=cat).exclude(id=product.id)[:4]
+        recommended_products = Product.objects.filter(category__slug=cat, stock=True).exclude(id=product.id)[:4]
         images = ProductImage.objects.filter(product=product)
 
         product_name = product.name
@@ -128,7 +128,7 @@ def lookbook(request):
     page = 'Lookbook'
     context = {}
     try:
-        recommended_products = Product.objects.all()[:4]
+        recommended_products = Product.objects.filter(stock=True)[:4]
     except:
         recommended_products = None
     try:   
@@ -222,7 +222,7 @@ def updating_cart_total(request):
 def cart(request):
     page = 'Cart'
     context = {}
-    recommeded_products = Product.objects.all()[:4]
+    recommeded_products = Product.objects.filter(stock=True)[:4]
     if request.user.is_authenticated: # cart functionality for logged in user
         customer = request.user
         context = update_cart(customer)

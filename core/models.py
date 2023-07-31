@@ -35,6 +35,7 @@ class Product(models.Model):
     color = models.TextField(default=' ')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     stock_quantity = models.PositiveIntegerField()
+    stock = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

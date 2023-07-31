@@ -16,6 +16,7 @@
 
     .slide {
         width: 100%;
+        height: 300px;
         object-fit: cover;
         margin-right: 10px;
     }
@@ -120,8 +121,12 @@
                         <input type="hidden" name="product_id" value="{{ product_id }}"
                             class="id_product">
                         <input type="hidden" name="action" value="add">
+                        {% if not product.stock %}
+                        <p class="text-danger mt-1 fw-semibold">Out of Stock.</p>
+                        {% else %}
                         <button type="submit" class="customBtnBlack py-2 cartBtn" id="addToCartBtn">Add to cart</button>
                         <p class="text-success mt-1 item-added">Added to cart.&nbsp;<i class="bi bi-check-circle"></i> </p>
+                        {% endif %}
                     </div>
                 </form>
                 <div class="container-fluid px-0 mb-2 d-none">
@@ -219,7 +224,8 @@
 <!-- PRODUCT DISPLAY CONTAINER Small Screens -->
 
 <div class="container-fluid mt-3 d-lg-none" id="productDisplayContainer">
-    <div class="slider-container">
+
+    <div class="slider-container d-none">
         <div class="slider">
             <img src="{{ primary_image.url }}" alt="Image 1" class="slide">
             {% for image in images %}
@@ -230,6 +236,31 @@
             <a class="prev-button"><i class="bi bi-chevron-left text-dark"></i></a>
             <a class="next-button"><i class="bi bi-chevron-right text-dark"></i></a>
         </div>
+    </div>
+
+    <div id="carouselExampleAutoplaying" class="carousel slide latest-products-container" data-bs-ride="carousel">
+        
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{{ primary_image.url }}" alt="" class="slide">
+            </div>
+            {% for image in images %}
+            <div class="carousel-item active">
+                <img src="{{ image.image.url }}" class="slide" alt="..." >
+            </div>
+            {% endfor %}
+
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 
     <div class="product-details mt-4">
@@ -261,8 +292,12 @@
             <div class="container-fluid mb-2 px-0">
                 <input type="hidden" name="product_id" value="{{ product_id }}" class="id_product">
                 <input type="hidden" name="action" value="add">
-                <button type="submit" class="customBtnBlack py-2 cartBtn" id="addToCartBtn">Add to cart</button>
-                <p class="text-success mt-1 item-added">Added to cart.&nbsp;<i class="bi bi-check-circle"></i> </p>
+                {% if not product.stock %}
+                    <p class="text-danger mt-1 fw-semibold">Out of Stock</p>
+                {% else %}
+                    <button type="submit" class="customBtnBlack py-2 cartBtn" id="addToCartBtn">Add to cart</button>
+                    <p class="text-success mt-1 item-added">Added to cart.&nbsp;<i class="bi bi-check-circle"></i> </p>
+                {% endif %}
             </div>
         </form>
         <div class="container-fluid px-0 mb-2 d-none">
@@ -366,7 +401,22 @@
 
 <!-- RECOMMENDED PRODUCTS CONTAINER -->
 
-{% include 'partials/recommended_products.html' %}
+<div class="container-fluid container-lg my-5">
+    <div class="row">
+        <p>You may also like</p>
+    </div>
+    <div class="row row-cols-lg-4 mb-2 row-cols-2 px-1">
+
+        {% for product in recommended_products %}
+            {% include 'partials/product.html' %}
+        {% endfor %}
+
+    </div>
+
+    <div class="row text-center mb-4 d-lg-none">
+        <a type="button" class="customBtnDark w-50 mx-auto py-2 text-decoration-none" >View All</a>
+    </div>
+</div>
 
 {% endblock content %}
 

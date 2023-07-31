@@ -1,0 +1,12 @@
+<a class="product col product2 px-1 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug  %}">
+    <div class="product-image-container position-relative">
+        <img src="{{ product.image.url }}" class="w-100 {% if not product.stock %}opacity-25{% endif %}" alt="">
+        {% if not product.stock %}
+        <span class="text-bg-danger position-absolute px-2 py-1 fw-semibold" style="right: 0px;">Sold</span>
+        {% endif %}
+    </div>
+    <div class="product-info">
+        <p class="product-title mt-2 mb-1">{{ product.name }}</p>
+        <p class="product-price text-start">{{ product.price }} PKR</p>
+    </div>
+</a>

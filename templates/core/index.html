@@ -53,15 +53,7 @@
             <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2">
 
                 {% for product in watches %}
-                    <a class="product col product2 px-1 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug %}">
-                        <div class="product-image-container">
-                            <img src="{{ product.image.url }}" class="w-100" alt="">
-                        </div>
-                        <div class="product-info">
-                            <p class="product-title mt-2 mb-1 w-100">{{ product.name }}</p>
-                            <p class="product-price text-start">{{ product.price }} PKR</p>
-                        </div>
-                    </a>
+                    {% include 'partials/product.html' %}
                 {% endfor %}
                 
             </div>
@@ -79,15 +71,7 @@
             <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2">
 
                 {% for product in sunglasses %}
-                    <a class="product col product2 px-1 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug %}">
-                        <div class="product-image-container">
-                            <img src="{{ product.image.url }}" class="w-100" alt="">
-                        </div>
-                        <div class="product-info">
-                            <p class="product-title mt-2 mb-1 w-100">{{ product.name }}</p>
-                            <p class="product-price text-start">{{ product.price }} PKR</p>
-                        </div>
-                    </a>
+                   {% include 'partials/product.html' %}
                 {% endfor %}
                 
             </div>
