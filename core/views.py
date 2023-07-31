@@ -17,6 +17,7 @@ def robots_txt(request):
         "Disallow: /admin",
         "Disallow: /cart", 
         "Disallow: /checkout",
+        "Sitemap: https://unrols.com/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
