@@ -16,6 +16,8 @@
 
     <link rel="canonical" href="{{ request.path }}">
 
+    <link rel="home" href="{% url 'home' %}">
+
     <link rel="icon" href="{% static 'img/favicon2.png' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
@@ -23,7 +25,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=REM:wght@200&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=REM:wght@100;200&family=Raleway:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"
         integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
@@ -56,7 +60,7 @@
             document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
         }
     </script>
-
+    {% block schema %}{% endblock schema %}
     {% block css %}{% endblock css %}
 </head>
 
@@ -70,7 +74,7 @@
     <div class="container sidebar text-light py-2 d-none" id="sidebarContainer">
         <ul class="d-flex flex-row justify-content-between align-items-center ps-0 mb-0">
             <li></li>
-            <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/logo.png' %}" alt=""></a></li>
+            <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/logo.png' %}" alt="Unrols"></a></li>
             <li class="fs-4" onclick="toggleSidebar()"><i class="bi bi-x"></i></li>
         </ul>
 
@@ -81,6 +85,7 @@
         </ul>
     </div>
 
+    <!-- Navbar for large screens -->
     <div class="container-fluid bg-dark text-light d-none d-lg-block py-2">
         <div class="container d-flex flex-row align-items-center justify-content-between">
             <ul class="d-flex flex-row mb-0 ps-0" id="nav-links">
@@ -89,12 +94,12 @@
                 <li class=""><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li>
             </ul>
             <div class="brand-logo fs-2 fw-semibold">
-                <a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/logo.png' %}" alt=""></a>
+                <a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/logo.png' %}" alt="Unrols Logo" title="logo"></a>
             </div>
 
             <div class="cart-search-container">
                 <ul class="d-flex flex-row d-flex flex-row align-items-center mb-0">
-                    <li class="fs-4"><a href="" class="nav-link"><i class="bi bi-search"></i></a></li>
+                    <li class="fs-4 searchBar"><a href="" class="nav-link"><i class="bi bi-search"></i></a></li>
                     <li class="ms-4 fs-4 position-relative">
                         <a href="{% url 'cart' %}" class="nav-link" id="cart-item-count">
                             <i class="bi bi-cart"></i>
@@ -118,16 +123,17 @@
                     <!-- {% endif %} -->
                 </ul>
             </div>
+
         </div>
     </div>
 
-    <!-- NAVBAR CONTAINER -->
+    <!-- Navbar for small screens -->
     <div class="container-fluid text-light py-2 d-lg-none px-1" id="navbarContainer" style="background-color: #111;">
-        <ul class="d-flex flex-row justify-content-between align-items-center list-style-none ps-2 mb-0">
+        <ul class="d-flex flex-row justify-content-between align-items-center list-style-none ps-2 mb-0 main-bar">
             <li class="fs-1" onclick="toggleSidebar()"><i class="bi bi-list"></i></li>  
-            <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/logo.png' %}" alt=""></a></li>
+            <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/logo.png' %}" alt="Unrols"></a></li>
             <div class="d-flex flex-row align-items-center justify-content-end flex-shrink-1">
-                <li class="fs-4"><i class="bi bi-search"></i></li>
+                <li class="fs-4 searchBar"><i class="bi bi-search"></i></li>
                 <li class="ms-2 fs-4 position-relative">
                     <a href="{% url 'cart' %}" class="nav-link" id="cart-item-count">
                         <i class="bi bi-cart fs-3"></i>
@@ -196,8 +202,8 @@
                     <ul class="d-flex flex-row justify-content-between ps-0">
                         <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-twitter"></i></a></li>
                         <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-youtube"></i></a></li>
-                        <li><a href="https://www.instagram.com/unrolspk/" class="nav-link"><i class="icon fs-5 bi bi-instagram"></i></a></li>
-                        <li><a href="https://www.facebook.com/unrols/" class="nav-link"><i class="icon fs-5 bi bi-facebook"></i></a></li>
+                        <li><a href="https://www.instagram.com/unrolspk/" title="Instagram" class="nav-link"><i class="icon fs-5 bi bi-instagram"></i></a></li>
+                        <li><a href="https://www.facebook.com/unrols/" title="Facebook" class="nav-link"><i class="icon fs-5 bi bi-facebook"></i></a></li>
                         <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-pinterest"></i></a></li>
                         <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-tiktok"></i></a></li>
                     </ul>

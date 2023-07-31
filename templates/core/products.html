@@ -7,43 +7,44 @@
         height: 200px;
         object-fit: cover;
     }
+
     .pagination li a {
         border: none;
     }
-    .page-link:hover{
+
+    .page-link:hover {
         /* color: gray; */
         text-decoration: underline;
     }
 </style>
 {% endblock css %}
 {% block content %}
-<div class="container-fluid container-md px-3 my-5">
-    <div class="container px-0">
-        <h1 class="category-title">{{ category | capfirst }}</h1>
-        <div class="row text-secondary mb-2 filters">
-            <div class="col"><i class="bi bi-sliders">&nbsp;Filter & Sort</i></div>
-            <div class="col text-end pe-0">{{ product_count }} products</div>
-        </div>
+<div class="container my-5 px-2">
+    <h1 class="category-title ps-0">{{ category | capfirst }}</h1>
+    <div class="row text-secondary mb-2 filters">
+        <div class="col"><i class="bi bi-sliders">&nbsp;Filter & Sort</i></div>
+        <div class="col text-end">{{ product_count }} products</div>
+    </div>
 
-        <div class="container my-4 mx-2 px-0">
-            <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4">
-                {% if page_obj %}
-                {% for product in page_obj %}
-                <a class="product col product2 pe-2 ps-0 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug  %}">
-                    <div class="product-image-container">
-                        <img src="{{ product.image.url }}" class="w-100" alt="">
-                    </div>
-                    <div class="product-info">
-                        <p class="product-title mt-2 mb-1">{{ product.name }}</p>
-                        <p class="product-price text-start">{{ product.price }} PKR</p>
-                    </div>
-                </a>
-                {% endfor %}
-                {% else %}
-                <h2 class="px-0">No Products Yet.</h2>
-                {% endif %}
+    <div class="container-fluid container-md my-4 mx-0 px-0">
+        <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2">
+            {% if page_obj %}
+            {% for product in page_obj %}
+            <a class="product col product2 px-1 page-link"
+                href="{% url 'product' cat=product.category.slug slug=product.slug  %}">
+                <div class="product-image-container">
+                    <img src="{{ product.image.url }}" class="w-100" alt="">
+                </div>
+                <div class="product-info">
+                    <p class="product-title mt-2 mb-1">{{ product.name }}</p>
+                    <p class="product-price text-start">{{ product.price }} PKR</p>
+                </div>
+            </a>
+            {% endfor %}
+            {% else %}
+            <h2 class="px-0">No Products Yet.</h2>
+            {% endif %}
 
-            </div>
         </div>
     </div>
 </div>
@@ -58,7 +59,9 @@
                 </a>
             </li>
             {% endif %}
-            <li class="page-item "><a class="page-link text-dark bg-light" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+            <li class="page-item ">
+                <a class="page-link text-dark bg-light" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a>
+            </li>
             {% if page_obj.has_next %}
             <li>
                 <a class="page-link text-dark" href="?page={{ page_obj.next_page_number }}" aria-label="Next">

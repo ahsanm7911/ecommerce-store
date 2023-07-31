@@ -18,7 +18,7 @@ $(document).ready(function () {
         } else {
 
             $.ajax({
-                url: '/add-to-cart/',
+                url: '/cart/add-to-cart/',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -45,7 +45,7 @@ $(document).ready(function () {
 
             updateCookieItem(productId, action, color)
             $.ajax({
-                url: '/unauth-cart/',
+                url: '/cart/unauth-cart/',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -65,7 +65,7 @@ $(document).ready(function () {
         } else {
 
             $.ajax({
-                url: '/add-to-cart/',
+                url: '/cart/add-to-cart/',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -105,7 +105,7 @@ $(document).ready(function () {
             $(this).parents('.cart-item').hide()
             updateCartData()
             $.ajax({
-                url: 'updating-cart-total/',
+                url: '/cart/updating-cart-total/',
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -117,7 +117,7 @@ $(document).ready(function () {
             })
         } else {
             $.ajax({
-                url: '/add-to-cart/',
+                url: '/cart/add-to-cart/',
                 type: 'POST',
                 data: formData,
                 success: function (response) {

@@ -2,11 +2,23 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from .models import Product, ProductImage, Order, OrderItem, ConfirmedOrder, ShippingAddress, RefundPolicy, ClientEnquiry, CustomerReview
 from accounts.models import Address
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.http import require_GET
 from django.core import serializers
 from .utils import *  
 import json
 # Create your views here.
+# SEO VIEWS
+
+@require_GET
+def robots_txt(request):
+    lines = [
+        "User-Agent: *",
+        "Disallow: /admin",
+        "Disallow: /cart", 
+        "Disallow: /checkout",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
 
 def test(request):
     products = ProductImage.objects.filter(product__slug='rolex-watch')

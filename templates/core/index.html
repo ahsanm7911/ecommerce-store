@@ -20,10 +20,13 @@
         }
     </style>
 {% endblock css %}
+{% block schema %}
+    {% include 'partials/structured_data.html' %}
+{% endblock schema %}
 {% block content %}
 
 
-
+    
     <!-- TOP BANNER CONTAINER -->
     <div class="container-fluid px-0" id="top-banner">
         <div class="top-banner-image position-relative text-light">
@@ -40,7 +43,7 @@
 
     <!-- MAIN CONTENT CONTAINER -->
     <div class="container bg-white py-4 d-flex flex-column align-items-center text-center" id="mainContentContainer">
-        <h1 class="w-75 fw-medium">Discover Endless Elegance</h1>
+        <h2 class="w-75 fw-medium">Discover Endless Elegance</h2>
         <p class="my-3">
             Indulge in our luxurious selection of watches and sunglasses, each meticulously crafted to complement your unique personality and flair. From sleek classics to statement pieces, our collection has something to suit every occasion and mood.
         </p>
@@ -50,7 +53,7 @@
             <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2">
 
                 {% for product in watches %}
-                    <a class="product col product2 pe-1 ps-1 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug %}">
+                    <a class="product col product2 px-1 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug %}">
                         <div class="product-image-container">
                             <img src="{{ product.image.url }}" class="w-100" alt="">
                         </div>
@@ -76,7 +79,7 @@
             <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2">
 
                 {% for product in sunglasses %}
-                    <a class="product col product2 pe-1 ps-1 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug %}">
+                    <a class="product col product2 px-1 page-link" href="{% url 'product' cat=product.category.slug slug=product.slug %}">
                         <div class="product-image-container">
                             <img src="{{ product.image.url }}" class="w-100" alt="">
                         </div>
@@ -99,7 +102,7 @@
     </div>
 
     <div class="container-fluid bg-dark text-light py-5" id="latestProducts">
-        <h1 class="text-center">Explore our latest creations</h1>
+        <h2 class="text-center">Explore our latest creations</h2>
         <p class="text-center text-light">Step into a realm of captivating style as we proudly present our New Products Arrival at Unrols. Prepare to be dazzled by a handpicked selection of fashion accessories that exude elegance, trendiness, and timeless charm. With each piece carefully curated to elevate your wardrobe, our latest arrivals promise to be the epitome of sartorial excellence.</p>
             
         <!-- NEW PRODUCTS CAROUSEL -->
