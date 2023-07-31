@@ -48,6 +48,3 @@ urlpatterns = [
     ),
 ]   
 
-admin.site.site_header = "Unrols Admin"
-admin.site.site_title = 'Unrols Admin Portal'
-admin.site.index_title = 'Welcome to Unrols Admin Panel'

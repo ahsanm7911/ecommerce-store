@@ -16,3 +16,7 @@ class AccountAdmin(UserAdmin):
 
 admin.site.register((Address, Newsletter))
 admin.site.register(Account, AccountAdmin)
+
+admin.site.site_header = "Unrols Administration"
+admin.site.site_title = 'Unrols Admin Panel'
+admin.site.index_title = 'Welcome to Unrols Admin Panel'
