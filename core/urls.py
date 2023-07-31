@@ -22,9 +22,9 @@ urlpatterns = [
     path('checkout/process-checkout/', views.process_checkout, name='process_checkout'),
 
     # Policy pages
-    path('policy/', views.store_policy, name='store_policy'),
+    path('policy/', views.store_policy, name='policy'),
     path('policies/refund-policy/', views.refund_policy, name='refund_policy'),
-    path('policies/shipping-information/', views.shipping_policy, name='shipping_policy'),
+    path('policies/shipping-information/', views.shipping_policy, name='shipping_information'),
 
     # Contact pages
     path('contact/', views.contact, name='contact'),
