@@ -20,6 +20,8 @@ def robots_txt(request):
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
 
+
+    
 def test(request):
     products = ProductImage.objects.filter(product__slug='rolex-watch')
     product_name = products[0].product.name
