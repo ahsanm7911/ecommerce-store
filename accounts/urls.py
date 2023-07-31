@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.contrib import admin
 from .import views
 
 # add url patterns here
@@ -46,3 +47,7 @@ urlpatterns = [
         name="password_reset_complete",
     ),
 ]   
+
+admin.site.site_header = "Unrols Admin"
+admin.site.site_title = 'Unrols Admin Portal'
+admin.site.index_title = 'Welcome to Unrols Admin Panel'
