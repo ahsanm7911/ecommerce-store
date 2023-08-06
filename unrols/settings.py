@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from decouple import config
 from database_settings import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-e+)qucqoxo=d6s*-wmk+tqqw4d*e8&gh#u#x-ewexot$9$=c#^'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #development ONLY
@@ -147,15 +148,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-USE_S3 = os.getenv('UNROLS_USE_S3') == 'TRUE'
+USE_S3 = config('UNROLS_USE_S3')
 if USE_S3:
     STORAGES = {'default': {'BACKEND': 'unrols.storage_backends.PublicMediaStorage'},
                 "staticfiles": {"BACKEND": "unrols.storage_backends.StaticStorage"}}
     
-    # AWS_ACCESS_KEY_ID = os.getenv('UNROLS_AWS_ACCESS_KEY_ID')
-    # AWS_SECRET_ACCESS_KEY = os.getenv('UNROLS_AWS_SECRET_ACCESS_KEY')
+    AWS_ACCESS_KEY_ID = config('UNROLS_AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = config('UNROLS_AWS_SECRET_ACCESS_KEY')
     
-    AWS_STORAGE_BUCKET_NAME = os.getenv('UNROLS_AWS_STORAGE_BUCKET_NAME')
+    AWS_STORAGE_BUCKET_NAME = config('UNROLS_AWS_STORAGE_BUCKET_NAME')
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
     # s3 static settings

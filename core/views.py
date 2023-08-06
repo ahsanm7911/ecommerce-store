@@ -6,6 +6,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django.core import serializers
 from .utils import *  
+from decouple import config
 import json
 # Create your views here.
 # SEO VIEWS
