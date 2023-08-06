@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 from database_settings import *
 
@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig',
+    'sorl.thumbnail',
+    'storages',
 ]
 
 PASSWORD_HASHERS = [
@@ -145,14 +147,43 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+USE_S3 = True
+if USE_S3:
+    STORAGES = {'default': {'BACKEND': 'unrols.storage_backends.PublicMediaStorage'},
+                "staticfiles": {"BACKEND": "unrols.storage_backends.StaticStorage"}}
+    AWS_ACCESS_KEY_ID = 'AKIAX4SPEXFK57JX4ESE'
+    AWS_SECRET_ACCESS_KEY = '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'
+    AWS_STORAGE_BUCKET_NAME = 'unrols.storage'
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    # s3 static settings
+    STATIC_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_QUERYSTRING_AUTH = False
+    AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
+    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+    'Cache-Control': 'max-age=94608000',
+    }
+
+
+else:
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    STATIC_URL = '/static/'
+    STATIC_ROOT = BASE_DIR / 'static'
+    
 STATICFILES_DIRS = [BASE_DIR/'src']
-STATIC_ROOT = BASE_DIR / 'static/'
 MEDIA_ROOT = BASE_DIR/ 'media'
 MEDIA_URL = '/media/'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
