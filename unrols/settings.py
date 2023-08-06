@@ -147,13 +147,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-USE_S3 = True
+USE_S3 = os.getenv('USE_S3') == 'TRUE'
 if USE_S3:
     STORAGES = {'default': {'BACKEND': 'unrols.storage_backends.PublicMediaStorage'},
                 "staticfiles": {"BACKEND": "unrols.storage_backends.StaticStorage"}}
-    AWS_ACCESS_KEY_ID = 'AKIAX4SPEXFK57JX4ESE'
-    AWS_SECRET_ACCESS_KEY = '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'
-    AWS_STORAGE_BUCKET_NAME = 'unrols.storage'
+    AWS_ACCESS_KEY_ID = os.getenv('UNROLS_AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('UNROLS_AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('UNROLS_AWS_STORAGE_BUCKET_NAME')
     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
     # s3 static settings
