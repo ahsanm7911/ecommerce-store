@@ -6,6 +6,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django.core import serializers
 from .utils import *  
+from unrols.settings import USE_S3
 from decouple import config
 import json
 # Create your views here.
@@ -37,6 +38,8 @@ def test(request):
 def home(request):
     context = {}
     page = "Home"
+    print(config('UNROLS_USE_S3'))
+    print(USE_S3)
     try:
         products = Product.objects.all().order_by('-created_at')[:4]
     except Product.DoesNotExist:
