@@ -6,6 +6,7 @@ from unrols import settings
 from accounts.models import Address
 from django.utils.text import slugify
 from django.utils import timezone
+from .utils import compress_image
 import uuid
 import datetime
 # Create your models here.
@@ -59,6 +60,7 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name) # Generating slug from the name
+        # self.image = compress_image(self.image)
         super().save(*args, **kwargs)
 
 class ProductImage(models.Model):
@@ -71,6 +73,10 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image of {self.product.name}"
+    
+    def save(self, *args, **kwargs):
+        self.image = compress_image(self.image)
+        super().save(*args, **kwargs)
     
     
 

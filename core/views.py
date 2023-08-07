@@ -38,8 +38,6 @@ def test(request):
 def home(request):
     context = {}
     page = "Home"
-    print(config('UNROLS_USE_S3'))
-    print(USE_S3)
     try:
         products = Product.objects.all().order_by('-created_at')[:4]
     except Product.DoesNotExist:
