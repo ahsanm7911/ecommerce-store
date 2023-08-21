@@ -1,17 +1,13 @@
-from .models import *
 import json
+from core.models import *
 
-# for image compression
-from pathlib import Path
-from PIL import Image
-from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
 
 def get_cart_data(request):
     try:
         cart = json.loads(request.COOKIES['cart'])
     except:
         cart = {}
+    print(cart)
     context = {}
     order_total = 0
     items = []
@@ -30,8 +26,9 @@ def get_cart_data(request):
             product['product_color'] = cart[i]['color']
             items.append(product)
             order_total += item_total
-        except:
-            pass
+        except Exception as e:
+            print(f'Error: {e}')
+            
 
     context['order_total'] = order_total
     context['items'] = items
@@ -79,12 +76,4 @@ def cart_total(cart):
         order_total += product_total
     return order_total
 
-def compress_image(image):
-    img = Image.open(image)
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
-    img_output = BytesIO()
-    img.save(img_output, 'WEBP', quality=20)
-    compressed_image = InMemoryUploadedFile(img_output, 'ImageField', f"{image.name.split('.')[0]}.webp", 'image/webp', len(img_output.getvalue()), None)
-    return compressed_image
 

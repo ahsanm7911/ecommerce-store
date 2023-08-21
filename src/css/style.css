@@ -120,7 +120,10 @@ input[type='submit'], button, a[type="button"], a.customBtnBlack{
 a.product:hover{
     text-decoration: underline;
 }
-
+#newsletter span{
+    left: 85%;
+    top: 25%;
+}
 /* Mobile Responsive */
 
 /* Mobile S (320 - 577px) */
@@ -371,6 +374,10 @@ button {
         margin: 0 !important;
     }
 
+    #newsletter span{
+        left: 90%;
+        top: 20%;
+    }
     .newsletter-input {
         width: 75% !important;
     }

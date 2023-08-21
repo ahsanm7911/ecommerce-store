@@ -6,9 +6,8 @@ from unrols import settings
 from accounts.models import Address
 from django.utils.text import slugify
 from django.utils import timezone
-from .utils import compress_image
+from .image_manipulation import resize_and_compress_image
 import uuid
-import datetime
 # Create your models here.
 
 
@@ -32,7 +31,7 @@ class Product(models.Model):
     slug = models.SlugField(unique=True, default=' ', blank=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to=f'images/primary_images/')
+    image = models.ImageField(upload_to=f'images/primary_images/', default=' ')
     color = models.TextField(default=' ')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     stock_quantity = models.PositiveIntegerField()
@@ -58,9 +57,14 @@ class Product(models.Model):
             url = ''
         return url
 
+
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name) # Generating slug from the name
-        # self.image = compress_image(self.image)
+        try:
+            self.main_image = resize_and_compress_image(self.image, 1600, 70)
+        except FileNotFoundError as e:
+            print(f"Error {e}")
+
         super().save(*args, **kwargs)
 
 class ProductImage(models.Model):
@@ -70,12 +74,20 @@ class ProductImage(models.Model):
     @property
     def get_product_category(self):
        return self.product.category.slug
+    
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        return url
 
     def __str__(self):
         return f"Image of {self.product.name}"
     
     def save(self, *args, **kwargs):
-        self.image = compress_image(self.image)
+        self.image = resize_and_compress_image(self.image, 1200, 85)
         super().save(*args, **kwargs)
     
     
