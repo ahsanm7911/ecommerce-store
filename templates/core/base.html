@@ -20,14 +20,10 @@
 
     <link rel="home" href="{% url 'home' %}">
 
-    <link rel="icon" href="{% static 'img/favicon2.png' %}">
+    <link rel="icon" href="{% static 'logos/unrols.webp' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=REM:wght@100;200&family=Raleway:wght@600&display=swap"
@@ -66,7 +62,6 @@
             document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
         }
     </script>
-    {% block schema %}{% endblock schema %}
     {% block css %}{% endblock css %}
 </head>
 
@@ -200,14 +195,24 @@
             <!-- NEWSLETTER -->
             <div class="container-fluid d-lg-flex flex-row justify-content-between align-items-center ps-0">
 
-                <div class="container mt-4 px-0" id="newsletter">
+                <form class="container mt-4 px-0" id="newsletter">
+                    {% csrf_token %}
                     <p class="text-light">Subscribe to our emails</p>
-                    <div class="form-floating mb-3 text-dark">
-                        <input type="email" class="form-control newsletter" id="floatingInput"
+                    <div class="form-floating mb-3 text-dark position-relative">
+                        <input type="email" class="form-control newsletter" name="email" id="floatingInput"
                             placeholder="name@example.com" style="border-radius: 0;">
                         <label for="floatingInput">Email address</label>
+                        <span class="position-absolute">
+                            <button class="bg-white border-none" type="submit">
+                                <i id="newsletterBtn" class="bi bi-arrow-right text-dark fs-3"></i>
+                            </button>
+                        </span>
+                        <p class="message-div mt-2 fw-semibold text-success">
+                            <i class="bi bi-check-circle"></i>
+                            <span>Thanks for subscribing.</span>
+                        </p>
                     </div>
-                </div>
+                </form>
 
                 <div class="container mt-4" id="social-icons">
                     <p class="text-light text-center">Follow us on social media</p>
@@ -231,7 +236,7 @@
     </div>
     <div class="container-fluid m-0" style="background-color: #111;" id='footer-bottom'>
         <p class="text-center text-lg-end py-3 mb-0" style="font-size: small; color: lightgrey;">
-            &copy; 2023 Unrols Ltd. All Rights Reserved
+            &copy; 2023 Unrols. All Rights Reserved
         </p>
     </div>
 
@@ -239,4 +244,5 @@
 {% block js %}{% endblock js %}
 <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/index.js' %}"></script>
+
 </html>
