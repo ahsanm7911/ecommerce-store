@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from accounts import views as account_views
 # urlpatterns here
 
 urlpatterns = [
@@ -20,6 +21,8 @@ urlpatterns = [
     path('cart/unauth-cart/', views.unauth_cart, name='unauth_cart'),
     path('cart/updating-cart-total/', views.updating_cart_total, name='updating_cart_total'),
     path('checkout/process-checkout/', views.process_checkout, name='process_checkout'),
+    path('newsletter/', account_views.newsletter, name='newsletter'),
+
 
     # Policy pages
     path('policy/', views.store_policy, name='policy'),
