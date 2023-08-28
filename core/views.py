@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
-from .models import Product, ProductImage, Order, OrderItem, ConfirmedOrder, ShippingAddress, RefundPolicy, ClientEnquiry, CustomerReview
+from .models import Product, ProductVariant, Color, Stock, Order, OrderItem, ConfirmedOrder, ShippingAddress, RefundPolicy, ClientEnquiry, CustomerReview
 from accounts.models import Address
 from django.http import JsonResponse, HttpResponse
+from django.contrib.sites.models import Site
 from django.views.decorators.http import require_GET
 from django.core import serializers
 from .utils import *  
@@ -26,13 +27,14 @@ def robots_txt(request):
 
     
 def test(request):
-    products = ProductImage.objects.filter(product__slug='rolex-watch')
-    product_name = products[0].product.name
-    product_price = products[0].product.price
     context = {}
-    context['products'] = products
-    context['product_name'] = product_name
-    context['product_price'] = product_price
+    product = Product.objects.get(id=2)
+    variants = ProductVariant.objects.filter(product=product)
+    print(variants)
+    context = {
+        'product': product,
+        'variants': variants,
+    }
     return render(request, 'test.html', context)
 
 def home(request):
@@ -94,35 +96,26 @@ def products(request, slug):
 
 def product(request, cat, slug):
     context = {}
+    product = Product.objects.get(category__slug=cat, slug=slug)
+    variants = ProductVariant.objects.filter(product=product)
+    bannerImage = variants[0].imageURL
 
-    try: 
-        product = Product.objects.get(category__slug=cat, slug=slug)
-    except Product.DoesNotExist:
-        product = None
+    domain_name = request.get_host()
+    product_link = domain_name + product.get_absolute_url()
 
-    try:    
-        recommended_products = Product.objects.filter(category__slug=cat, stock=True).exclude(id=product.id)[:4]
-        images = ProductImage.objects.filter(product=product)
+    recommend_products = []
+    for product in Product.objects.filter(category__slug=cat):
+        variants = ProductVariant.objects.filter(product=product)
+        recommend_products.append(variants[0])
 
-        product_name = product.name
-        product_price = product.price
-        product_url = f'https://unrols.com/products/{product.category.slug}/{product.slug}/'
-        product_colors = product.color.split(':')
-        context['product_id'] = product.id
-        context['product_name'] = product_name
-        context['product_price'] = product_price
-        context['primary_image'] = product.image
-        context['product_url'] = product_url
-        context['product_colors'] = product_colors
-        context['product_desc'] = product.description
-        context['product'] = product
-        context['images'] = images
-        page = product_name
-        context['page'] = page
 
-        context['recommended_products'] = recommended_products
-    except:
-        pass
+    context = {
+        'product': product,
+        'variants': variants,
+        'bannerImage': bannerImage,
+        'product_link': product_link,
+        'recommended_products': recommend_products
+    }
 
     return render(request, 'core/product.html', context)
 
@@ -147,20 +140,17 @@ def lookbook(request):
 def add_to_cart(request):
     if request.method == 'POST':
 
-        id_product = request.POST.get('product_id')
+        variantId = request.POST.get('product_id')
         action = request.POST.get('action')
-        color = request.POST.get('color')
         try:
-            product =  Product.objects.get(id=id_product)
+            product =  ProductVariant.objects.get(id=variantId)
         except Product.DoesNotExist:
             product = None
 
-        print('Color:', color)
 
-        if color in product.color.split(':'):
-            customer = request.user
-            order, created = Order.objects.get_or_create(customer=customer, is_complete=False)
-            orderItem, created = OrderItem.objects.get_or_create(order=order, product=product, color=color)
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, is_complete=False)
+        orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
 
         if action == 'add':
             orderItem.quantity += 1
@@ -190,7 +180,7 @@ def unauth_cart(request):
         id = request.POST.get('product_id')
         cart = json.loads(request.COOKIES['cart'])
         try:
-            product = Product.objects.get(id=id)
+            product = ProductVariant.objects.get(id=id)
         except Product.DoesNotExist:
             product = None
         try: 
@@ -204,7 +194,7 @@ def unauth_cart(request):
         finally:
             order_total = 0
             for i in cart:
-                get_product = Product.objects.get(id=i)
+                get_product = ProductVariant.objects.get(id=i)
                 product_total = get_product.price * cart[i]['quantity']
                 order_total += product_total
 
@@ -224,14 +214,14 @@ def updating_cart_total(request):
 def cart(request):
     page = 'Cart'
     context = {}
-    recommeded_products = Product.objects.filter(stock=True)[:4]
+    # recommeded_products = Product.objects.filter(stock=True)[:4]
     if request.user.is_authenticated: # cart functionality for logged in user
         customer = request.user
         context = update_cart(customer)
     else:                               # cart functionality for guest user
         context = get_cart_data(request)
         # data to send as response for ajax
-    context['recommended_products'] = recommeded_products
+    # context['recommended_products'] = recommeded_products
     context['page'] = page
     return render(request, 'core/cart.html', context)
 

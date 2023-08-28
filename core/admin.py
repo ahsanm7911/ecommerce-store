@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import (Product,
-                    ProductImage, 
+                    ProductVariant, 
+                    Color,
+                    Stock,
                     Cart, 
                     CartItem, 
                     Order, 
@@ -14,7 +16,7 @@ from .models import (Product,
                     CustomerReview)
 # Register your models here.
 
-admin.site.register((ProductImage, Cart, CartItem, Order, OrderItem, ShippingAddress ,ConfirmedOrder, ClientEnquiry, CustomerReview))
+admin.site.register((ProductVariant, Color, Stock, Cart, CartItem, Order, OrderItem, ShippingAddress ,ConfirmedOrder, ClientEnquiry, CustomerReview))
 
 @admin.register(Product, Category, RefundPolicy, ShippingPolicy)
 class PostAdmin(admin.ModelAdmin):

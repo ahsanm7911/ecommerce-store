@@ -66,7 +66,6 @@
                 <div class="d-flex flex-row align-items-center ps-0">
                     <form action="" class="qtyForm" method="post">
                         {% csrf_token %}
-                        <input type="hidden" name="color" value="{{ item.product_color }}">
                         <input type="hidden" name="product_id" value="{{ item.product_id }}">
                         <input type="hidden" name="action" value="remove">
                         <button type="submit" class="bg-white ps-0"><i class="bi bi-caret-left-fill float-left"></i></button>
@@ -74,7 +73,6 @@
                     <p class="qtyBar">{{ item.product_quantity }}</p>
                     <form action="" class="qtyForm" method="post">
                         {% csrf_token %}
-                        <input type="hidden" name="color" value="{{ item.product_color }}">
                         <input type="hidden" name="product_id" value="{{ item.product_id }}">
                         <input type="hidden" name="action" value="add">
                         <button type="submit" class="bg-white"><i class="bi bi-caret-right-fill"></i></button>
@@ -87,7 +85,6 @@
             <div class="d-flex flex-row align-items-center">
                 <form action="" class="qtyForm" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="color" value="{{ item.product_color }}">
                     <input type="hidden" name="product_id" value="{{ item.product_id }}">
                     <input type="hidden" name="action" value="remove">
                     <button type="submit" class="bg-white"><i class="bi bi-caret-left-fill"></i></button>
@@ -95,7 +92,6 @@
                 <p class="qtyBar" >{{ item.product_quantity }}</p>
                 <form action="" class="qtyForm" method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="color" value="{{ item.product_color }}">
                     <input type="hidden" name="product_id" value="{{ item.product_id }}">
                     <input type="hidden" name="action" value="add">
                     <button type="submit" class="bg-white"><i class="bi bi-caret-right-fill"></i></button>
@@ -107,7 +103,6 @@
             <p class="float-end" title="Delete">
                 <form action="" method="post" class="item-delete-btn">
                     {% csrf_token %}    
-                    <input type="hidden" name="color" value="{{ item.product_color }}">
                     <input type="hidden" name="product_id" value="{{ item.product_id }}">
                     <input type="hidden" name="action" value="delete">
                     <button type="submit" class="nav-link text-decoration-none"><i class="bi bi-trash-fill"></i></button>

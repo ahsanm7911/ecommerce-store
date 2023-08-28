@@ -5,7 +5,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from colorama import Fore
 
 
-def resize_and_compress_image(image, max_size, quality):
+def resize_and_compress_image(image, max_size, quality, output):
     img = Image.open(image)
     if img.mode != 'RGB':
         img = img.convert('RGB')
@@ -23,7 +23,7 @@ def resize_and_compress_image(image, max_size, quality):
     
     buffer = BytesIO()
     resized_image.save(buffer, 'WEBP', quality=quality)
-    compressed_image = InMemoryUploadedFile(buffer, 'ImageField', f"{image.name.split('.')[0]}.webp", 'image/webp', len(buffer.getvalue()), None)
+    compressed_image = InMemoryUploadedFile(buffer, 'ImageField', f"{output}.webp", 'image/webp', len(buffer.getvalue()), None)
     return compressed_image
         
 

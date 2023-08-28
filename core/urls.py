@@ -6,6 +6,7 @@ from accounts import views as account_views
 urlpatterns = [
 
     # SEO
+    path('test/', views.test, name='test'),
     path('robots.txt', views.robots_txt),
 
     # Main product pages

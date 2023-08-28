@@ -1,12 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.urls import reverse
 from unrols import settings
 from accounts.models import Address
 from django.utils.text import slugify
 from django.utils import timezone
 from .image_manipulation import resize_and_compress_image
+from colorama import Fore
 import uuid
 # Create your models here.
 
@@ -26,21 +28,48 @@ class Category(models.Model):
         self.slug = slugify(self.name) # Generating slug from name
         super().save(*args, **kwargs)
 
-class Product(models.Model):
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, default=' ', blank=True)
-    description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to=f'images/primary_images/', default=' ')
-    color = models.TextField(default=' ')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    stock_quantity = models.PositiveIntegerField()
-    stock = models.BooleanField(default=True)
+class Color(models.Model):
+    name = models.CharField(max_length=50, default='')
+    hex_code = models.CharField(max_length=20, default='')
+    image = models.ImageField(upload_to='colors/', default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+    
+    @property
+    def slug(self):
+        return slugify(self.name)
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        return url
+    
+
+    def save(self, *args, **kwargs):
+        try:
+            self.image = resize_and_compress_image(self.image, 100, 85, output=f'{self.slug}-{self.hex_code}')
+        except Exception as e:
+            print(f'Color image not optimized: {e}', Fore.RED)
+        super().save(*args, **kwargs)
+
+class Product(models.Model):
+    name = models.CharField(max_length=200)
+    code = models.CharField(max_length=10, default='')
+    slug = models.SlugField(unique=True, default=' ', blank=True)
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.name} - {self.code}'
 
     def get_absolute_url(self):
         return reverse("product", args=[str(self.category.slug), str(self.slug)])
@@ -59,21 +88,27 @@ class Product(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name) # Generating slug from the name
-        try:
-            self.main_image = resize_and_compress_image(self.image, 1600, 70)
-        except FileNotFoundError as e:
-            print(f"Error {e}")
-
+        self.slug = slugify(self.name) + '-' + slugify(self.code) # Generating slug from the name
         super().save(*args, **kwargs)
 
-class ProductImage(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=f'images/other_images/')
+def product_image_directory(instance, filename):
+    return f'products/{instance.product.slug}/{filename}'
 
+
+class ProductVariant(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    image = models.ImageField(upload_to=product_image_directory)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.product.name} - {self.color.name}'
+    
     @property
-    def get_product_category(self):
-       return self.product.category.slug
+    def product_slug(self):
+        return self.product.slug
     
     @property
     def imageURL(self):
@@ -82,15 +117,31 @@ class ProductImage(models.Model):
         except:
             url = ''
         return url
-
-    def __str__(self):
-        return f"Image of {self.product.name}"
     
     def save(self, *args, **kwargs):
-        self.image = resize_and_compress_image(self.image, 1200, 85)
+        if not self.price:
+            self.price = self.product.price
+        try:
+            self.image = resize_and_compress_image(self.image, 1080, 85, output=f'{slugify(self.product.name)}-{self.color.slug}')
+        except Exception as e:
+            print(f'Image not optimized: {e}', Fore.RED)
         super().save(*args, **kwargs)
-    
-    
+
+        
+
+class Stock(models.Model):
+    variant = models.OneToOneField(ProductVariant, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)   
+
+    def __str__(self):
+        return f'{self.variant} - {self.quantity}'
+
+    @property
+    def stock(self):
+        if self.quantity <= 0:
+            return False
+        else:
+            return True
 
 class Cart(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

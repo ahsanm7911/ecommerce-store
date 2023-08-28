@@ -2,457 +2,282 @@
 {% load static %}
 {% block css %}
 <style>
-    .slider-container {
-        position: relative;
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
+    /* UTILITY CLASSES */
+    .op-0 {
+        opacity: 0;
     }
 
-    .slider {
-        display: flex;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .slide {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-        margin-right: 10px;
-    }
-
-    .slider-controls {
-        margin-top: 10px;
-        text-align: center;
-    }
-
-    .prev-button,
-    .next-button {
-        padding: 5px 10px;
-        font-size: 16px;
-        cursor: pointer;
-        background-color: white;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-    }
-
-    .prev-button {
-        margin-right: 10px;
-    }
-
-    .next-button:hover,
-    .prev-button:hover {
-        background-color: lightgrey;
-    }
-
-    .other-product-image img {
-        height: 250px;
+    .carousel-image {
+        height: 400px;
         object-fit: cover;
     }
 
-    .main-product-image img {
-        height: 340px;
-        object-fit: cover;
+    @media only screen and (min-width:768px) {
+        #addToCartBtn {
+            width: 60% !important;
+        }
+
+        .carousel-image {
+            height: 500px;
+            object-fit: cover;
+        }
     }
 
-    #productBannerContainer .image-container image {
-        object-fit: cover;
-        height: 102px;
+    @media only screen and (min-width: 1024px) {}
+
+    #colors {
+        padding: 4px;
+        margin-top: 20px;
     }
-    a.customBtnDark{
-        text-decoration: none;
+
+    .color-div {
+        width: 55px;
+        height: 55px;
+        border-radius: 60px;
     }
-    button.cartBtn:hover{
-        margin: 0px;
+
+    .color-div-inner img {
+        width: 45px;
+        height: 45px;
+        border-radius: 60px;
+        padding: 2px;
+    }
+
+
+    .color-active {
+        border: 2px solid darkgray;
+    }
+
+    .disableBtn {
+        opacity: 20%;
     }
 </style>
 {% endblock css %}
 
 {% block content %}
 
-<!-- TOP BANNER CONTAINER -->
-<!-- PRODUCT DISPLAY CONTAINER FOR LARGE SCREENS -->
-<div class="container my-5 d-none d-lg-block">
-    <div class="row">
-        <div class="col-8">
-            <div class="row main-product-image mb-2">
-                <img src="{{ primary_image.url }}" alt="" class="w-100 pe-0">
-            </div>
-            <div class="row row-cols-2 mb-2">
+<!-- product display container for large screens - START  -->
+<!-- product display container for large screens - END  -->
 
-                {% for image in images %}
 
-                <div class="col other-product-image pe-0 mb-2">
-                    <img src="{{ image.image.url }}" alt="" class="w-100">
-                </div>
 
-                {% endfor %}
+<!-- product display container for small screens - START -->
+<br class="d-lg-none"><br class="d-lg-none">
+<div class="container-fluid text-center px-0 d-lg-flex flex-row" id="productDisplay">
 
-            </div>
+    <div class="container-fluid px-0 w-100"> <!-- Product Images Div -->
 
+        <!-- For small screens -->
+        <div class="container-fluid px-0 product-title-details d-lg-none">
+            <h1 class="fs-4 mb-0">{{ product.name }}</h1>
+            <p style="font-size: small;" class="mb-1 text-secondary">{{ product.code }}</p>
+            <h4 class="text-secondary mb-0 text-decoration-line-through fs-6">Rs.&nbsp;<span>2000.00</span>&nbsp;PKR
+            </h4>
+            <h4 class="fs-4 fw-normal"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;PKR</h4>
         </div>
-        <div class="col-4">
-            <div class="product-details">
-                <div class="row">
-                    <h1>{{ product_name }}</h1>
+        <br class="d-lg-none">
+        <div class="container-fluid d-flex flex-column align-items-center px-0 mx-0 w-100" id="product-image-container">
+            <div id="carouselExampleFade" class="carousel slide carousel-fade w-100">
+                <div class="carousel-inner">
+                    {% for variant in variants %}
+                    <div class="carousel-item" data-bs-color="{{ variant.color.name }}"
+                        data-bs-variant="{{ variant.id }}" data-bs-stock="{{ variant.stock.stock }}"
+                        data-bs-price="{{ variant.price }}">
+                        <img src="{{ variant.imageURL }}" class="d-block w-100 carousel-image" alt="...">
+                        <h6 class="fw-semibold text-secondary active-color fs-6 mt-2 d-lg-none">COLOR: <span
+                                class="text-dark text-uppercase">RED</span></h6>
+                        <p
+                            class="text-danger fw-semibold mb-0 d-lg-none {% if variant.stock.stock %}opacity-0{% endif %}">
+                            Sorry, This color is currently unavailable.
+                        </p>
+                    </div>
+                    {% endfor %}
                 </div>
-                <div class="row">
-                    <p class="text-secondary mb-0 product-price">{{ product_price }} PKR</p>
-                </div>
-                <div class="row">
-                    <p class="text-secondary"></p>
-                </div>
-
-                <form action="" method="post" class="addToCartForm mb-0">
-                    {% csrf_token %}
-                    <div class="row mb-3">
-                        <p class="text-secondary mb-1">Color</p>
-                        <div class="container d-flex flex-row" id="colorBtnsContainer">
-                            <select name="color" id="" class="form-select w-25 fs-6" required>
-                                <option value="">Color</option>
-                                {% for color in product_colors %}
-                                    <option value="{{ color }}">{{ color |capfirst }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="container-fluid mb-1 px-0">
-                        <input type="hidden" name="product_id" value="{{ product_id }}"
-                            class="id_product">
-                        <input type="hidden" name="action" value="add">
-                        {% if not product.stock %}
-                        <p class="text-danger mt-1 fw-semibold">Out of Stock.</p>
-                        {% else %}
-                        <button type="submit" class="customBtnBlack py-2 cartBtn" id="addToCartBtn">Add to cart</button>
-                        <p class="text-success mt-1 item-added">Added to cart.&nbsp;<i class="bi bi-check-circle"></i> </p>
-                        {% endif %}
-                    </div>
-                </form>
-                <div class="container-fluid px-0 mb-2 d-none">
-                    <input type="hidden" name="product_id" value="{{ product_id }}">
-                    <input type="hidden" name="action" value="add">
-                    <button class="customBtnBlack py-2 px-0" id="buyNowBtn">Buy it now</button>
-                </div>
-                <div class="container-fluid product-desc px-0 mt-4">
-                    <h4 class="mb-2">Description</h4>
-                    {% autoescape off %}
-                        {{ product_desc }}
-                    {% endautoescape %}
-                </div>
-
-                <!-- PRODUCT Instructions and information dropdown -->
-                <div class="container-fluid mt-4 px-0">
-                    <hr>
-                    <p class="mb-0">
-                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
-                            data-bs-toggle="collapse" href="#general" role="button" aria-expanded="false"
-                            aria-controls="collapseExample">
-                            General
-                            <i class="bi bi-plus float-end"></i>
-                        </a>
-                    <p>
-                    <div class="collapse" id="general">
-                        <div class="bg-white">
-                            &nbsp;
-                        </div>
-                    </div>
-                    <hr>
-
-                    <p class="mb-0">
-                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
-                            data-bs-toggle="collapse" href="#movement" role="button" aria-expanded="false"
-                            aria-controls="collapseExample">
-                            Movement
-                            <i class="bi bi-plus float-end"></i>
-                        </a>
-                    <p>
-                    <div class="collapse" id="movement">
-                        <div class="bg-white">
-                            &nbsp;
-                        </div>
-                    </div>
-                    <hr>
-
-                    <p class="mb-0">
-                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
-                            data-bs-toggle="collapse" href="#case" role="button" aria-expanded="false"
-                            aria-controls="collapseExample">
-                            Case
-                            <i class="bi bi-plus float-end"></i>
-                        </a>
-                    <p>
-                    <div class="collapse" id="case">
-                        <div class="bg-white">
-                            &nbsp;
-                        </div>
-                    </div>
-                    <hr>
-
-                    <p class="mb-0">
-                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
-                            data-bs-toggle="collapse" href="#dial" role="button" aria-expanded="false"
-                            aria-controls="collapseExample">
-                            Dial
-                            <i class="bi bi-plus float-end"></i>
-                        </a>
-                    <p>
-                    <div class="collapse" id="dial">
-                        <div class="bg-white">
-                            &nbsp;
-                        </div>
-                    </div>
-                    <hr>
-
-                    <p class="mb-0 mt-4">
-                        <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between"
-                            data-bs-toggle="collapse" href="#share-link" role="button" aria-expanded="false"
-                            aria-controls="collapseExample">
-                            <i class="bi bi-share fs-6">&nbsp;Share</i>
-                        </a>
-                    <p>
-                    <div class="collapse mt-0 mb-2" id="share-link">
-                        <div class="bg-light">
-                            <input type="text" class="form-control" value="{{ product_url }}">
-                        </div>
-                    </div>
-                </div>
+                <button class="carousel-control-prev carousel-btn" type="button" data-bs-target="#carouselExampleFade"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next carousel-btn" type="button" data-bs-target="#carouselExampleFade"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
     </div>
-</div>
-<!-- PRODUCT DISPLAY CONTAINER Small Screens -->
 
-<div class="container-fluid mt-3 d-lg-none" id="productDisplayContainer">
-
-    <div class="slider-container d-none">
-        <div class="slider">
-            <img src="{{ primary_image.url }}" alt="Image 1" class="slide">
-            {% for image in images %}
-                <img src="{{ image.image.url }}" alt="Image 1" class="slide">
-            {% endfor %}
+    <br class="d-none d-lg-block">
+    <br class="d-none d-lg-block">
+    <div class="container-fluid px-0 w-100 mb-2"> <!-- Product details div -->
+        <!-- For Large Screens -->
+        <div class="container product-title-details d-none d-lg-block mt-5">
+            <h1 class="fs-4 mb-0">Luminex AuraVista Shades</h1>
+            <p style="font-size: small;" class="mb-2 text-secondary">UNS-001</p>
+            <p class="text-secondary mb-0 text-decoration-line-through">Rs.&nbsp;<span>2000.00</span>&nbsp;PKR</p>
+            <h4 class="fs-4 fw-normal"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;PKR</h4>
         </div>
-        <div class="slider-controls">
-            <a class="prev-button"><i class="bi bi-chevron-left text-dark"></i></a>
-            <a class="next-button"><i class="bi bi-chevron-right text-dark"></i></a>
-        </div>
-    </div>
 
-    <div id="carouselExampleAutoplaying" class="carousel slide latest-products-container" data-bs-ride="carousel">
-        
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{{ primary_image.url }}" alt="" class="slide">
-            </div>
-            {% for image in images %}
-            <div class="carousel-item">
-                <img src="{{ image.image.url }}" class="slide" alt="..." >
+        <h6 class="fw-semibold text-secondary active-color fs-6 d-none d-lg-block">COLOR: <span
+                class="text-dark text-uppercase">RED</span>
+        </h6>
+        <div id="colors" class="d-flex flex-row justify-content-center mt-0">
+            {% for variant in variants %}
+            <div class="color-div me-2 d-flex flex-row justify-content-center align-items-center">
+                <div class="color-div-inner" data-bs-color="{{ variant.color.name }}"
+                    data-slide-to="{{ forloop.counter }}">
+                    <img src="{{ variant.color.imageURL }}" alt="">
+                </div>
             </div>
             {% endfor %}
 
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-
-    <div class="product-details mt-4">
-        <div class="row">
-            <h1>{{ product_name }}</h1>
+        <div class="out-of-stock-msg op-0">
+            <p class="text-danger fw-semibold d-none d-lg-block">Sorry, this color is currently unavailable.</p>
         </div>
-        <div class="row">
-            <p class="text-secondary mb-0">{{ product_price }} PKR</p>
-        </div>
-        <div class="row">
-            <p class="text-secondary"></p>
-        </div>
-
-        <form action="" method="post" class="addToCartForm mb-0">
+        <form action="" method="post" class="addToCartForm my-4">
             {% csrf_token %}
-            <div class="row mb-3 colo-div">
-                <p class="text-secondary mb-1">Color</p>
-                <div class="container d-flex flex-row" id="colorBtnsContainer">
-                    <select name="color" id="" class="form-select w-50 fs-6" required>
-                        <option value="">Color</option>
-                        {% for color in product_colors %}
-                            <option value="{{ color }}">{{ color |capfirst }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
 
 
-            <div class="container-fluid mb-2 px-0">
-                <input type="hidden" name="product_id" value="{{ product_id }}" class="id_product">
+            <div class="container-fluid mb-2 px-0 d-flex flex-column justify-content-center align-items-center w-75">
                 <input type="hidden" name="action" value="add">
-                {% if not product.stock %}
-                    <p class="text-danger mt-1 fw-semibold">Out of Stock</p>
-                {% else %}
-                    <button type="submit" class="customBtnBlack py-2 cartBtn" id="addToCartBtn">Add to cart</button>
-                    <p class="text-success mt-1 item-added">Added to cart.&nbsp;<i class="bi bi-check-circle"></i> </p>
-                {% endif %}
+                <input type="hidden" name="variantId" value="" id="variantId">
+                <button type="submit" class="customBtnBlack py-2 cartBtn w-100" id="addToCartBtn">Add to
+                    cart</button>
+                <p class="text-success mt-1 item-added">Added to cart.&nbsp;<i class="bi bi-check-circle"></i> </p>
             </div>
+
         </form>
         <div class="container-fluid px-0 mb-2 d-none">
             <button class="customBtnBlack py-2" id="buyNowBtn">Buy it now</button>
         </div>
-        <div class="container-fluid product-desc px-0 mt-4">
-            <h4 class="mb-2">Description</h4>
-            {% autoescape off %}
-                {{ product_desc }}
-            {% endautoescape %}
-        </div>
+        <div class="shipping-details" style="letter-spacing: 2px; font-size: x-small;">
 
-        <!-- PRODUCT Instructions and information dropdown -->
-        <div class="container-fluid mt-4 px-0">
-            <hr>
-            <p class="mb-0">
-                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
-                    href="#general" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    General
-                    <i class="bi bi-plus float-end"></i>
-                </a>
-            <p>
-            <div class="collapse" id="general">
-                <div class="bg-light">
-                    &nbsp;
-                </div>
-            </div>
-            <hr>
+            <p class="text-secondary text-uppercase fw-semibold mb-0">Order now and it ships by</p>
+            <span class="text-dark fw-medium text-uppercase">Tuesday, August 29</span>
+            <br><br>
+            <div class="container-fluid d-md-flex flex-row justify-content-around align-items-center">
 
-            <p class="mb-0">
-                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
-                    href="#movement" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    Movement
-                    <i class="bi bi-plus float-end"></i>
-                </a>
-            <p>
-            <div class="collapse" id="movement">
-                <div class="bg-light">
-                    &nbsp;
+                <div class="fast-delivery">
+                    <img src="{% static 'icons/fast-delivery.png' %}" alt="">
+                    <p class="text-uppercase fw-semibold text-secondary pt-1">Fast Delivery</p>
                 </div>
-            </div>
-            <hr>
 
-            <p class="mb-0">
-                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
-                    href="#case" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    Case
-                    <i class="bi bi-plus float-end"></i>
-                </a>
-            <p>
-            <div class="collapse" id="case">
-                <div class="bg-light">
-                    &nbsp;
+                <div class="refund-guarantee">
+                    <img src="{% static 'icons/7.png' %}" alt="">
+                    <p class="text-uppercase fw-semibold text-secondary pt-1">7 day money back guarantee</p>
                 </div>
-            </div>
-            <hr>
 
-            <p class="mb-0">
-                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
-                    href="#dial" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    Dial
-                    <i class="bi bi-plus float-end"></i>
-                </a>
-            <p>
-            <div class="collapse" id="dial">
-                <div class="bg-light">
-                    &nbsp;
+                <div class="customer-support">
+                    <img src="{% static 'icons/telemarketer.png' %}" alt="">
+                    <p class="text-uppercase fw-semibold text-secondary pt-1">24/7 Customer Support</p>
                 </div>
-            </div>
-            <hr>
 
-            <p class="mb-0 mt-4">
-                <a class="nav-link fs-5 d-flex align-items-baseline justify-content-between" data-bs-toggle="collapse"
-                    href="#share-link" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    <i class="bi bi-share fs-6">&nbsp;Share</i>
-                </a>
-            <p>
-            <div class="collapse mt-0 mb-2" id="share-link">
-                <div class="bg-light">
-                    <input type="text" class="form-control" value="{{ product_url }}">
-                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- PRODUCT BANNER -->
-<div class="container-fluid my-2 container-lg d-lg-flex flex-row-reverse" id="productBannerContainer">
-    <div class="image-container">
-        <img src="{{ primary_image.url }}" alt="" class="w-100">
-    </div>
-    <div class="banner-desc bg-light p-4 text-dark" style="height: 300px;">
-        <h3 class="overflow-hidden">A new kind of {{ product.category.slug }}.</h3>
-            {% autoescape off %}
-                {{ product.category.description }}
-            {% endautoescape %}
-    </div>
+
 </div>
 
-<!-- CUSTOMER SERVICE -->
-{% include 'partials/policy.html' %}
+<div class="container-fluid description bg-light px-0">
+    <div class="container d-flex flex-column justify-content-center align-items-center pt-5">
 
-<!-- RECOMMENDED PRODUCTS CONTAINER -->
-
-<div class="container-fluid container-lg my-5">
-    <div class="row">
-        <p>You may also like</p>
-    </div>
-    <div class="row row-cols-lg-4 mb-2 row-cols-2 px-1">
-
-        {% for product in recommended_products %}
-            {% include 'partials/product.html' %}
-        {% endfor %}
-
+        <h3 class="fs-4">Description</h3>
+        <p class="">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eum in fuga, modi ad cum beatae fugiat
+            explicabo!
+            Cupiditate quisquam nihil error nemo eum ex nobis, modi ullam! Consequatur, aliquam voluptatem! Quasi eius
+            non accusamus ab corporis unde obcaecati, numquam, perferendis expedita, maxime a ratione incidunt amet
+            esse. Quae voluptas incidunt odio voluptatum similique ipsa omnis magnam repellat ullam reiciendis veritatis
+            culpa dolores maiores eligendi temporibus quis atque distinctio cumque, quisquam, magni in. Consectetur
+            expedita asperiores, temporibus, voluptates labore quas doloribus tenetur nobis molestias eius ipsam vitae
+            illum placeat atque sequi cumque? Unde ducimus eos voluptatibus quae quo culpa magni assumenda.</p>
     </div>
 
-    <div class="row text-center mb-4 d-lg-none">
-        <a type="button" href="{% url 'products' slug=product.category.slug %}" class="customBtnDark w-50 mx-auto py-2 text-decoration-none" >View All</a>
+</div>
+<br>
+<div class="container-fluid">
+    <h6 style="font-size: small;" class="mb-3">You may also like</h6>
+    <div class="container-fluid px-0">
+        <div class="row row-cols-2 px-1">
+            {% for product in recommended_products %}
+            <div class="col px-0">
+                {% include "partials/product.html" %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
+
 
 {% endblock content %}
 
 {% block js %}
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const slider = document.querySelector(".slider");
-        const prevButton = document.querySelector(".prev-button");
-        const nextButton = document.querySelector(".next-button");
-        let slideIndex = 0;
+    $(document).ready(function () {
 
-        function showSlide(n) {
-            const slides = document.querySelectorAll(".slide");
-            if (n >= slides.length) {
-                slideIndex = 0;
-            } else if (n < 0) {
-                slideIndex = slides.length - 1;
+        const carousel = $('.carousel')
+        const colorContainer = $('#colors')
+        const carouselItems = $('.carousel-item')
+        const colors = $('.color-div')
+
+        $activeColor = $('.active-color').children('span')
+        $activeColor.text($(carouselItems[0]).attr('data-bs-color'))
+        $('.variant-price').text($(carouselItems[0]).attr('data-bs-price'))
+        $(carouselItems[0]).addClass('active')
+        $(colors[0]).addClass('color-active')
+
+        // setting initial variantId in input field.
+        $carouselItem = $(carouselItems[0]).attr('data-bs-variant')
+        $('#variantId').val($carouselItem)
+
+        $(carousel).on('slide.bs.carousel', event => {
+            console.log(event)
+            $color = $(event.relatedTarget).attr('data-bs-color')
+            $stock = $(event.relatedTarget).attr('data-bs-stock')
+            $price = $(event.relatedTarget).attr('data-bs-price')
+
+            if ($stock == 'False') {
+                $('#addToCartBtn').addClass('disableBtn')
+                $('#addToCartBtn').prop('disabled', true)
+                $('.out-of-stock-msg').removeClass('op-0')
+            } else {
+                $('#addToCartBtn').removeClass('disableBtn')
+                $('#addToCartBtn').prop('disabled', false)
+                $('.out-of-stock-msg').addClass('op-0')
             }
-            slider.style.transform = `translateX(-${slideIndex * 100}%)`;
-        }
 
-        function nextSlide() {
-            slideIndex++;
-            showSlide(slideIndex);
-        }
+            // Updating variant price 
+            console.log('price', $price)
+            $('.variant-price').text($price)
+            console.log($stock)
+            $variantId = $(event.relatedTarget).attr('data-bs-variant')
+            // Setting add to cart from input variantId value
+            $('#variantId').val($variantId)
 
-        function prevSlide() {
-            slideIndex--;
-            showSlide(slideIndex);
-        }
+            console.log('input', $('#variantId').val())
+            console.log('Active variant: ', $variantId)
+            $(colorContainer).children('div.color-div').removeClass('color-active')
+            for (let i = 0; i < colors.length; i++) {
+                let item = $(colors[i]).children('.color-div-inner')
+                if (item.attr('data-bs-color') == $color) {
+                    item.parent('.color-div').addClass('color-active')
+                }
+            }
+        })
 
-        nextButton.addEventListener("click", nextSlide);
-        prevButton.addEventListener("click", prevSlide);
-    });
+        // $('.carousel').carousel()
+        // click event for color btns
+        $('#colors').on('click', '.color-div-inner', function (e) {
+            e.preventDefault()
+            $slideIndex = parseInt($(this).attr('data-slide-to'))
+            console.log('color index: ', $slideIndex - 1)
+            $('.carousel').carousel($slideIndex - 1) //Navigate to the specific slide
+            $('div.color-div').removeClass('color-active')
+            $(this).parent('div.color-div').addClass('color-active')
+        })
 
+    })
 </script>
 
 <script src="{% static 'js/cart.js' %}"></script>

@@ -14,16 +14,16 @@ def get_cart_data(request):
     for i in cart:
         try:
             product = {}
-            get_product = Product.objects.get(id=i)
+            get_product = ProductVariant.objects.get(id=i)
             item_total = (get_product.price * cart[i]['quantity'])
             get_product_image = get_product.image
             product['item_total'] = item_total
             product['product_image'] = get_product_image
             product['product_id'] = get_product.id
-            product['product_name'] = get_product.name
+            product['product_name'] = get_product.product.name
             product['product_price'] = get_product.price
             product['product_quantity'] = cart[i]['quantity']
-            product['product_color'] = cart[i]['color']
+            product['product_color'] = get_product.color.name
             items.append(product)
             order_total += item_total
         except Exception as e:
@@ -49,7 +49,7 @@ def update_cart(customer):
         try:
             product = {}
             id = item.product.id
-            get_product_image = Product.objects.get(id=id).image
+            get_product_image = ProductVariant.objects.get(id=id).image
             item_total = item.product.price * item.quantity
             order_total += item_total
             product['product_id'] = item.product.id
@@ -71,7 +71,7 @@ def update_cart(customer):
 def cart_total(cart):
     order_total = 0
     for i in cart:
-        get_product = Product.objects.get(id=i)
+        get_product = ProductVariant.objects.get(id=i)
         product_total = get_product.price * cart[i]['quantity']
         order_total += product_total
     return order_total

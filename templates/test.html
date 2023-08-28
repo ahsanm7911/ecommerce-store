@@ -1,22 +1,130 @@
 <html lang="en">
-    {% load static %}
+{% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Page</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous">
+        </script>
 </head>
+<style>
+    .colors {
+        border: 1px solid #111;
+        padding: 4px;
+    }
+
+    .color-div {
+        width: 55px;
+        height: 55px;
+        border-radius: 60px;
+    }
+
+    .color-div-inner img {
+        width: 45px;
+        height: 45px;
+        border-radius: 60px;
+        padding: 2px;
+    }
+
+    .color-active {
+        border: 2px solid darkgray;
+    }
+</style>
+
 <body>
-    <h1>Products</h1>
-    {% autoescape off %}
-    <ul>
-        <li>{{ product_name }}</li>
-        <li>{{ product_price }}</li>
-        
-        {% for product in products %}
-        <img src={% static '' %}{{ product.image }} alt="" width='200' height='200'> 
-        {% endfor %}
-    </ul>
-    {% endautoescape %}
+    <div class="container-fluid text-center mt-5 px-0">
+
+        <h1 class="fs-4 mb-0">{{ product.name }}</h1>
+        <p style="font-size: small;" class="mb-1 text-secondary">{{ product.code }}</p>
+        <div class="container d-flex flex-column justify-content-center align-items-center px-0"
+            id="product-image-container">
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    {% for variant in variants %}
+                    <div class="carousel-item" data-bs-color="{{ variant.color.name }}">
+                        <h1 class="fs-4 fw-normal">{{ variant.price }}&nbsp;PKR</h1>
+                        <img src="{{ variant.imageURL }}" class="d-block w-100" alt="...">
+                        <p class="text-secondary mb-0">{{ variant.color }}</p>
+                        {% if not variant.stock.stock %}
+                            <p class="text-danger mb-0">
+                                Sorry, This color is out of stock. :(
+                            </p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev carousel-btn" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next carousel-btn" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <br>
+
+        <div id="colors" class="d-flex flex-row justify-content-center">
+            {% for variant in variants %}
+            <div class="color-div me-2 d-flex flex-row justify-content-center align-items-center">
+                <div class="color-div-inner" data-bs-color="{{ variant.color.name }}">
+                    <img src="{{ variant.color.imageURL }}" alt="">
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+
+            const carousel = $('.carousel')
+            const colorContainer = $('#colors')
+            const carouselItems = $('.carousel-item')
+            const colors = $('.color-div')
+
+            $(carouselItems[0]).addClass('active')
+            $(colors[0]).addClass('color-active')
+
+            $(carousel).on('slide.bs.carousel', event => {
+                console.log(event)
+                let color = $(event.relatedTarget).attr('data-bs-color')
+                console.log('Active color: ', color)
+                $(colorContainer).children('div.color-div').removeClass('color-active')
+                for(let i = 0; i < colors.length; i++){
+                    let item = $(colors[i]).children('.color-div-inner')
+                    if(item.attr('data-bs-color') == color){
+                        item.parent('.color-div').addClass('color-active')
+                    }
+                }
+            })
+
+            $(colorContainer).on('click', '.color-div-inner', function(e){
+                e.preventDefault()
+                $this = $(this)
+                carouselItems.removeClass('active')
+                $(colorContainer).children('div.color-div').removeClass('color-active')
+                $this.parent('.color-div').addClass('color-active')
+                for(let i = 0 ; i < carouselItems.length; i++){
+                    if($(carouselItems[i]).attr('data-bs-color') == $this.attr('data-bs-color')){
+                        $(carouselItems[i]).addClass('active')
+                    }
+                }
+                console.log($this.attr('data-bs-color'))
+            })
+
+        })
+    </script>
 </body>
+
 </html>

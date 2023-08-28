@@ -7,13 +7,14 @@ $(document).ready(function () {
         e.preventDefault()
         itemAdded.show(600)
         let formData = $(this).serialize()
+        arr = formData.split('&')
+        console.log(arr)
         if (user === 'AnonymousUser') {
+            action = arr[1].split('=')[1]
+            variantId = arr[2].split('=')[1]
+            console.log(variantId)
             // Updating cookie
-            arr = formData.split('&')
-            color = arr[1].split('=')[1]
-            productId = arr[2].split('=')[1]
-            action = arr[3].split('=')[1]
-            updateCookieItem(productId, action, color)
+            updateCookieItem(variantId, action)
             updateCartData(cartCountEle)
         } else {
 
@@ -39,11 +40,10 @@ $(document).ready(function () {
 
         if (user == "AnonymousUser") {
             arr = formData.split('&')
-            color = arr[1].split('=')[1]
-            productId = arr[2].split('=')[1]
-            action = arr[3].split('=')[1]
-
-            updateCookieItem(productId, action, color)
+            console.log(arr)
+            variantId = arr[1].split('=')[1]
+            action = arr[2].split('=')[1]
+            updateCookieItem(variantId, action)
             $.ajax({
                 url: '/cart/unauth-cart/',
                 type: 'POST',
@@ -96,12 +96,11 @@ $(document).ready(function () {
             let qtyEle = $(this).siblings('p.qtyBar')
 
             arr = formData.split('&')
-            color = arr[1].split('=')[1]
-            productId = arr[2].split('=')[1]
-            action = arr[3].split('=')[1]
+            variantId = arr[1].split('=')[1]
+            action = arr[2].split('=')[1]
 
 
-            updateCookieItem(productId, action, color)
+            updateCookieItem(variantId, action)
             $(this).parents('.cart-item').hide()
             updateCartData()
             $.ajax({
@@ -144,26 +143,26 @@ $(document).ready(function () {
 })
 
 
-function updateCookieItem(productId, action, color) {
+function updateCookieItem(variantId, action) {
 
     if (action == 'add') {
-        if (cart[productId] == undefined) {
-            cart[productId] = { 'quantity': 1, 'color': color }
+        if (cart[variantId] == undefined) {
+            cart[variantId] = { 'quantity': 1}
         } else {
-            cart[productId]['quantity'] += 1
+            cart[variantId]['quantity'] += 1
         }
     }
 
     if (action == 'remove') {
-        cart[productId]['quantity'] -= 1
+        cart[variantId]['quantity'] -= 1
 
-        if (cart[productId]['quantity'] <= 0) {
-            delete cart[productId]
+        if (cart[variantId]['quantity'] <= 0) {
+            delete cart[variantId]
         }
     }
 
     if (action == 'delete') {
-        delete cart[productId]
+        delete cart[variantId]
     }
 
 

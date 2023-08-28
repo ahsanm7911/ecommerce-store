@@ -2,6 +2,11 @@
     box-sizing: border-box;
 }
 
+h1,h2,h3,h4,h5,h6{
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
 p {
     font-family: 'REM', sans-serif;
     font-weight: lighter;
@@ -221,6 +226,9 @@ button {
     object-fit: cover;
 }
 
+.top-display-text{
+    font-size: small;
+}
 /* Mobile M (375 - 577px) */
 @media only screen and (min-width: 375px) {
 
