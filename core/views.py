@@ -40,35 +40,41 @@ def test(request):
 def home(request):
     context = {}
     page = "Home"
+    products = []
+    sunglasses = []
+    watches = []
+    for product in Product.objects.all():
+        variant = ProductVariant.objects.filter(product=product)[0]
+        products.append(variant)
+    
     try:
-        products = Product.objects.all().order_by('-created_at')[:4]
-    except Product.DoesNotExist:
-        products = None
-    try:
-        watches = Product.objects.filter(category__slug='watches').order_by('created_at')[:8]
-    except:
-        watches = None
-    try:
-        sunglasses = Product.objects.filter(category__slug='sunglasses').order_by('-created_at')[:8]
-    except:
-        sunglasses = None
-    try:
-        watches_category = Category.objects.get(slug='watches').slug
-    except:
-        watches_category = None
-    try:
-        sunglasses_category = Category.objects.get(slug='sunglasses').slug
-    except:
-        sunglasses_category = None
-    reviews = CustomerReview.objects.all()
+        watch_category = Category.objects.get(slug='watch')
+    except Category.DoesNotExist:
+        watch_category = None
 
-    context['products'] = products
-    context['watches'] = watches
-    context['sunglasses'] = sunglasses
-    context['watch_category'] = watches_category
-    context['sunglass_category'] = sunglasses_category
-    context['reviews'] = reviews
-    context['page'] = page
+    try:
+        sunglasses_category = Category.objects.get(slug='sunglasses')
+    except Category.DoesNotExist:
+        sunglasses_category = None
+
+
+    for product in Product.objects.filter(category__slug='watch'):
+        variant = ProductVariant.objects.filter(product=product)[0]
+        watches.append(variant)
+
+    for product in Product.objects.filter(category__slug='sunglasses'):
+        variant = ProductVariant.objects.filter(product=product)[0]
+        sunglasses.append(variant)
+
+
+    context = {
+        'page': page,
+        'products': products,
+        'watches_category': watch_category,
+        'sunglasses_category': sunglasses_category,
+        'watches': watches,
+        'sunglasses': sunglasses
+    }
     return render(request, 'core/index.html', context)
 
 def products(request, slug):
@@ -96,25 +102,27 @@ def products(request, slug):
 
 def product(request, cat, slug):
     context = {}
-    product = Product.objects.get(category__slug=cat, slug=slug)
-    variants = ProductVariant.objects.filter(product=product)
+    main_product = Product.objects.get(category__slug=cat, slug=slug)
+    variants = ProductVariant.objects.filter(product=main_product)
     bannerImage = variants[0].imageURL
 
     domain_name = request.get_host()
-    product_link = domain_name + product.get_absolute_url()
+    product_link = domain_name + main_product.get_absolute_url()
 
-    recommend_products = []
-    for product in Product.objects.filter(category__slug=cat):
-        variants = ProductVariant.objects.filter(product=product)
-        recommend_products.append(variants[0])
+    products_with_first_variant = []
+    products = Product.objects.filter(category__slug=cat)
+
+    for product in products:
+        first_variant = product.productvariant_set.first()
+        products_with_first_variant.append((product, first_variant))
 
 
     context = {
-        'product': product,
+        'main_product': main_product,
         'variants': variants,
         'bannerImage': bannerImage,
         'product_link': product_link,
-        'recommended_products': recommend_products
+        'products_with_first_variant': products_with_first_variant
     }
 
     return render(request, 'core/product.html', context)

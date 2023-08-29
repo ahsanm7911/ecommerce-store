@@ -1,12 +1,12 @@
-<a class="product col product2 px-1 page-link" href="{% url 'product' cat=product.product.category.slug slug=product.product.slug  %}">
+<a class="product col product2 px-1 page-link" href="{% url 'product' cat=item.category.slug slug=item.slug  %}">
     <div class="product-image-container position-relative">
-        <img src="{{ product.imageURL }}" class="w-100 {% if not product.stock %}opacity-25{% endif %}" alt="">
-        {% if not product.stock %}
+        <img src="{{ first_variant.imageURL }}" class="w-100 {% if not first_variant.stock.stock %}opacity-25{% endif %}" alt="">
+        {% if not first_variant.stock.stock %}
         <span class="text-bg-danger position-absolute px-2 py-1 fw-semibold" style="right: 0px;">Sold</span>
         {% endif %}
     </div>
     <div class="product-info">
-        <p class="product-title mt-2 mb-1">{{ product.product.name }}</p>
-        <p class="product-price text-start">{{ product.price }} PKR</p>
+        <p class="product-title mt-2 mb-1">{{ item.name }}</p>
+        <p class="product-price text-start">{{ first_variant.price }} PKR</p>
     </div>
 </a>
