@@ -193,5 +193,5 @@ STATICFILES_DIRS = [BASE_DIR/'src']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SITE_ID = 1
-MAINTENANCE = False
+MAINTENANCE = config('MAINTENANCE', cast=bool)
 
