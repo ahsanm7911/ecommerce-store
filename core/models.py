@@ -55,7 +55,6 @@ class Color(models.Model):
     
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
         try:
             self.image = resize_and_compress_image(self.image, 100, 85, output=f'{self.slug}-{self.hex_code}')
         except Exception as e:

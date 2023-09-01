@@ -29,7 +29,9 @@ sitemaps = {
 
 if settings.MAINTENANCE:
     urlpatterns = [
-        path('', maintenance_view, name='maintenance_page')
+        path('', maintenance_view, name='maintenance_page'),
+        path('admin/', admin.site.urls),
+
     ]
 else:
     urlpatterns = [
