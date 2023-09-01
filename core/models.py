@@ -9,6 +9,9 @@ from django.utils.text import slugify
 from django.utils import timezone
 from .image_manipulation import resize_and_compress_image
 from colorama import Fore
+from datetime import datetime, timedelta, date
+from PIL import Image
+import os
 import uuid
 # Create your models here.
 
@@ -52,6 +55,7 @@ class Color(models.Model):
     
 
     def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
         try:
             self.image = resize_and_compress_image(self.image, 100, 85, output=f'{self.slug}-{self.hex_code}')
         except Exception as e:
@@ -65,6 +69,7 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    lead_time = models.PositiveIntegerField(default=2) # number of days 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -91,15 +96,50 @@ class Product(models.Model):
         self.slug = slugify(self.name) + '-' + slugify(self.code) # Generating slug from the name
         super().save(*args, **kwargs)
 
+def product_variant_image_directory(instance, filename):
+    return f'products/{instance.product.slug}/variants/{instance.color.slug}/{filename}'
+
 def product_image_directory(instance, filename):
     return f'products/{instance.product.slug}/{filename}'
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=product_image_directory, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.product.name} | {self.id}'
+
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        return url
+    
+    def save(self, *args, **kwargs):
+        if not self.pk: # Only on creation, not on update
+           super().save(*args, **kwargs)
+
+        try:
+            self.image = resize_and_compress_image(self.image, 1080, 85, output=f'{self.product.slug}-{self.id}')
+        except Exception as e:
+            print('Image not optimized: ', e)
+
 
 
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
-    image = models.ImageField(upload_to=product_image_directory)
+    image_original = models.ImageField(upload_to=product_variant_image_directory, default='')
+    image_thumbnail = models.ImageField(upload_to=product_variant_image_directory, blank=True)
+    image_small = models.ImageField(upload_to=product_variant_image_directory, blank=True)
+    image_medium = models.ImageField(upload_to=product_variant_image_directory, blank=True)
+    image_large = models.ImageField(upload_to=product_variant_image_directory, blank=True)
     color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    display = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -111,23 +151,78 @@ class ProductVariant(models.Model):
         return self.product.slug
     
     @property
-    def imageURL(self):
+    def original(self):
         try:
-            url = self.image.url
+            url = self.image_original.url
         except:
             url = ''
         return url
     
+    @property
+    def thumbnail(self):
+        try:
+            url = self.image_thumbnail.url
+        except:
+            url = ''
+        return url
+    
+    @property
+    def small(self):
+        try:
+            url = self.image_small.url
+        except:
+            url = ''
+        return url
+
+    @property
+    def medium(self):
+        try:
+            url = self.image_medium.url
+        except:
+            url = ''
+        return url
+
+    @property
+    def large(self):
+        try:
+            url = self.image_large.url
+        except:
+            url = ''
+        return url
+
     def save(self, *args, **kwargs):
+
         if not self.price:
             self.price = self.product.price
-        try:
-            self.image = resize_and_compress_image(self.image, 1080, 85, output=f'{slugify(self.product.name)}-{self.color.slug}')
-        except Exception as e:
-            print(f'Image not optimized: {e}', Fore.RED)
+        size = 1600
+        self.image_original = resize_and_compress_image(self.image_original, size, 85, output=f'{size}x{size}')
         super().save(*args, **kwargs)
-
+        if self.image_original and not self.image_thumbnail:
+            size = 200
+            self.image_thumbnail = resize_and_compress_image(self.image_original, size, 100, output=f'{size}x{size}')
+            super().save(*args, **kwargs)
         
+        if self.image_original and not self.image_small:
+            size = 500
+            self.image_small = resize_and_compress_image(self.image_original, size, 100, output=f'{size}x{size}')
+            super().save(*args, **kwargs)
+
+        if self.image_original and not self.image_medium:
+            size = 800
+            self.image_medium = resize_and_compress_image(self.image_original, size, 100, output=f'{size}x{size}')
+            super().save(*args, **kwargs)
+
+        if self.image_original and not self.image_large:
+            size = 1200
+            self.image_large = resize_and_compress_image(self.image_original, size, 100, output=f'{size}x{size}')
+            super().save(*args, **kwargs)
+
+
+        if not self.pk: # Only on creation, not on update
+           super().save(*args, **kwargs)
+
+
+
 
 class Stock(models.Model):
     variant = models.OneToOneField(ProductVariant, on_delete=models.CASCADE)
@@ -149,7 +244,7 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"Cart for {self.user.username}"
-    
+
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -229,6 +324,7 @@ class ConfirmedOrder(models.Model):
     bill = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     payment_method = models.CharField(max_length=40, default='COD')
     status = models.CharField(max_length=255, choices=ORDER_STATUS, default=ORDER_STATUS[0])
+    tracking_id = models.CharField(max_length=255, default='', blank=True)
     channel = models.CharField(max_length=255, choices=CHANNEL, default=CHANNEL[0], null=True)
     registered_user = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -236,6 +332,7 @@ class ConfirmedOrder(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.transaction_id:
+
             # Generate the perfixed ID
             last_id = ConfirmedOrder.objects.order_by('-id').first()
             if last_id:
@@ -247,7 +344,8 @@ class ConfirmedOrder(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.transaction_id
+        split_char = "\n"
+        return f"{self.transaction_id} | {self.shippingAddress.split(split_char)[0]}"
 
 
 class RefundPolicy(models.Model):

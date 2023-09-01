@@ -2,7 +2,9 @@
     box-sizing: border-box;
 }
 
-h1,h2,h3,h4,h5,h6{
+
+
+.heading-spaced{
     text-transform: uppercase;
     letter-spacing: 3px;
 }
@@ -27,11 +29,17 @@ h6 {
     font-family: 'Raleway';
 }
 
+.brand-logo{
+    display: flex;
+    align-items: center;
+    width: 160px;
+}
 .brand-logo a img{
-    width: 100px;
-    height: 80px;
+    width: 100%;
+    height: px;
     object-fit: cover;
-    margin-left: 18px;
+    margin-left: 0px;
+    padding: 0px 14px;
 }
 hr {
     opacity: 20%;
@@ -115,16 +123,24 @@ input[type='submit'], button, a[type="button"], a.customBtnBlack{
 #cart-item-count .badge {
     position: absolute;
     /* font-size: small; */
-    top: 0px;
-    right: 4px;
+    top: 19px;
+    right: 27px;
     padding: 4px 8px;
-    border-radius: 50%;
-    background: red;
+    background: transparent;
     color: white;
 }
-a.product:hover{
+p.product-title{
+    font-size: medium;
+    padding-left: 4px;
+    font-family: 'Raleway';
+}
+p.product-price{
+    padding-left: 4px;
+}
+p.product-title:hover{
     text-decoration: underline;
 }
+
 #newsletter span{
     left: 85%;
     top: 25%;
@@ -229,6 +245,13 @@ button {
 .top-display-text{
     font-size: small;
 }
+div.products-wrapper a:nth-child(odd){
+    padding-right: 2px;
+}
+div.products-wrapper a:nth-child(even){
+    padding-left: 2px;
+}
+
 /* Mobile M (375 - 577px) */
 @media only screen and (min-width: 375px) {
 
@@ -332,12 +355,22 @@ button {
     .cart-item-image img {
         width: 100% !important;
     }
-
+    #cart-item-count .badge{
+        top: 23px;
+        right: 30px;
+    }
     #checkoutBtn {
         padding-left: 88px;
         padding-right: 88px;
         width: 50% !important;
     }
+    div.products-wrapper a:nth-child(odd){
+        padding-right: 4px;
+    }
+    div.products-wrapper a:nth-child(even){
+        padding-left: 4px;
+    }
+    
 }
 
 /* Laptop (1024px) */
@@ -394,6 +427,9 @@ button {
         width: 25%;
     }
 
+    #footer{
+        font-size: small;
+    }
     #footer ul,
     #newsletter {
         padding: 0px !important;
@@ -419,5 +455,9 @@ button {
 
     #viewAllBtn {
         width: 25% !important;
+    }
+    #cart-item-count .badge{
+        top: 22px;
+        right: 29px;
     }
 }

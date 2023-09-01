@@ -33,6 +33,9 @@
     .color-active {
         border: 2px solid darkgray;
     }
+    .para-test p:nth-child(odd){
+        background-color: antiquewhite;
+    }
 </style>
 
 <body>
@@ -82,6 +85,14 @@
             {% endfor %}
         </div>
 
+    </div>
+
+    <div class="para-test">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus explicabo ex a, odit ea incidunt debitis praesentium iure alias aperiam?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus explicabo ex a, odit ea incidunt debitis praesentium iure alias aperiam?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus explicabo ex a, odit ea incidunt debitis praesentium iure alias aperiam?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus explicabo ex a, odit ea incidunt debitis praesentium iure alias aperiam?</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus explicabo ex a, odit ea incidunt debitis praesentium iure alias aperiam?</p>
     </div>
 
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>

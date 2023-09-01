@@ -2,7 +2,9 @@
     box-sizing: border-box;
 }
 
-h1,h2,h3,h4,h5,h6{
+
+
+.heading-spaced{
     text-transform: uppercase;
     letter-spacing: 3px;
 }
@@ -27,11 +29,17 @@ h6 {
     font-family: 'Raleway';
 }
 
+.brand-logo{
+    display: flex;
+    align-items: center;
+    width: 160px;
+}
 .brand-logo a img{
-    width: 100px;
-    height: 80px;
+    width: 100%;
+    height: px;
     object-fit: cover;
-    margin-left: 18px;
+    margin-left: 0px;
+    padding: 0px 14px;
 }
 hr {
     opacity: 20%;
@@ -115,16 +123,15 @@ input[type='submit'], button, a[type="button"], a.customBtnBlack{
 #cart-item-count .badge {
     position: absolute;
     /* font-size: small; */
-    top: 0px;
-    right: 4px;
+    top: 22px;
+    right: 30px;
     padding: 4px 8px;
-    border-radius: 50%;
-    background: red;
+    background: transparent;
     color: white;
 }
-a.product:hover{
-    text-decoration: underline;
-}
+/* a.product:hover{ */
+    /* text-decoration: underline; */
+/* } */
 #newsletter span{
     left: 85%;
     top: 25%;

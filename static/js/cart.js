@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     $('.addToCartForm').submit(function (e) {
         e.preventDefault()
-        itemAdded.show(600)
+        itemAdded.show(500)
         let formData = $(this).serialize()
         arr = formData.split('&')
         console.log(arr)

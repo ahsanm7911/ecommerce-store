@@ -1,17 +1,22 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
-from .models import Product, ProductVariant, Color, Stock, Order, OrderItem, ConfirmedOrder, ShippingAddress, RefundPolicy, ClientEnquiry, CustomerReview
+from .models import Product, ProductVariant, ProductImage, Color, Stock, Order, OrderItem, ConfirmedOrder, ShippingAddress, RefundPolicy, ClientEnquiry, CustomerReview
 from accounts.models import Address
 from django.http import JsonResponse, HttpResponse
 from django.contrib.sites.models import Site
 from django.views.decorators.http import require_GET
 from django.core import serializers
 from .utils import *  
+import random
 from unrols.settings import USE_S3
 from decouple import config
 import json
 # Create your views here.
 # SEO VIEWS
+
+
+def maintenance(request):
+    return render(request, 'maintenance_page.html')
 
 @require_GET
 def robots_txt(request):
@@ -43,10 +48,13 @@ def home(request):
     products = []
     sunglasses = []
     watches = []
-    for product in Product.objects.all():
-        variant = ProductVariant.objects.filter(product=product)[0]
-        products.append(variant)
     
+    products = ProductVariant.objects.filter(display=True)
+    mobile_banner_image = ProductVariant.objects.get(product__code='UNS-001', color__name='Black')
+    desktop_banner_image = ProductVariant.objects.get(product__code='UNS-001',color__name='Black')
+    print(mobile_banner_image)
+    print(desktop_banner_image)
+
     try:
         watch_category = Category.objects.get(slug='watch')
     except Category.DoesNotExist:
@@ -57,15 +65,10 @@ def home(request):
     except Category.DoesNotExist:
         sunglasses_category = None
 
+    customer_reviews = CustomerReview.objects.all()
 
-    for product in Product.objects.filter(category__slug='watch'):
-        variant = ProductVariant.objects.filter(product=product)[0]
-        watches.append(variant)
-
-    for product in Product.objects.filter(category__slug='sunglasses'):
-        variant = ProductVariant.objects.filter(product=product)[0]
-        sunglasses.append(variant)
-
+    watches = ProductVariant.objects.filter(product__category__slug='watches', display=True)
+    sunglasses = ProductVariant.objects.filter(product__category__slug='sunglasses', display=True)
 
     context = {
         'page': page,
@@ -73,56 +76,77 @@ def home(request):
         'watches_category': watch_category,
         'sunglasses_category': sunglasses_category,
         'watches': watches,
-        'sunglasses': sunglasses
+        'sunglasses': sunglasses,
+        'mobile_banner_image': mobile_banner_image,
+        'desktop_banner_image': desktop_banner_image,
+        'reviews': customer_reviews
     }
     return render(request, 'core/index.html', context)
 
 def products(request, slug):
     page = slug
     context = {}
-    try:
-        products = Product.objects.filter(category__slug=slug)
-    except:
-        products = None
+
+    variants = ProductVariant.objects.filter(product__category__slug=slug, display=True)    
+    product_count = len(variants)
+    items_per_page = 8  
     try:        
-        paginator = Paginator(products, 8)
+        paginator = Paginator(variants, items_per_page)
     except:
         pass
+
+    try:
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+    except:
+        page_obj = None
     
-    category = slug
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    product_count = products.count()
-    context['page_obj'] = page_obj
-    context['product_count'] = product_count
-    context['category'] = category
-    context['page'] = page
+    context = {
+        'page': page,
+        'page_obj': page_obj,
+        'product_count': product_count
+    }
 
     return render(request, 'core/products.html', context)
 
 def product(request, cat, slug):
     context = {}
     main_product = Product.objects.get(category__slug=cat, slug=slug)
-    variants = ProductVariant.objects.filter(product=main_product)
-    bannerImage = variants[0].imageURL
+    variants = ProductVariant.objects.filter(product=main_product).order_by('-display')
 
     domain_name = request.get_host()
     product_link = domain_name + main_product.get_absolute_url()
 
     products_with_first_variant = []
-    products = Product.objects.filter(category__slug=cat)
+    products = Product.objects.filter(category__slug=cat).exclude(id=main_product.id)
 
-    for product in products:
-        first_variant = product.productvariant_set.first()
-        products_with_first_variant.append((product, first_variant))
+    product_images = ProductImage.objects.filter(product=main_product)
+    page = main_product.name 
 
+    products = ProductVariant.objects.filter(product__category__slug=cat, display=True).exclude(product=main_product)
+
+    # Shipping details
+    lead_time = timedelta(days=main_product.lead_time)
+    current_date = date.today()
+
+    # Define a list of holidays (dates) when shipping is not available 
+    holidays = [date(2023, 12, 25), date(2023, 1, 1)] # Add your holidays here
+
+    # Calculate the estimated shipping date considering weekends and holidays 
+    shipping_date = current_date + lead_time
+    while shipping_date.weekday() >= 5 or shipping_date in holidays:
+        shipping_date += timedelta(days=1)
+
+    
 
     context = {
+        'page': page,
         'main_product': main_product,
         'variants': variants,
-        'bannerImage': bannerImage,
+        'product_images': product_images,
         'product_link': product_link,
-        'products_with_first_variant': products_with_first_variant
+        'products': products,
+        'shipping_date': shipping_date
     }
 
     return render(request, 'core/product.html', context)
@@ -130,18 +154,49 @@ def product(request, cat, slug):
 def lookbook(request):
     page = 'Lookbook'
     context = {}
-    try:
-        recommended_products = Product.objects.filter(stock=True)[:4]
-    except:
-        recommended_products = None
-    try:   
-        category = recommended_products[0].category.slug
-    except:
-        category = None
 
-    context['recommended_products'] = recommended_products
-    context['category'] = category
-    context['page'] = page
+    products = []
+    for product in Product.objects.all()[:4]:
+        if product.productvariant_set.all().count() > 0:
+            try:
+                variant = product.productvariant_set.all()[0]
+            except:
+                variant = None
+            products.append(variant)
+
+    choices = []
+    for i in ProductVariant.objects.all()[:11]:
+        choices.append(i.id)
+        
+    
+
+    image_one       = ProductVariant.objects.get(id=random.choice(choices))
+    image_two       = ProductVariant.objects.get(id=random.choice(choices))
+    image_three       = ProductVariant.objects.get(id=random.choice(choices))
+    image_four       = ProductVariant.objects.get(id=random.choice(choices))
+    image_five      = ProductVariant.objects.get(id=random.choice(choices))
+    image_six       = ProductVariant.objects.get(id=random.choice(choices))
+    image_seven       = ProductVariant.objects.get(id=random.choice(choices))
+    image_eight       = ProductVariant.objects.get(id=random.choice(choices))
+    image_nine       = ProductVariant.objects.get(id=random.choice(choices))
+    image_ten       = ProductVariant.objects.get(id=random.choice(choices))
+    image_eleven       = ProductVariant.objects.get(id=random.choice(choices))
+
+    context = {
+        'page': page,
+        'products': products,
+        'image_one': image_one,
+        'image_two': image_two,
+        'image_three': image_three,
+        'image_four': image_four,
+        'image_five': image_five,
+        'image_six': image_six,
+        'image_seven': image_seven,
+        'image_eight': image_eight,
+        'image_nine': image_nine,
+        'image_ten': image_ten,
+        'image_eleven': image_eleven,
+    }
 
     return render(request, 'core/lookbook.html', context)
 
@@ -222,15 +277,17 @@ def updating_cart_total(request):
 def cart(request):
     page = 'Cart'
     context = {}
-    # recommeded_products = Product.objects.filter(stock=True)[:4]
+
+    variants = ProductVariant.objects.filter(display=True)[:4]
+
     if request.user.is_authenticated: # cart functionality for logged in user
         customer = request.user
         context = update_cart(customer)
     else:                               # cart functionality for guest user
         context = get_cart_data(request)
         # data to send as response for ajax
-    # context['recommended_products'] = recommeded_products
     context['page'] = page
+    context['variants'] = variants
     return render(request, 'core/cart.html', context)
 
 def process_checkout(request):
@@ -267,7 +324,7 @@ def process_checkout(request):
             new_order.save()
         else:
 
-            shipping_address = f'{full_name} , {phone}\n{street}, {city}, {country}\n{postal_code}.'
+            shipping_address = f'{full_name}\n{phone}\n{street}, {city}, {country}\n{postal_code}.'
             
             cartData = get_cart_data(request)
             item_details = ''

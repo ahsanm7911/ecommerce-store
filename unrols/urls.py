@@ -19,6 +19,7 @@ from django.contrib.sitemaps.views import sitemap, index
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from core.views import maintenance as maintenance_view
 from core.sitemaps import *
 
 sitemaps = {
@@ -26,24 +27,30 @@ sitemaps = {
     "products": ProductsSitemap
 }
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('core.urls')),
-    # path('accounts/', include('accounts.urls'))
+if settings.MAINTENANCE:
+    urlpatterns = [
+        path('', maintenance_view, name='maintenance_page')
+    ]
+else:
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', include('core.urls')),
+        # path('accounts/', include('accounts.urls'))
 
-    path(
-        "sitemap.xml",
-         index, 
-        {'sitemaps': sitemaps},
-         name='django.contrib.sitemaps.views.index',
-         ),
-    path(
-        'sitemap_<section>.xml',
-        sitemap,
-        {"sitemaps": sitemaps},
-        name='django.contrib.sitemaps.views.sitemap',
-    ),
-]
+        path(
+            "sitemap.xml",
+            index, 
+            {'sitemaps': sitemaps},
+            name='django.contrib.sitemaps.views.index',
+            ),
+        path(
+            'sitemap_<section>.xml',
+            sitemap,
+            {"sitemaps": sitemaps},
+            name='django.contrib.sitemaps.views.sitemap',
+        ),
+    ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)

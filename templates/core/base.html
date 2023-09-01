@@ -5,20 +5,19 @@
 <head>
 
     <!-- Google tag (gtag.js) -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NMY2HV1KC"></script> -->
-    <!-- <script> -->
-        <!-- // window.dataLayer = window.dataLayer || []; -->
-        <!-- // function gtag() { dataLayer.push(arguments); } -->
-        <!-- // gtag('js', new Date()); -->
-<!-- //  -->
-        <!-- // gtag('config', 'G-2NMY2HV1KC'); -->
-    <!-- // </script> -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NMY2HV1KC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-2NMY2HV1KC');
+    </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name='author' content="Unrols">
 
-    <title>Unrols - {{ page|title }}</title>
+    <title>Unrols - {{ page | title }}</title>
 
     <meta name="description"
         content="Explore chic fashion accessories online. Discover trendy sunglasses, watches, handbags & more. Elevate your style with our curated collection. Shop now!">
@@ -78,7 +77,7 @@
 <body class="bg-white">
     <!-- MAIN HEADER INFO -->
     <div
-        class="top-display-text container-fluid px-0 header-info d-flex flex-row justify-content-center align-items-center border-bottom border-light-subtle ">
+        class="top-display-text container-fluid px-0 header-info d-flex flex-row justify-content-center align-items-center border-bottom border-light-subtle">
         <p class="mt-2 mb-2 fw-light">Free shipping on all orders!</p>
     </div>
 
@@ -93,30 +92,33 @@
         <ul class="d-flex flex-column ps-0 mt-5" id="sidebarUl">
             <li class="fs-4 py-3"><a href="{% url 'products' slug='watches' %}" class="nav-link">Watches</a></li>
             <li class="fs-4 py-3"><a href="{% url 'products' slug='sunglasses' %}" class="nav-link">Sunglasses</a></li>
-            <li class="fs-4 py-3"><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li>
+            <!-- <li class="fs-4 py-3"><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li> -->
         </ul>
     </div>
 
     <!-- Navbar for large screens -->
     <div class="container-fluid bg-dark text-light d-none d-lg-block py-2">
         <div class="container d-flex flex-row align-items-center justify-content-between">
+
             <ul class="d-flex flex-row mb-0 ps-0" id="nav-links">
                 <li class="me-4"><a href="{% url 'products' slug='watches' %}" class="nav-link">Watches</a></li>
                 <li class="me-4"><a href="{% url 'products' slug='sunglasses' %}" class="nav-link">Sunglasses</a></li>
-                <li class=""><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li>
+                <!-- <li class=""><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li> -->
             </ul>
-            <div class="brand-logo fs-2 fw-semibold">
+
+            <div class="brand-logo fs-2 fw-semibold align-self-baseline">
                 <a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/logo.png' %}" alt="Unrols Logo"
                         title="logo"></a>
             </div>
 
+
             <div class="cart-search-container">
                 <ul class="d-flex flex-row d-flex flex-row align-items-center mb-0">
-                    <li class="fs-4 searchBar"><a href="" class="nav-link"><i class="bi bi-search"></i></a></li>
+                    {% comment %} <li class="fs-4 searchBar"><a href="" class="nav-link"><i class="bi bi-search"></i></a></li> {% endcomment %}
                     <li class="ms-4 fs-4 position-relative">
                         <a href="{% url 'cart' %}" class="nav-link" id="cart-item-count">
-                            <i class="bi bi-cart"></i>
-                            <span class="badge">
+                            <i class="bi bi-bag fs-2"></i>
+                            <span class="badge fs-6">
                                 {% if request.user.is_authenticated %}
                                 {{ request | items_count }}
                                 {% else %}
@@ -142,16 +144,16 @@
 
     <!-- Navbar for small screens -->
     <div class="container-fluid text-light py-2 d-lg-none px-1" id="navbarContainer" style="background-color: #111;">
-        <ul class="d-flex flex-row justify-content-between align-items-center list-style-none ps-2 mb-0 main-bar">
+        <ul class="d-flex flex-row justify-content-between align-items-center list-style-none ps-2 mb-0 main-bar" style="height: 70px;">
             <li class="fs-1" onclick="toggleSidebar()"><i class="bi bi-list"></i></li>
             <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img
                         src="{% static 'logos/logo.png' %}" alt="Unrols"></a></li>
             <div class="d-flex flex-row align-items-center justify-content-end flex-shrink-1">
-                <li class="fs-4 searchBar"><i class="bi bi-search"></i></li>
+                <!-- <li class="fs-4 searchBar"><i class="bi bi-search"></i></li> -->
                 <li class="ms-2 fs-4 position-relative">
                     <a href="{% url 'cart' %}" class="nav-link" id="cart-item-count">
-                        <i class="bi bi-cart fs-3"></i>
-                        <span class="badge">
+                        <i class="bi bi-bag fs-1"></i>
+                        <span class="badge fs-6">
                             {% if request.user.is_authenticated %}
                             {{ request | items_count }}
                             {% else %}
@@ -181,7 +183,7 @@
                     <li class="mb-2 text-light"><a href="{% url 'products' slug='sunglasses' %}"
                             class="nav-link">Sunglasses</a></li>
 
-                    <li class="mb-2 text-light"><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li>
+                    <!-- <li class="mb-2 text-light"><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li> -->
                 </ul>
                 <br>
                 <ul style="padding-left: 0px;">

@@ -46,20 +46,20 @@
     {% for item in items %}
     <div class="row cart-item mb-2">
         <div class="col col-md-2 cart-item-image">
-            <img src="{{ item.product_image.url }}" alt="" class="w-100">
+            <img src="{{ item.product_image }}" alt="{{ item.product_name }}" class="w-100">
         </div>
         <div class="col cart-item-details">
             <div class="row">
                 <p class="mb-0 fs-6">{{ item.product_name }}</p>
             </div>
             <div class="row">
-                <p class="mb-0 text-secondary">{{ item.product_price }} PKR</p>
+                <p class="mb-0 text-dark fw-medium">{{ item.product_price }} PKR</p>
             </div>
             <div class="row">
                 <p class="mb-0 text-secondary">Color:</p>
             </div>
             <div class="row">
-                <p class="mb-0 text-secondary">{{ item.product_color | capfirst }}</p>
+                <p class="mb-0 text-dark">{{ item.product_color | capfirst }}</p>
             </div>
             <br>
             <div class="row d-md-none">
@@ -99,7 +99,7 @@
             </div>
         </div>
         <div class="col-2 item-total d-flex flex-column align-items-end justify-content-between">
-            <p class="float-end"><span>{{ item.item_total | default:'0.00' }}</span> PKR</p>
+            <p class="float-end"><span class="">{{ item.item_total | default:'0.00' }}</span> PKR</p>
             <p class="float-end" title="Delete">
                 <form action="" method="post" class="item-delete-btn">
                     {% csrf_token %}    
@@ -136,9 +136,9 @@
     <div class="row">
         <p>You may also like</p>
     </div>
-    <div class="row row-cols-lg-4 mb-2 row-cols-2 px-1">
+    <div class="row row-cols-lg-4 mb-2 row-cols-2 px-1 products-wrapper">
 
-        {% for product in recommended_products %}
+        {% for variant in variants %}
             {% include 'partials/product.html' %}
         {% endfor %}
 

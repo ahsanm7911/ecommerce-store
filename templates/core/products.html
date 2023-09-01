@@ -27,9 +27,9 @@
     </div>
 
     <div class="container-fluid container-md my-4 mx-0 px-0">
-        <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2">
+        <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2 products-wrapper">
             {% if page_obj %}
-            {% for product in page_obj %}
+            {% for variant in page_obj %}
                 {% include 'partials/product.html' %}
             {% endfor %}
             {% else %}

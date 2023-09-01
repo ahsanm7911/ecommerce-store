@@ -3,6 +3,12 @@
 {% block css %}
 <style>
     /* UTILITY CLASSES */
+    /* *::-webkit-scrollbar{ */
+        /* display: none; */
+    /* } */
+    body{
+        overflow-x: hidden;
+    }
     .op-0 {
         opacity: 0;
     }
@@ -11,19 +17,51 @@
         height: 400px;
         object-fit: cover;
     }
-
+    .product-details {
+        width: 100%;
+    }
+    .product-details-images{
+        width: 100%;
+    }
     @media only screen and (min-width:768px) {
         #addToCartBtn {
             width: 60% !important;
         }
 
         .carousel-image {
-            height: 500px;
+            height: 540px;
             object-fit: cover;
         }
     }
 
-    @media only screen and (min-width: 1024px) {}
+    @media only screen and (min-width: 1024px) {
+        .product-details{
+            width: 47%;
+            position: sticky;
+            padding: 24px !important;
+            top: 0;
+            height: 628px;
+            overflow-y: hidden;
+        }
+        .product-details-images{
+            width: 49%;
+            overflow-y: scroll;
+            max-height: 100vh;
+            box-sizing: border-box;
+            /* Hide the scroll bar */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .product-details-images::-webkit-scrollbar{
+            display: none;
+        }
+        .product-details-images img{
+            height: 628px;
+            object-fit: cover;
+        }
+
+
+    }
 
     #colors {
         padding: 4px;
@@ -40,9 +78,11 @@
         width: 45px;
         height: 45px;
         border-radius: 60px;
-        padding: 2px;
+        border: 1px solid lightgray;
+        padding: 0px;
     }
-    .color-div-inner:hover{
+
+    .color-div-inner:hover {
         cursor: pointer;
     }
 
@@ -54,6 +94,7 @@
     .disableBtn {
         opacity: 20%;
     }
+    
 </style>
 {% endblock css %}
 
@@ -72,11 +113,11 @@
 
         <!-- For small screens -->
         <div class="container-fluid px-0 product-title-details d-lg-none">
-            <h1 class="fs-4 mb-0">{{ main_product.name }}</h1>
+            <h1 class="fs-4 mb-0 heading-spaced">{{ main_product.name }}</h1>
             <p style="font-size: small;" class="mb-1 text-secondary">{{ main_product.code }}</p>
-            <h4 class="text-secondary mb-0 text-decoration-line-through fs-6">Rs.&nbsp;<span>2000.00</span>&nbsp;PKR
+            <h4 class="text-secondary mb-0 text-decoration-line-through fs-6 heading-spaced">Rs.&nbsp;<span>2000.00</span>&nbsp;PKR
             </h4>
-            <h4 class="fs-4 fw-normal"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;PKR</h4>
+            <h4 class="fs-4 fw-normal heading-spaced"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;PKR</h4>
         </div>
         <br class="d-lg-none">
         <div class="container-fluid d-flex flex-column align-items-center px-0 mx-0 w-100" id="product-image-container">
@@ -86,9 +127,12 @@
                     <div class="carousel-item" data-bs-color="{{ variant.color.name }}"
                         data-bs-variant="{{ variant.id }}" data-bs-stock="{{ variant.stock.stock }}"
                         data-bs-price="{{ variant.price }}">
-                        <img src="{{ variant.imageURL }}" class="d-block w-100 carousel-image" alt="...">
-                        <h6 class="fw-semibold text-secondary active-color fs-6 mt-2 d-lg-none">COLOR: <span
-                                class="text-dark text-uppercase">RED</span></h6>
+                        <picture>
+                            <source media="(min-width:768px)" srcset="{{ variant.original }}">
+                            <img src="{{ variant.medium }}" class="d-block w-100 carousel-image" alt="...">
+                        </picture>
+                        <h6 class="fw-semibold text-secondary active-color mt-2 d-lg-none" style="font-size: small;">COLOR: <span
+                                class="text-dark text-uppercase heading-spaced">RED</span></h6>
                         <p
                             class="text-danger fw-semibold mb-0 d-lg-none {% if variant.stock.stock %}opacity-0{% endif %}">
                             Sorry, This color is currently unavailable.
@@ -115,18 +159,18 @@
     <div class="container-fluid px-0 w-100 mb-2"> <!-- Product details div -->
         <!-- For Large Screens -->
         <div class="container product-title-details d-none d-lg-block mt-5">
-            <h1 class="fs-4 mb-0">{{ main_product.name }}</h1>
+            <h1 class="fs-4 mb-0 heading-spaced">{{ main_product.name }}</h1>
             <p style="font-size: small;" class="mb-2 text-secondary">{{ main_product.code }}</p>
-            <p class="text-secondary mb-0 text-decoration-line-through">Rs.&nbsp;<span>2000.00</span>&nbsp;PKR</p>
-            <h4 class="fs-4 fw-normal"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;PKR</h4>
+            <p class="text-secondary mb-0 text-decoration-line-through heading-spaced">Rs.&nbsp;<span>2000.00</span>&nbsp;PKR</p>
+            <h4 class="fs-4 fw-normal heading-spaced"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;PKR</h4>
         </div>
 
-        <h6 class="fw-semibold text-secondary active-color fs-6 d-none d-lg-block">COLOR: <span
-                class="text-dark text-uppercase">RED</span>
+        <h6 class="fw-semibold text-secondary active-color d-none d-lg-block" style="font-size: small;">COLOR: <span
+                class="text-dark text-uppercase heading-spaced">RED</span>
         </h6>
-        <div id="colors" class="d-flex flex-row justify-content-center mt-0">
+        <div id="colors" class="d-flex flex-row justify-content-center align-items-center mt-0">
             {% for variant in variants %}
-            <div class="color-div me-2 d-flex flex-row justify-content-center align-items-center">
+            <div class="color-div mx-1 d-flex flex-row justify-content-center align-items-center">
                 <div class="color-div-inner" data-bs-color="{{ variant.color.name }}"
                     data-slide-to="{{ forloop.counter }}">
                     <img src="{{ variant.color.imageURL }}" alt="">
@@ -142,11 +186,11 @@
             {% csrf_token %}
 
 
-            <div class="container-fluid mb-2 px-0 d-flex flex-column justify-content-center align-items-center w-75">
+            <div class="container-fluid mb-2 px-0 d-flex flex-column align-items-center w-75">
                 <input type="hidden" name="action" value="add">
                 <input type="hidden" name="variantId" value="" id="variantId">
                 <button type="submit" class="customBtnBlack py-2 cartBtn w-100" id="addToCartBtn">Add to
-                    cart</button>
+                    Cart</button>
                 <p class="text-success mt-1 item-added">Added to cart.&nbsp;<i class="bi bi-check-circle"></i> </p>
             </div>
 
@@ -154,12 +198,12 @@
         <div class="container-fluid px-0 mb-2 d-none">
             <button class="customBtnBlack py-2" id="buyNowBtn">Buy it now</button>
         </div>
-        <div class="shipping-details" style="letter-spacing: 2px; font-size: x-small;">
+        <div class="shipping-details mt-2" style="letter-spacing: 2px; font-size: x-small;">
 
             <p class="text-secondary text-uppercase fw-semibold mb-0">Order now and it ships by</p>
-            <span class="text-dark fw-medium text-uppercase">Tuesday, August 29</span>
+            <span class="text-dark fw-medium text-uppercase fs-6">{{ shipping_date }}</span>
             <br><br>
-            <div class="container-fluid d-md-flex flex-row justify-content-around align-items-center">
+            <div class="container-fluid d-md-flex flex-row justify-content-evenly align-items-center">
 
                 <div class="fast-delivery">
                     <img src="{% static 'icons/fast-delivery.png' %}" alt="">
@@ -183,24 +227,32 @@
 </div>
 
 <div class="container-fluid description bg-light px-0">
-    <div class="container d-flex flex-column justify-content-center align-items-center pt-5">
+    <div class="row px-0 row-cols-1 row-cols-lg-2">
 
-        <h3 class="fs-4">Description</h3>
-        {% autoescape off %}
-        {{ main_product.description | default:'This product has no description.'}}
-        {% endautoescape %}
+        <div class="container d-flex flex-column py-5 px-4 align-items-center col product-details">
+
+            <h3 class="fs-4 text-dark">Product Details:</h3>
+            {% autoescape off %}
+            {{ main_product.description | truncatechars:'950'}}
+            {% endautoescape %}
+
+        </div>
+
+        <div class="container product-details-images col px-0">
+            {% for image in product_images %}
+                <img src="{{ image.imageURL }}" alt="" class="banner-image w-100 px-0">
+            {% endfor %}
+        </div>
     </div>
 
 </div>
 <br>
-<div class="container">
+<div class="container-fluid">
     <h6 style="font-size: small;" class="mb-3">You may also like</h6>
     <div class="container-fluid px-0">
-        <div class="row row-cols-2 row-cols-lg-4 px-1">
-            {% for item, first_variant in products_with_first_variant %}
-            <div class="col px-0">
+        <div class="row row-cols-2 row-cols-lg-4 px-2 products-wrapper">
+            {% for variant in products %}
                 {% include "partials/product.html" %}
-            </div>
             {% endfor %}
         </div>
     </div>

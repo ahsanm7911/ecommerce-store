@@ -1,12 +1,25 @@
-<a class="product col product2 px-1 page-link" href="{% url 'product' cat=item.category.slug slug=item.slug  %}">
+<style>
+    .product-image-container{
+        object-fit: cover;
+        transition: transform 0.6s;
+        overflow: hidden;
+    }
+    .product-image-container:hover img{
+        transform: scale(1.1); /* Zoom in effect when hover */
+    }
+</style>
+<a class="product col page-link" href="{% url 'product' cat=variant.product.category.slug slug=variant.product.slug  %}">
     <div class="product-image-container position-relative">
-        <img src="{{ first_variant.imageURL }}" class="w-100 {% if not first_variant.stock.stock %}opacity-25{% endif %}" alt="">
-        {% if not first_variant.stock.stock %}
+        <picture>
+            <source media="(min-width:768px)" srcset="{{ variant.small }}">
+            <img src="{{ variant.thumbnail }}"   class="w-100 {% if not variant.stock.stock %}opacity-25{% endif %}" alt="{{ variant.product.name }}">
+        </picture>
+        {% if not variant.stock.stock %}
         <span class="text-bg-danger position-absolute px-2 py-1 fw-semibold" style="right: 0px;">Sold</span>
         {% endif %}
     </div>
     <div class="product-info">
-        <p class="product-title mt-2 mb-1">{{ item.name }}</p>
-        <p class="product-price text-start">{{ first_variant.price }} PKR</p>
+        <p class="product-title mt-2 mb-1 fw-bold">{{ variant.product.name }}</p>
+        <p class="product-price text-start">{{ variant.price }} PKR</p>
     </div>
 </a>
