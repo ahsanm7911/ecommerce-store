@@ -1,6 +1,6 @@
 $(document).ready(function () {
     let orderTotalEle = $('div.order-total').children('p').children('span')
-    let cartCountEle = $('a#cart-item-count').children('span.badge')
+    let cartCountEle = $('a#cart-item-count').children('span.count')
     let itemAdded = $('p.item-added').hide()
 
     $('.addToCartForm').submit(function (e) {
@@ -15,7 +15,7 @@ $(document).ready(function () {
             console.log(variantId)
             // Updating cookie
             updateCookieItem(variantId, action)
-            updateCartData(cartCountEle)
+            updateCartData()
         } else {
 
             $.ajax({

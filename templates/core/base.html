@@ -5,13 +5,13 @@
 <head>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NMY2HV1KC"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-2NMY2HV1KC');
-    </script>
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NMY2HV1KC"></script> -->
+    <!-- <script> -->
+        <!-- // window.dataLayer = window.dataLayer || []; -->
+        <!-- // function gtag() { dataLayer.push(arguments); } -->
+        <!-- // gtag('js', new Date()); -->
+        <!-- // gtag('config', 'G-2NMY2HV1KC'); -->
+    <!-- // </script> -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -116,17 +116,13 @@
                 <ul class="d-flex flex-row d-flex flex-row align-items-center mb-0">
                     {% comment %} <li class="fs-4 searchBar"><a href="" class="nav-link"><i
                                 class="bi bi-search"></i></a></li> {% endcomment %}
-                    <li class="ms-4 fs-4">
-                        <a type="button" href="{% url 'cart' %}" class="btn btn-dark position-relative" id="cart-item-count">
-                            <i class="bi bi-bag fs-2"></i>
-                            <span
-                                class="badge text-light position-absolute top-50 bottom-50 start-50 translate-middle pt-2 pb-3 rounded-circle">
-                                {% if request.user.is_authenticated %}
-                                {{ request | items_count }}
-                                {% else %}
+                    <li class="ms-4 fs-2">
+                        <a class="cart" id="cart-item-count" href="{% url 'cart' %}">
+                            <span class="count">
                                 {{ request | items_count_guest }}
-                                {% endif %}
                             </span>
+                            <!--   <span class="count">1</span> -->
+                            <i class="material-icons bi bi-cart"></i>
                         </a>
                     </li>
                     <!-- {% if request.user.is_authenticated %} -->
@@ -154,18 +150,15 @@
             <div class="d-flex flex-row align-items-center justify-content-end flex-shrink-1">
                 <!-- <li class="fs-4 searchBar"><i class="bi bi-search"></i></li> -->
                 <li class="ms-2 fs-4">
-                    <a type="button" href="{% url 'cart' %}" class="btn btn-dark position-relative" id="cart-item-count">
-                        <i class="bi bi-bag fs-2"></i>
-                        <span
-                            class="badge text-light position-absolute top-50 bottom-50 start-50 translate-middle pt-2 pb-3 rounded-circle">
-                            {% if request.user.is_authenticated %}
-                            {{ request | items_count }}
-                            {% else %}
+                    <a class="cart" id="cart-item-count" href="{% url 'cart' %}">
+                        <span class="count">
                             {{ request | items_count_guest }}
-                            {% endif %}
                         </span>
+                        <!--   <span class="count">1</span> -->
+                        <i class="material-icons bi bi-cart"></i>
                     </a>
-                </li>
+                </li>                        
+
             </div>
         </ul>
     </div>
