@@ -66,6 +66,7 @@ class Product(models.Model):
     code = models.CharField(max_length=10, default='')
     slug = models.SlugField(unique=True, default=' ', blank=True)
     description = models.TextField(blank=True, null=True)
+    old_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     lead_time = models.PositiveIntegerField(default=2) # number of days 
@@ -131,6 +132,7 @@ class ProductImage(models.Model):
 
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    old_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     image_original = models.ImageField(upload_to=product_variant_image_directory, default='')
     image_thumbnail = models.ImageField(upload_to=product_variant_image_directory, blank=True)
@@ -194,6 +196,10 @@ class ProductVariant(models.Model):
 
         if not self.price:
             self.price = self.product.price
+
+        if not self.old_price:
+            self.old_price = self.product.old_price
+
         size = 1600
         self.image_original = resize_and_compress_image(self.image_original, size, 85, output=f'{size}x{size}')
         super().save(*args, **kwargs)
@@ -206,7 +212,7 @@ class ProductVariant(models.Model):
             size = 300
             self.image_xsmall = resize_and_compress_image(self.image_original, size, 100, output=f'{size}x{size}')
             super().save(*args, **kwargs)
-            
+
         if self.image_original and not self.image_small:
             size = 500
             self.image_small = resize_and_compress_image(self.image_original, size, 100, output=f'{size}x{size}')
