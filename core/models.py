@@ -134,6 +134,7 @@ class ProductVariant(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     image_original = models.ImageField(upload_to=product_variant_image_directory, default='')
     image_thumbnail = models.ImageField(upload_to=product_variant_image_directory, blank=True)
+    image_xsmall = models.ImageField(upload_to=product_variant_image_directory, blank=True)
     image_small = models.ImageField(upload_to=product_variant_image_directory, blank=True)
     image_medium = models.ImageField(upload_to=product_variant_image_directory, blank=True)
     image_large = models.ImageField(upload_to=product_variant_image_directory, blank=True)
@@ -197,10 +198,15 @@ class ProductVariant(models.Model):
         self.image_original = resize_and_compress_image(self.image_original, size, 85, output=f'{size}x{size}')
         super().save(*args, **kwargs)
         if self.image_original and not self.image_thumbnail:
-            size = 200
+            size = 100
             self.image_thumbnail = resize_and_compress_image(self.image_original, size, 100, output=f'{size}x{size}')
             super().save(*args, **kwargs)
         
+        if self.image_original and not self.image_xsmall:
+            size = 300
+            self.image_xsmall = resize_and_compress_image(self.image_original, size, 100, output=f'{size}x{size}')
+            super().save(*args, **kwargs)
+            
         if self.image_original and not self.image_small:
             size = 500
             self.image_small = resize_and_compress_image(self.image_original, size, 100, output=f'{size}x{size}')
