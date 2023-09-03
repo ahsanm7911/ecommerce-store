@@ -169,6 +169,14 @@ class ProductVariant(models.Model):
         return url
     
     @property
+    def xsmall(self):
+        try:
+            url = self.image_xsmall.url
+        except:
+            url = ''
+        return url
+    
+    @property
     def small(self):
         try:
             url = self.image_small.url
