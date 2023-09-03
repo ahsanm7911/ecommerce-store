@@ -46,23 +46,6 @@
             Indulge in our luxurious selection of watches and sunglasses, each meticulously crafted to complement your unique personality and flair. From sleek classics to statement pieces, our collection has something to suit every occasion and mood.
         </p>
 
-        <div class="container-fluid my-4 px-1">
-            <h3 class="mb-4">Watches</h3>
-            <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2 products-wrapper">
-
-                {% for variant in watches %}
-                    {% include 'partials/product.html' %}
-                {% endfor %}
-                
-            </div>
-
-            
-            <div class="row">
-                <a href="{% url 'products' slug='watches' %}" class="customBtnDark py-2 mx-auto w-50" style="font-size: small;">Discover
-                    Watches</a>
-            </div>
-        </div>
-        <br>
 
         <div class="container-fluid my-4 px-1">
             <h3 class="mb-4">Sunglasses</h3>
@@ -78,6 +61,23 @@
             <div class="row">
                 <a href="{% url 'products' slug='sunglasses' %}" class="customBtnDark py-2 mx-auto w-50" style="font-size: small !important;">Discover
                     Sunglasses</a>
+            </div>
+        </div>
+        <br>
+        <div class="container-fluid my-4 px-1">
+            <h3 class="mb-4">Watches</h3>
+            <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2 products-wrapper">
+
+                {% for variant in watches %}
+                    {% include 'partials/product.html' %}
+                {% endfor %}
+                
+            </div>
+
+            
+            <div class="row">
+                <a href="{% url 'products' slug='watches' %}" class="customBtnDark py-2 mx-auto w-50" style="font-size: small;">Discover
+                    Watches</a>
             </div>
         </div>
 
