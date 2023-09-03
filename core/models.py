@@ -39,7 +39,7 @@ class Color(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name}-{self.hex_code}'
     
     @property
     def slug(self):
@@ -120,14 +120,12 @@ class ProductImage(models.Model):
         return url
     
     def save(self, *args, **kwargs):
-        if not self.pk: # Only on creation, not on update
-           super().save(*args, **kwargs)
-
+    
         try:
-            self.image = resize_and_compress_image(self.image, 1080, 85, output=f'{self.product.slug}-{self.id}')
+            self.image = resize_and_compress_image(self.image, 1080, 85, output=f'{self.product.slug}')
         except Exception as e:
             print('Image not optimized: ', e)
-
+        super().save(*args, **kwargs)
 
 
 class ProductVariant(models.Model):
