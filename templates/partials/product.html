@@ -12,11 +12,9 @@
     <div class="product-image-container position-relative">
         <picture>
             <source media="(min-width:768px)" srcset="{{ variant.xsmall }}">
-            <img src="{{ variant.xsmall }}"   class="w-100 {% if not variant.stock.stock %}opacity-25{% endif %}" alt="{{ variant.product.name }}">
+            <img src="{{ variant.xsmall }}"   class="w-100" alt="{{ variant.product.name }}">
         </picture>
-        {% if not variant.stock.stock %}
-        <span class="text-bg-danger position-absolute px-2 py-1 fw-semibold" style="right: 0px;">Sold</span>
-        {% endif %}
+        <!-- <span class="text-bg-danger position-absolute px-2 py-1 fw-semibold" style="right: 0px;">Sold</span> -->
     </div>
     <div class="product-info">
         <p class="product-title mt-2 mb-1 fw-bold">{{ variant.product.name }}</p>

@@ -283,7 +283,6 @@
         $('#variantId').val($carouselItem)
 
         $(carousel).on('slide.bs.carousel', event => {
-            console.log(event)
             $color = $(event.relatedTarget).attr('data-bs-color')
             $stock = $(event.relatedTarget).attr('data-bs-stock')
             $price = $(event.relatedTarget).attr('data-bs-price')
@@ -300,16 +299,12 @@
             }
 
             // Updating variant price 
-            console.log('price', $price)
             $('.variant-price').text($price)
             $('.variant-old-price').text($old_price)
-            console.log($stock)
             $variantId = $(event.relatedTarget).attr('data-bs-variant')
             // Setting add to cart from input variantId value
             $('#variantId').val($variantId)
 
-            console.log('input', $('#variantId').val())
-            console.log('Active variant: ', $variantId)
             $(colorContainer).children('div.color-div').removeClass('color-active')
             for (let i = 0; i < colors.length; i++) {
                 let item = $(colors[i]).children('.color-div-inner')
@@ -324,7 +319,6 @@
         $('#colors').on('click', '.color-div-inner', function (e) {
             e.preventDefault()
             $slideIndex = parseInt($(this).attr('data-slide-to'))
-            console.log('color index: ', $slideIndex - 1)
             $('.carousel').carousel($slideIndex - 1) //Navigate to the specific slide
             $('div.color-div').removeClass('color-active')
             $(this).parent('div.color-div').addClass('color-active')
@@ -334,4 +328,4 @@
 </script>
 
 <script src="{% static 'js/cart.js' %}"></script>
-{% endblock js %}
+{% endblock js %}   

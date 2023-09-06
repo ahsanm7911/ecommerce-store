@@ -11,6 +11,7 @@ from .image_manipulation import resize_and_compress_image
 from colorama import Fore
 from datetime import datetime, timedelta, date
 from PIL import Image
+from django.utils.html import mark_safe
 import os
 import uuid
 # Create your models here.
@@ -198,6 +199,26 @@ class ProductVariant(models.Model):
             url = ''
         return url
 
+    @property
+    def get_stock(self):
+        return self.stock.quantity
+    
+
+    def image_tag(self):
+        try:
+            return mark_safe('<img src="%s" width="100px" height="100px" />' %(self.thumbnail))
+        except:
+            return mark_safe('<p>No Image.</p>')
+
+    image_tag.short_description =  'Image'
+
+
+    def get_stock(self):
+        stock = Stock.objects.get(variant=self)
+        return stock.quantity
+
+    get_stock.short_description = "Stock"
+
     def save(self, *args, **kwargs):
 
         if not self.price:
@@ -254,6 +275,19 @@ class Stock(models.Model):
             return False
         else:
             return True
+        
+    @property
+    def hello(self):
+        return 'hello'
+    
+    def image_tag(self):
+        try:
+            return mark_safe('<img src="%s" width="100px" height="100px" />' %(self.variant.thumbnail))
+        except:
+            return mark_safe('<p>No Image.</p>')
+
+    image_tag.short_description =  'Image'
+
 
 class Cart(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

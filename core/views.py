@@ -50,10 +50,8 @@ def home(request):
     watches = []
     
     products = ProductVariant.objects.filter(display=True)
-    mobile_banner_image = ProductVariant.objects.get(product__code='UNS-011', color__name='Red')
-    desktop_banner_image = ProductVariant.objects.get(product__code='UNS-011',color__name='Red')
-    print(mobile_banner_image)
-    print(desktop_banner_image)
+    mobile_banner_image = ProductVariant.objects.get(product__code='UNW-001', color__name='Beaver')
+    desktop_banner_image = ProductVariant.objects.get(product__code='UNW-001',color__name='Beaver')
 
     try:
         watch_category = Category.objects.get(slug='watch')
