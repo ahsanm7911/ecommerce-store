@@ -50,8 +50,8 @@ def home(request):
     watches = []
     
     products = ProductVariant.objects.filter(display=True)
-    mobile_banner_image = ProductVariant.objects.get(product__code='UNW-001', color__name='Silver')
-    desktop_banner_image = ProductVariant.objects.get(product__code='UNW-001',color__name='Silver')
+    mobile_banner_image = ProductVariant.objects.get(product__code='UNS-011', color__name='Red')
+    desktop_banner_image = ProductVariant.objects.get(product__code='UNS-011',color__name='Red')
     print(mobile_banner_image)
     print(desktop_banner_image)
 
@@ -68,7 +68,7 @@ def home(request):
     customer_reviews = CustomerReview.objects.all()
 
     watches = ProductVariant.objects.filter(product__category__slug='watches', display=True)
-    sunglasses = ProductVariant.objects.filter(product__category__slug='sunglasses', display=True)
+    sunglasses = ProductVariant.objects.filter(product__category__slug='sunglasses', display=True).order_by('-created_at')
 
     context = {
         'page': page,
@@ -123,7 +123,7 @@ def product(request, cat, slug):
     product_images = ProductImage.objects.filter(product=main_product)
     page = main_product.name 
 
-    products = ProductVariant.objects.filter(product__category__slug=cat, display=True).exclude(product=main_product)
+    products = ProductVariant.objects.filter(product__category__slug=cat, display=True).exclude(product=main_product)[:4]
 
     # Shipping details
     lead_time = timedelta(days=main_product.lead_time)

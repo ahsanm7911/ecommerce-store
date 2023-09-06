@@ -11,7 +11,7 @@
 <a class="product col page-link" href="{% url 'product' cat=variant.product.category.slug slug=variant.product.slug  %}">
     <div class="product-image-container position-relative">
         <picture>
-            <source media="(min-width:768px)" srcset="{{ variant.small }}">
+            <source media="(min-width:768px)" srcset="{{ variant.xsmall }}">
             <img src="{{ variant.xsmall }}"   class="w-100 {% if not variant.stock.stock %}opacity-25{% endif %}" alt="{{ variant.product.name }}">
         </picture>
         {% if not variant.stock.stock %}

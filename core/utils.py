@@ -16,7 +16,7 @@ def get_cart_data(request):
             product = {}
             get_product = ProductVariant.objects.get(id=i)
             item_total = (get_product.price * cart[i]['quantity'])
-            get_product_image = get_product.thumbnail
+            get_product_image = get_product.xsmall
             product['item_total'] = item_total
             product['product_image'] = get_product_image
             product['product_id'] = get_product.id
@@ -49,7 +49,7 @@ def update_cart(customer):
         try:
             product = {}
             id = item.product.id
-            get_product_image = ProductVariant.objects.get(id=id).image
+            get_product_image = ProductVariant.objects.get(id=id).xsmall
             item_total = item.product.price * item.quantity
             order_total += item_total
             product['product_id'] = item.product.id
