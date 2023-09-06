@@ -29,7 +29,7 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'view_variants_link')
+    list_display = ('__str__', 'image_tag', 'view_variants_link',)
     fields = ('category', 'name', 'code', 'description', 'old_price', 'price', 'lead_time')
     list_filter = ('category', )
     search_fields = ('name__icontains', 'code__icontains')

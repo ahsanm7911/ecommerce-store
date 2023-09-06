@@ -84,6 +84,15 @@ class Product(models.Model):
     def get_category(self):
         return self.category.slug
     
+    def image_tag(self):
+        try:
+            return mark_safe('<img src="%s" width="100px" height="100px" />' %(self.productvariant_set.filter(product=self)[0].thumbnail))
+        except:
+            return mark_safe('<p>No Image.</p>')
+
+    image_tag.short_description =  'Image'
+
+    
     @property
     def imageURL(self):
         try:
@@ -113,13 +122,7 @@ class ProductImage(models.Model):
     def __str__(self):
         return f'{self.product.name} | {self.id}'
 
-    def imageURL(self):
-        try:
-            url = self.image.url
-        except:
-            url = ''
-        return url
-    
+
     def save(self, *args, **kwargs):
     
         try:
