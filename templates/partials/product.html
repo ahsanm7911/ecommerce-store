@@ -18,6 +18,7 @@
     </div>
     <div class="product-info">
         <p class="product-title mt-2 mb-1 fw-bold">{{ variant.product.name }}</p>
-        <p class="product-price text-start">{{ variant.price }} PKR</p>
+        <p class="product-old-price ps-1 mb-0 text-decoration-line-through text-start">Rs. {{ variant.old_price }}</p>
+        <p class="product-price text-start fw-medium">Rs. {{ variant.price }} </p>
     </div>
 </a>
