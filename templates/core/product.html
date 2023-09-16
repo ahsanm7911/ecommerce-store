@@ -4,11 +4,12 @@
 <style>
     /* UTILITY CLASSES */
     /* *::-webkit-scrollbar{ */
-        /* display: none; */
+    /* display: none; */
     /* } */
-    body{
+    body {
         overflow-x: hidden;
     }
+
     .op-0 {
         opacity: 0;
     }
@@ -17,12 +18,15 @@
         height: 400px;
         object-fit: cover;
     }
+
     .product-details {
         width: 100%;
     }
-    .product-details-images{
+
+    .product-details-images {
         width: 100%;
     }
+
     @media only screen and (min-width:768px) {
         #addToCartBtn {
             width: 60% !important;
@@ -35,7 +39,7 @@
     }
 
     @media only screen and (min-width: 1024px) {
-        .product-details{
+        .product-details {
             width: 47%;
             position: sticky;
             padding: 24px !important;
@@ -43,7 +47,8 @@
             height: 628px;
             overflow-y: hidden;
         }
-        .product-details-images{
+
+        .product-details-images {
             width: 49%;
             overflow-y: scroll;
             max-height: 100vh;
@@ -52,10 +57,12 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
-        .product-details-images::-webkit-scrollbar{
+
+        .product-details-images::-webkit-scrollbar {
             display: none;
         }
-        .product-details-images img{
+
+        .product-details-images img {
             height: 628px;
             object-fit: cover;
         }
@@ -94,10 +101,8 @@
     .disableBtn {
         opacity: 20%;
     }
-    
 </style>
 {% endblock css %}
-
 {% block content %}
 
 <!-- product display container for large screens - START  -->
@@ -115,9 +120,11 @@
         <div class="container-fluid px-0 product-title-details d-lg-none">
             <h1 class="fs-4 mb-0 heading-spaced">{{ main_product.name }}</h1>
             <p style="font-size: small;" class="mb-1 text-secondary">{{ main_product.code }}</p>
-            <h4 class="text-secondary mb-0 text-decoration-line-through fs-6 heading-spaced">Rs.&nbsp;<span class="variant-old-price"></span>&nbsp;
+            <h4 class="text-secondary mb-0 text-decoration-line-through fs-6 heading-spaced">Rs.&nbsp;<span
+                    class="variant-old-price"></span>&nbsp;
             </h4>
-            <h4 class="fs-4 fw-normal heading-spaced"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;</h4>
+            <h4 class="fs-4 fw-normal heading-spaced text-danger"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;
+            </h4>
         </div>
         <br class="d-lg-none">
         <div class="container-fluid d-flex flex-column align-items-center px-0 mx-0 w-100" id="product-image-container">
@@ -131,8 +138,8 @@
                             <source media="(min-width:768px)" srcset="{{ variant.original }}">
                             <img src="{{ variant.medium }}" class="d-block w-100 carousel-image" alt="...">
                         </picture>
-                        <h6 class="fw-semibold text-secondary active-color mt-2 d-lg-none" style="font-size: small;">COLOR: <span
-                                class="text-dark text-uppercase heading-spaced">RED</span></h6>
+                        <h6 class="fw-semibold text-secondary active-color mt-2 d-lg-none" style="font-size: small;">
+                            COLOR: <span class="text-dark text-uppercase heading-spaced">RED</span></h6>
                         <p
                             class="text-danger fw-semibold mb-0 d-lg-none {% if variant.stock.stock %}opacity-0{% endif %}">
                             Out of Stock.
@@ -161,8 +168,10 @@
         <div class="container product-title-details d-none d-lg-block mt-5">
             <h1 class="fs-4 mb-0 heading-spaced">{{ main_product.name }}</h1>
             <p style="font-size: small;" class="mb-2 text-secondary">{{ main_product.code }}</p>
-            <p class="text-secondary mb-0 text-decoration-line-through heading-spaced">Rs.&nbsp;<span class="variant-old-price"></span>&nbsp;</p>
-            <h4 class="fs-4 fw-normal heading-spaced"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;</h4>
+            <p class="text-secondary mb-0 text-decoration-line-through heading-spaced">Rs.&nbsp;<span
+                    class="variant-old-price"></span>&nbsp;</p>
+            <h4 class="fs-4 fw-normal heading-spaced text-danger"> Rs.&nbsp; <span class="variant-price"></span>&nbsp;
+            </h4>
         </div>
 
         <h6 class="fw-semibold text-secondary active-color d-none d-lg-block" style="font-size: small;">COLOR: <span
@@ -173,7 +182,7 @@
             <div class="color-div mx-1 d-flex flex-row justify-content-center align-items-center">
                 <div class="color-div-inner" data-bs-color="{{ variant.color.name }}"
                     data-slide-to="{{ forloop.counter }}">
-                    <img src="{{ variant.color.imageURL }}" alt="">
+                    <img src="{{ variant.color.imageURL }}" alt="{{ variant.color.name }}">
                 </div>
             </div>
             {% endfor %}
@@ -202,6 +211,17 @@
 
             <p class="text-secondary text-uppercase fw-semibold mb-0">Order now and it ships by</p>
             <span class="text-dark fw-medium text-uppercase fs-6">{{ shipping_date }}</span>
+            <br><br>
+            {% comment %} <!-- TrustBox widget - Micro Review Count --> {% endcomment %}
+            {% comment %} <div class="container-fluid px-0"> {% endcomment %}
+                {% comment %} <div class="trustpilot-widget" data-locale="en-US" data-template-id="5419b6a8b0d04a076446a9ad" {% endcomment %}
+                    {% comment %} data-businessunit-id="64fb4c0779f5cdb0dae809e6" data-style-height="24px" data-style-width="100%" {% endcomment %}
+                    {% comment %} data-theme="light" data-min-review-count="10" data-without-reviews-preferred-string-id="3" {% endcomment %}
+                    {% comment %} data-style-alignment="center"> {% endcomment %}
+                    {% comment %} <a href="https://www.trustpilot.com/review/unrols.com" target="_blank" rel="noopener">Trustpilot</a> {% endcomment %}
+                {% comment %} </div> {% endcomment %}
+            {% comment %} </div> {% endcomment %}
+            {% comment %} <!-- End TrustBox widget --> {% endcomment %}
             <br><br>
             <div class="container-fluid d-md-flex flex-row justify-content-evenly align-items-center">
 
@@ -240,7 +260,7 @@
 
         <div class="container product-details-images col px-0">
             {% for image in product_images %}
-                <img src="{{ image.imageURL }}" alt="" class="banner-image w-100 px-0">
+            <img src="{{ image.imageURL }}" alt="{{ image.alt_tag }}" class="banner-image w-100 px-0">
             {% endfor %}
         </div>
     </div>
@@ -252,7 +272,7 @@
     <div class="container-fluid px-0">
         <div class="row row-cols-2 row-cols-lg-4 px-2 products-wrapper">
             {% for variant in products %}
-                {% include "partials/product.html" %}
+            {% include "partials/product.html" %}
             {% endfor %}
         </div>
     </div>
@@ -277,6 +297,12 @@
         $('.variant-old-price').text($(carouselItems[0]).attr('data-bs-old-price'))
         $(carouselItems[0]).addClass('active')
         $(colors[0]).addClass('color-active')
+        $stock = $(carouselItems[0]).attr('data-bs-stock')
+        if ($stock == 'False') {
+            $('#addToCartBtn').addClass('disableBtn')
+            $('#addToCartBtn').prop('disabled', true)
+            $('.out-of-stock-msg').removeClass('op-0')
+        }
 
         // setting initial variantId in input field.
         $carouselItem = $(carouselItems[0]).attr('data-bs-variant')
@@ -328,4 +354,4 @@
 </script>
 
 <script src="{% static 'js/cart.js' %}"></script>
-{% endblock js %}   
+{% endblock js %}

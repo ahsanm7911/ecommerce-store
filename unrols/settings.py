@@ -190,8 +190,7 @@ STATICFILES_DIRS = [BASE_DIR/'src']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
+SITE_ID=2
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SITE_ID = 1
 MAINTENANCE = config('MAINTENANCE', cast=bool)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB

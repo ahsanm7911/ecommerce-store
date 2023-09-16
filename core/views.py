@@ -44,19 +44,19 @@ def test(request):
 
 def home(request):
     context = {}
-    page = "Home"
     products = []
     sunglasses = []
-    watches = []
     
-    products = ProductVariant.objects.filter(display=True)
-    mobile_banner_image = ProductVariant.objects.get(product__code='UNW-001', color__name='Beaver')
-    desktop_banner_image = ProductVariant.objects.get(product__code='UNW-001',color__name='Beaver')
-
+    products = ProductVariant.objects.filter(product__category__slug='sunglasses', display=True)
     try:
-        watch_category = Category.objects.get(slug='watch')
-    except Category.DoesNotExist:
-        watch_category = None
+        mobile_banner_image = ProductVariant.objects.get(product__code='UNW-001', color__name='Beaver')
+    except ProductVariant.DoesNotExist:
+        mobile_banner_image = ''
+    try:
+        desktop_banner_image = ProductVariant.objects.get(product__code='UNW-001',color__name='Beaver')
+    except ProductVariant.DoesNotExist:
+        desktop_banner_image = ''
+
 
     try:
         sunglasses_category = Category.objects.get(slug='sunglasses')
@@ -65,24 +65,29 @@ def home(request):
 
     customer_reviews = CustomerReview.objects.all()
 
-    watches = ProductVariant.objects.filter(product__category__slug='watches', display=True)
     sunglasses = ProductVariant.objects.filter(product__category__slug='sunglasses', display=True).order_by('-created_at')
 
+    # SEO 
+    title_tag = 'Unrols Sunglasses Official Store | Pakistan'
+    meta_description = 'Discover Brand New Arrivals & Exclusive Promo on Unrols official store and get the perfect sunglasses to complete your look. Free shipping accross Pakistan.'
+    keywords = 'sunglasses, free shipping, shades, eyewear, watches'
+
+
     context = {
-        'page': page,
         'products': products,
-        'watches_category': watch_category,
         'sunglasses_category': sunglasses_category,
-        'watches': watches,
         'sunglasses': sunglasses,
         'mobile_banner_image': mobile_banner_image,
         'desktop_banner_image': desktop_banner_image,
-        'reviews': customer_reviews
+        'reviews': customer_reviews,
+        # SEO
+        'title_tag': title_tag,
+        'meta_description': meta_description, 
+        'meta_keywords': keywords
     }
     return render(request, 'core/index.html', context)
 
 def products(request, slug):
-    page = slug
     context = {}
 
     variants = ProductVariant.objects.filter(product__category__slug=slug, display=True)    
@@ -99,15 +104,30 @@ def products(request, slug):
     except:
         page_obj = None
     
+    try:
+        category = Category.objects.get(slug=slug)
+    except Category.DoesNotExist:
+        category = None
+
+    # SEO 
+    title_tag = category.title_tag
+    meta_description = category.meta_description
+    keywords = category.keywords
+
+    
     context = {
-        'page': page,
         'page_obj': page_obj,
-        'product_count': product_count
+        'product_count': product_count,
+        'title_tag': title_tag,
+        'meta_description': meta_description, 
+        'meta_keywords': keywords
+
     }
 
     return render(request, 'core/products.html', context)
 
 def product(request, cat, slug):
+    
     context = {}
     main_product = Product.objects.get(category__slug=cat, slug=slug)
     variants = ProductVariant.objects.filter(product=main_product).order_by('-display')
@@ -135,6 +155,10 @@ def product(request, cat, slug):
     while shipping_date.weekday() >= 5 or shipping_date in holidays:
         shipping_date += timedelta(days=1)
 
+    # SEO 
+    title_tag = main_product.title_tag
+    meta_description = main_product.meta_description
+    keywords = main_product.keywords
     
 
     context = {
@@ -144,58 +168,16 @@ def product(request, cat, slug):
         'product_images': product_images,
         'product_link': product_link,
         'products': products,
-        'shipping_date': shipping_date
+        'shipping_date': shipping_date,
+        'title_tag': title_tag,
+        'meta_description': meta_description, 
+        'meta_keywords': keywords
     }
 
     return render(request, 'core/product.html', context)
 
 def lookbook(request):
-    page = 'Lookbook'
     context = {}
-
-    products = []
-    for product in Product.objects.all()[:4]:
-        if product.productvariant_set.all().count() > 0:
-            try:
-                variant = product.productvariant_set.all()[0]
-            except:
-                variant = None
-            products.append(variant)
-
-    choices = []
-    for i in ProductVariant.objects.all()[:11]:
-        choices.append(i.id)
-        
-    
-
-    image_one       = ProductVariant.objects.get(id=random.choice(choices))
-    image_two       = ProductVariant.objects.get(id=random.choice(choices))
-    image_three       = ProductVariant.objects.get(id=random.choice(choices))
-    image_four       = ProductVariant.objects.get(id=random.choice(choices))
-    image_five      = ProductVariant.objects.get(id=random.choice(choices))
-    image_six       = ProductVariant.objects.get(id=random.choice(choices))
-    image_seven       = ProductVariant.objects.get(id=random.choice(choices))
-    image_eight       = ProductVariant.objects.get(id=random.choice(choices))
-    image_nine       = ProductVariant.objects.get(id=random.choice(choices))
-    image_ten       = ProductVariant.objects.get(id=random.choice(choices))
-    image_eleven       = ProductVariant.objects.get(id=random.choice(choices))
-
-    context = {
-        'page': page,
-        'products': products,
-        'image_one': image_one,
-        'image_two': image_two,
-        'image_three': image_three,
-        'image_four': image_four,
-        'image_five': image_five,
-        'image_six': image_six,
-        'image_seven': image_seven,
-        'image_eight': image_eight,
-        'image_nine': image_nine,
-        'image_ten': image_ten,
-        'image_eleven': image_eleven,
-    }
-
     return render(request, 'core/lookbook.html', context)
 
 def add_to_cart(request):
@@ -351,42 +333,64 @@ def checkout(request):
 
 
 def refund_policy(request):
-    page = 'Refund Policy'
     context = {}
     try:
-        refund_policy = RefundPolicy.objects.filter(is_active=True)
-        context['refund_policy'] = refund_policy[0]
-    except IndexError as e:
-        print(e)
-        context['refund_policy'] = e
-    except RefundPolicy.DoesNotExist as e:
-        print(e)
-        refund_policy = None
-        context['refund_policy'] = refund_policy
-    context['page'] = page
+        refund_policy = RefundPolicy.objects.get(is_active=True)
+        title_tag = refund_policy.title_tag
+        meta_description = refund_policy.meta_description
+        keywords = refund_policy.keywords
+        description = refund_policy.description
+    except:
+        title_tag = ''
+        meta_description = ''
+        keywords = ''
+        description = ''
+
+    context = {
+        'title_tag': title_tag,
+        'meta_description': meta_description, 
+        'meta_keywords': keywords,
+        'description': description
+    }
 
     return render(request, 'core/refund_policy.html', context)
 
 def shipping_policy(request):
-    page = 'Shipping Details'
-    context = {}
     try:
-        shipping_policy = ShippingPolicy.objects.filter(is_active=True)
-        context['shipping_policy'] = shipping_policy[0]
-    except IndexError as e:
-        print(e)
-        context['shipping_policy'] = e
-    except ShippingPolicy.DoesNotExist:
-        shipping_policy = None
-        context['shipping_policy'] = shipping_policy
-    context['page'] = page
+        shipping_policy = ShippingPolicy.objects.get(is_active=True)
+        title_tag = shipping_policy.title_tag
+        meta_description = shipping_policy.meta_description
+        keywords = shipping_policy.keywords
+        description = shipping_policy.description
+    except:
+        title_tag = ''
+        meta_description = ''
+        keywords = ''
+        description = ''
 
+    context = {
+        'title_tag': title_tag,
+        'meta_description': meta_description, 
+        'meta_keywords': keywords,
+        'description': description
+    }
     return render(request, 'core/shipping_policy.html', context)
 
 def store_policy(request):
     page = 'Policy'
     context = {}
+
+    # SEO 
+    title_tag = 'Refund Policy'
+    meta_description = 'This is our policy page.'
+    keywords = 'unrols policy'
+
     context['page'] = page
+    context = {
+        'title_tag': title_tag,
+        'meta_description': meta_description, 
+        'meta_keywords': keywords
+    }
 
     return render(request, 'core/store_policy.html', context)
 
@@ -402,11 +406,41 @@ def contact(request):
         enquiry.save()
         message = "Your message have been submitted. We'll reach out to you shortly."
         return JsonResponse(message, safe=False)
+    
+    # SEO 
+    title_tag = 'Contact'
+    meta_description = "Get in touch with us today! Contact our friendly team for inquiries, assistance, or collaborations. We're here to help you."
+    keywords = 'contact us, get in touch, customer support, reach out, inquiry, assistance, questions'
+
     context['page'] = page
+    context = {
+        'title_tag': title_tag,
+        'meta_description': meta_description, 
+        'meta_keywords': keywords
+    }
     return render(request, 'core/contact.html', context)
 
 def about(request):
-    page = 'About'
     context = {}
-    context['page'] = page
+
+    try:
+        about = About.objects.get(is_active=True)
+        title_tag = about.title_tag
+        meta_description = about.meta_description
+        keywords = about.keywords
+        description = about.description
+
+    except About.DoesNotExist:
+        title_tag = ''
+        meta_description = ''
+        keywords = ''
+        description = ''
+
+    context = {
+        'title_tag': title_tag,
+        'meta_description': meta_description, 
+        'meta_keywords': keywords,
+        'description': description
+    }
+
     return render(request, 'core/about.html', context)

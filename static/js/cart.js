@@ -8,11 +8,9 @@ $(document).ready(function () {
         itemAdded.show(500)
         let formData = $(this).serialize()
         arr = formData.split('&')
-        console.log(arr)
         if (user === 'AnonymousUser') {
             action = arr[1].split('=')[1]
             variantId = arr[2].split('=')[1]
-            console.log(variantId)
             // Updating cookie
             updateCookieItem(variantId, action)
             updateCartData()
@@ -24,7 +22,6 @@ $(document).ready(function () {
                 data: formData,
                 success: function (response) {
                     cartCountEle.text(response['item_count'])
-
                 }
             })
         }
@@ -40,7 +37,6 @@ $(document).ready(function () {
 
         if (user == "AnonymousUser") {
             arr = formData.split('&')
-            console.log(arr)
             variantId = arr[1].split('=')[1]
             action = arr[2].split('=')[1]
             updateCookieItem(variantId, action)

@@ -4,7 +4,7 @@
     <div class="container py-5">
         <h1 class="text-center">Refund Policy</h1>
         {% autoescape off %}
-            {{ refund_policy.description | default:' ' }}
+            {{ description | default:' ' }}
         {% endautoescape %}
     </div>
 {% endblock content %}

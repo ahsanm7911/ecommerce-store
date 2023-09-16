@@ -1,49 +1,60 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block css %}
-    <style>
-        .product-image-container img{
-            height: 200px;
-            object-fit: cover;
-        }
-        a.customBtn:hover{
-            border: 2px solid white;
-            margin: -1px;
-        }
-        @media only screen and (min-width:768px){
-            .customBtnDark{
-                width: 25% !important;
-            }
-        }
+<style>
+    .product-image-container img {
+        height: 200px;
+        object-fit: cover;
+    }
 
-    </style>
+    a.customBtn:hover {
+        border: 2px solid white;
+        margin: -1px;
+    }
+
+    @media only screen and (min-width:768px) {
+        .customBtnDark {
+            width: 25% !important;
+        }
+    }
+</style>
 {% endblock css %}
 {% block schema %}
-    {% include 'partials/structured_data.html' %}
+{% include 'partials/structured_data.html' %}
 {% endblock schema %}
 {% block content %}
 
 
-    
-    <!-- TOP BANNER CONTAINER -->
-    <div class="container-fluid px-0" id="top-banner">
-        <div class="top-banner-image position-relative text-light">
-            <img src="{{ mobile_banner_image.medium }}" alt="" class="w-100 h-100 d-md-none" style="height: 350px; object-fit: cover;">
-            <img src="{{ desktop_banner_image.original }}" class="w-100 d-none d-md-block" alt="" style="height: 600px; object-fit: cover;">
-            <div class="container position-absolute top-banner-info translate-middle-x d-flex flex-column align-items-center">
-                <h1 class="text-center mb-3 fw-bold lh-base fs-3">Introducing the Ultimate Style Destination for Fashion Accessories!</h1>
-                <p class="w-75 text-center d-none d-md-block text-light fw-semibold">Welcome to Unrols, your one-stop shop for exquisite fashion accessories that will elevate your style to new heights. We believe that every outfit deserves the perfect finishing touch, and our curated collection of accessories promises to dazzle and delight.
-                </p>
-                <a href="{% url 'products' slug=watches %}" class="customBtn text-center px-4 py-2 text-decoration-none">Discover</a>
-            </div>
+
+<!-- TOP BANNER CONTAINER -->
+<div class="container-fluid px-0" id="top-banner">
+    <div class="top-banner-image position-relative text-light">
+        <img src="{{ mobile_banner_image.medium }}" alt="{{ mobile_banner_image.alt_tag }}"
+            class="w-100 h-100 d-md-none" style="height: 350px; object-fit: cover;">
+        <img src="{{ desktop_banner_image.original }}" class="w-100 d-none d-md-block"
+            alt="{{ desktop_banner_image.alt_tag }}" style="height: 600px; object-fit: cover;">
+        <div
+            class="container position-absolute top-banner-info translate-middle-x d-flex flex-column align-items-center">
+            <h1 class="text-center mb-3 fw-bold lh-base fs-3">Introducing the Ultimate Style Destination for Fashion
+                Accessories!</h1>
+            <p class="w-75 text-center d-none d-md-block text-light fw-semibold">Welcome to Unrols, your one-stop shop
+                for exquisite fashion accessories that will elevate your style to new heights. We believe that every
+                outfit deserves the perfect finishing touch, and our curated collection of accessories promises to
+                dazzle and delight.
+            </p>
+            <a href="{% url 'products' slug=sunglasses %}"
+                class="customBtn text-center px-4 py-2 text-decoration-none">Discover Our Collection</a>
         </div>
     </div>
+</div>
 
-    <!-- MAIN CONTENT CONTAINER -->
-    <div class="container bg-white py-4 d-flex flex-column align-items-center text-center px-1" id="mainContentContainer">
-        <h3 class="w-75 fw-medium">Discover Endless Elegance</h2>
+<!-- MAIN CONTENT CONTAINER -->
+<div class="container bg-white py-4 d-flex flex-column align-items-center text-center px-1" id="mainContentContainer">
+    <h3 class="w-75 fw-medium">Discover Endless Elegance</h2>
         <p class="my-3">
-            Indulge in our luxurious selection of watches and sunglasses, each meticulously crafted to complement your unique personality and flair. From sleek classics to statement pieces, our collection has something to suit every occasion and mood.
+            Indulge in our luxurious selection of sunglasses, each meticulously crafted to complement your
+            unique personality and flair. From sleek classics to statement pieces, our collection has something to suit
+            every occasion and mood.
         </p>
 
 
@@ -52,48 +63,56 @@
             <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2 products-wrapper">
 
                 {% for variant in sunglasses %}
-                   {% include 'partials/product.html' %}
+                {% include 'partials/product.html' %}
                 {% endfor %}
-                
+
             </div>
 
-            
+
             <div class="row">
-                <a href="{% url 'products' slug='sunglasses' %}" class="customBtnDark py-2 mx-auto w-50" style="font-size: small !important;">Discover
+                <a href="{% url 'products' slug='sunglasses' %}" class="customBtnDark py-2 mx-auto w-50"
+                    style="font-size: small !important;">Discover
                     Sunglasses</a>
             </div>
         </div>
         <br>
-        <div class="container-fluid my-4 px-1">
+
+
+        {% comment %} <div class="container-fluid my-4 px-1">
             <h3 class="mb-4">Watches</h3>
             <div class="row mb-2 row-cols-2 row-cols-md-3 row-cols-lg-4 gx-2 products-wrapper">
 
                 {% for variant in watches %}
-                    {% include 'partials/product.html' %}
+                {% include 'partials/product.html' %}
                 {% endfor %}
-                
+
             </div>
 
-            
+
             <div class="row">
-                <a href="{% url 'products' slug='watches' %}" class="customBtnDark py-2 mx-auto w-50" style="font-size: small;">Discover
+                <a href="{% url 'products' slug='watches' %}" class="customBtnDark py-2 mx-auto w-50"
+                    style="font-size: small;">Discover
                     Watches</a>
             </div>
-        </div>
+        </div> {% endcomment %}
 
-    </div>
 
-    <div class="container-fluid bg-dark text-light py-5" id="latestProducts">
-        <h3 class="text-center">Explore our latest creations</h2>
-        <p class="text-center text-light">Step into a realm of captivating style as we proudly present our New Products Arrival at Unrols. Prepare to be dazzled by a handpicked selection of fashion accessories that exude elegance, trendiness, and timeless charm. With each piece carefully curated to elevate your wardrobe, our latest arrivals promise to be the epitome of sartorial excellence.</p>
-            
+</div>
+
+<div class="container-fluid bg-dark text-light py-5" id="latestProducts">
+    <h3 class="text-center">Explore our latest creations</h2>
+        <p class="text-center text-light">Step into a realm of captivating style as we proudly present our New Products
+            Arrival at Unrols. Prepare to be dazzled by a handpicked selection of fashion accessories that exude
+            elegance, trendiness, and timeless charm. With each piece carefully curated to elevate your wardrobe, our
+            latest arrivals promise to be the epitome of sartorial excellence.</p>
+
         <!-- NEW PRODUCTS CAROUSEL -->
         <div id="carouselExampleAutoplaying" class="carousel slide latest-products-container" data-bs-ride="carousel">
             <div class="carousel-inner">
 
                 {% for variant in products %}
                 <div class="carousel-item active">
-                    <img src="{{ variant.medium }}" class="d-block w-100" alt="{{ variant.product.name }}">
+                    <img src="{{ variant.medium }}" class="d-block w-100" alt="{{ variant.alt_tag }}">
                 </div>
                 {% endfor %}
 
@@ -110,42 +129,24 @@
             </button>
         </div>
 
-    </div>
+</div>
 
-    <!-- CUSTOMER REVIEWS CONTAINER -->
-    <div class="container-fluid bg-light text-center pt-5 pb-2" id="customerReview">
-        <h3>Hear What Our Customers Are Saying!</h3>
-        <p class="mx-auto w-75">Discover why our online store is a shopper's paradise through the heartfelt words of our valued customers. At Unrols, we take pride in delivering exceptional products and top-notch service, and our customer reviews are a testament to the satisfaction and joy we bring to each shopping experience.</p>
-            
-        <div id="carouselExampleAutoplaying" class="carousel slide mt-5" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                {% for review in reviews %}
-                <div class="carousel-item active bg-dark py-3">
-                    <figure class="px-3 mx-auto">
-                        <blockquote class="blockquote">
-                            <p class="text-light">{{ review.content }}</p>
-                        </blockquote>
-                        <figcaption class="blockquote-footer">
-                            <cite title="Source Title">{{ review.author }}</cite>
-                        </figcaption>
-                    </figure>
-                </div>
-                {% endfor %}   
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
-                data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
-            data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+<!-- CUSTOMER REVIEWS CONTAINER -->
+<div class="container-fluid bg-white text-center pt-5 pb-2" id="customerReview">
+    <h3>Hear What Our Customers Are Saying!</h3>
+    <p class="mx-auto w-75">Discover why our online store is a shopper's paradise through the heartfelt words of our
+        valued customers. At Unrols, we take pride in delivering exceptional products and top-notch service, and our
+        customer reviews are a testament to the satisfaction and joy we bring to each shopping experience.</p>
+
+        <div class="row">
+            <a href="https://www.trustpilot.com/review/unrols.com" target="_blank" class="customBtnDark py-2 mx-auto w-50"
+                style="font-size: small !important;">See Reviews
+            </a>
         </div>
+        <br>
 
-    </div>
-    <!-- CUSTOMER SERVICE -->
-    {% include 'partials/policy.html' %}
-        
+</div>
+<!-- CUSTOMER SERVICE -->
+{% include 'partials/policy.html' %}
+
 {% endblock content %}

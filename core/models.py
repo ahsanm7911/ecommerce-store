@@ -22,6 +22,11 @@ class Category(models.Model):
     slug = models.SlugField(unique=True, default=' ', blank=True)
     description = models.TextField()
 
+    #SEO
+    title_tag = models.CharField(max_length=60, null=True, blank=True, default='')
+    meta_description = models.CharField(max_length=255, null=True, blank=True, default='')
+    keywords = models.CharField(max_length=255, null=True, blank=True, default='')
+
     class Meta:
         verbose_name_plural = "Categories"
 
@@ -73,6 +78,10 @@ class Product(models.Model):
     lead_time = models.PositiveIntegerField(default=2) # number of days 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # SEO
+    title_tag = models.CharField(max_length=60, null=True, blank=True, default='')
+    meta_description = models.CharField(max_length=255, null=True, blank=True, default='')
+    keywords = models.CharField(max_length=255, null=True, blank=True, default='')
 
     def __str__(self):
         return f'{self.name} - {self.code}'
@@ -103,7 +112,7 @@ class Product(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name) + '-' + slugify(self.code) # Generating slug from the name
+        self.slug = slugify(self.name) # Generating slug from the name
         super().save(*args, **kwargs)
 
 def product_variant_image_directory(instance, filename):
@@ -118,10 +127,18 @@ class ProductImage(models.Model):
     image = models.ImageField(upload_to=product_image_directory, default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # SEO
+    alt_tag = models.CharField(max_length=255, null=True, blank=True, default='')
 
     def __str__(self):
         return f'{self.product.name} | {self.id}'
 
+    def imageURL(self):
+        try:
+            url = self.image.url 
+        except:
+            url = ''
+        return url
 
     def save(self, *args, **kwargs):
     
@@ -146,9 +163,13 @@ class ProductVariant(models.Model):
     display = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # SEO
+    alt_tag = models.CharField(max_length=255, null=True, blank=True, default='')
+
 
     def __str__(self):
         return f'{self.product.name} - {self.color.name}'
+    
     
     @property
     def product_slug(self):
@@ -408,6 +429,12 @@ class RefundPolicy(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # SEO
+    title_tag = models.CharField(max_length=60, null=True, blank=True, default='')
+    meta_description = models.CharField(max_length=255, null=True, blank=True, default='')
+    keywords = models.CharField(max_length=255, null=True, blank=True, default='')
+
+
     def __str__(self):
         return self.description[:20]
     
@@ -416,6 +443,12 @@ class ShippingPolicy(models.Model):
     is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # SEO
+    title_tag = models.CharField(max_length=60, null=True, blank=True, default='')
+    meta_description = models.CharField(max_length=255, null=True, blank=True, default='')
+    keywords = models.CharField(max_length=255, null=True, blank=True, default='')
+
 
     def __str__(self):
         return self.description[:20]
@@ -431,7 +464,19 @@ class ClientEnquiry(models.Model):
 
     def __str__(self):
         return f'{self.email} | {self.comment[:30]}'
-    
+
+class About(models.Model):
+    description = models.TextField()
+    is_active = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    # SEO
+    title_tag = models.CharField(max_length=60, null=True, blank=True, default='')
+    meta_description = models.CharField(max_length=255, null=True, blank=True, default='')
+    keywords = models.CharField(max_length=255, null=True, blank=True, default='')
+
+    def __str__(self):
+        return self.description[:20]
     
 class CustomerReview(models.Model):
     author = models.CharField(max_length=255)

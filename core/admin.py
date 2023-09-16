@@ -17,20 +17,22 @@ from .models import (Product,
                     RefundPolicy, 
                     ShippingPolicy, 
                     ClientEnquiry,
-                    CustomerReview)
+                    CustomerReview, 
+                    About)
 # Register your models here.
 
 admin.site.register((ProductImage, Color, Cart, CartItem, Order, OrderItem, ShippingAddress ,ConfirmedOrder, ClientEnquiry, CustomerReview))
 
-@admin.register(Category, RefundPolicy, ShippingPolicy)
+@admin.register(Category, RefundPolicy, ShippingPolicy, About)
 class PostAdmin(admin.ModelAdmin):
     class Media:
         js = ('js/tiny.js',)
 
+    
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'image_tag', 'view_variants_link',)
-    fields = ('category', 'name', 'code', 'description', 'old_price', 'price', 'lead_time')
+    fields = ('category', 'name', 'code', 'slug', 'description', 'old_price', 'price', 'lead_time', 'title_tag', 'meta_description', 'keywords')
     list_filter = ('category', )
     search_fields = ('name__icontains', 'code__icontains')
 

@@ -23,7 +23,10 @@ def items_count_guest(request):
         itemCount += 1
     return itemCount
 
+def format_price(price):
+    return "{:,.0f}".format(price)
 
 
 register.filter('items_count', items_count)
 register.filter('items_count_guest', items_count_guest)
+register.filter('format_price', format_price)
