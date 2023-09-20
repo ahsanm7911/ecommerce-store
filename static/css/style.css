@@ -92,6 +92,9 @@ input[type='submit'], button, a[type="button"], a.customBtnBlack{
 #footer ul li:hover {
     text-decoration: underline;
 }
+#footer a.nav-link{
+    font-size: small !important;
+}
 
 #qtyForm input {
     width: 25%;
@@ -201,6 +204,11 @@ button {
     border: none;
 }
 
+/* IG FEED */
+.ig-feed-lg{
+    display: none;
+}
+
 #qtyForm button {
     padding: 6px 12px;
 }
@@ -262,6 +270,10 @@ div.products-wrapper a:nth-child(even){
         font-family: 'Roboto', sans-serif;
         font-weight: bold;
     }
+}
+.features-container div img{
+    height: 50px;
+    object-fit: cover;
 }
 /* Mobile M (375 - 577px) */
 @media only screen and (min-width: 375px) {
@@ -427,7 +439,7 @@ div.products-wrapper a:nth-child(even){
         top: 20%;
     }
     .newsletter-input {
-        width: 75% !important;
+        width: 25% !important;
     }
 
     #social-icons {
@@ -462,5 +474,11 @@ div.products-wrapper a:nth-child(even){
 
     #viewAllBtn {
         width: 25% !important;
+    }
+    .ig-feed-lg{
+        display: block;
+    }
+    .ig-feed-sm{
+        display: none;
     }
 }

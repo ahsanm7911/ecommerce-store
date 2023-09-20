@@ -53,9 +53,12 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django.contrib.sites',
     'core.apps.CoreConfig',
+    'api.apps.ApiConfig',
     'accounts.apps.AccountsConfig',
     'sorl.thumbnail',
     'storages',
+    'rest_framework',
+    'corsheaders'
 ]
 
 PASSWORD_HASHERS = [
@@ -74,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'unrols.urls'
@@ -194,3 +198,9 @@ SITE_ID=2
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MAINTENANCE = config('MAINTENANCE', cast=bool)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
+
+# CORS HEADERS
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:5500',
+)

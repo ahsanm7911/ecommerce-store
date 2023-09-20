@@ -1,0 +1,27 @@
+{% extends "core/base.html" %}
+{% block content %}
+    <div class="container-fluid container-lg my-5">
+        <br>
+        <h1 class="text-center fs-4">Frequently Asked Questions</h1>
+        <br>
+        {% for faq in faqs %}
+        
+        <p class="d-inline-flex gap-1 w-100">
+            <a class="btn btn-light w-100 d-flex flex-row justify-content-between fw-semibold" data-bs-toggle="collapse" href="#q{{ faq.id }}" role="button" aria-expanded="false"
+                aria-controls="collapseExample">
+                {{ faq.question}}
+                &nbsp;
+                <i class="bi bi-chevron-down"></i>
+            </a>
+        </p>
+        <div class="collapse" id="q{{ faq.id }}">
+            <div class="card card-body">
+                {% autoescape off %}
+                    {{ faq.description }}
+                {% endautoescape %}
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+    </div>
+{% endblock content %}

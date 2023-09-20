@@ -68,13 +68,12 @@
             document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
         }
     </script>
-    <!-- TrustBox script -->
-    <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
-    <!-- End TrustBox script -->
     {% block css %}{% endblock css %}
 </head>
 
 <body class="bg-white">
+    {% comment "Display orders" %} {% endcomment %}
+    {% include "partials/display_orders.html" %}
     <!-- MAIN HEADER INFO -->
     <div
         class="top-display-text container-fluid px-0 header-info d-flex flex-row justify-content-center align-items-center border-bottom border-light-subtle">
@@ -98,7 +97,7 @@
     </div>
 
     <!-- Navbar for large screens -->
-    <div class="container-fluid bg-dark text-light d-none d-lg-block py-2">
+    <div class="container-fluid text-light d-none d-lg-block py-2" style="background-color: #111;">
         <div class="container d-flex flex-row align-items-center justify-content-between">
 
             <ul class="d-flex flex-row mb-0 ps-0" id="nav-links">
@@ -124,7 +123,7 @@
                                 {{ request | items_count_guest }}
                             </span>
                             {% comment %} <!--   <span class="count">1</span> --> {% endcomment %}
-                            <i class="material-icons bi bi-cart"></i>
+                            <i class="material-icons bi bi-handbag"></i>
                         </a>
                     </li>
                     {% comment "" %}
@@ -153,14 +152,14 @@
             <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img
                         src="{% static 'logos/logo.png' %}" alt="Unrols"></a></li>
             <div class="d-flex flex-row align-items-center justify-content-end flex-shrink-1">
-                {% comment %} <!-- <li class="fs-4 searchBar"><i class="bi bi-search"></i></li> --> {% endcomment %}
+                {% comment %} <li class="fs-4 searchBar"><i class="bi bi-search"></i></li>  {% endcomment %}
                 <li class="ms-2 fs-4">
                     <a class="cart" id="cart-item-count" href="{% url 'cart' %}">
                         <span class="count">
                             {{ request | items_count_guest }}
                         </span>
-                        {% comment %} <!--   <span class="count">1</span> --> {% endcomment %}
-                        <i class="material-icons bi bi-cart"></i>
+                        {% comment %}   <span class="count">1</span>  {% endcomment %}
+                        <i class="material-icons bi bi-handbag"></i>
                     </a>
                 </li>
 
@@ -171,56 +170,57 @@
     {% block content %}
 
     {% endblock content %}
-
+    <br>
+    {% comment %} Instagram Feed Embed {% endcomment %}
+    <div class="ig-feed-sm">
+        {% ig_data %}
+    </div>
+    <div class="ig-feed-lg">
+        {% ig_data_lg%}
+    </div>
     <!-- FOOTER -->
-    <br><br><br><br><br><br>
-    <div class="container-fluid bg-dark text-light py-3 px-2" id="footer">
-        <div class="container-fluid container-lg d-flex flex-column justify-content-start">
+    <br>
+    <div class="container-fluid text-light py-3 px-2" id="footer" style="background-color: #111;">
+        <div class="container-fluid d-flex flex-column justify-content-start">
             <div class="container-fluid d-lg-flex flex-row justify-content-between ps-0">
 
                 <ul style="padding-left: 0px;">
-                    <li class="fs-5 fw-medium mb-3 text-white text-decoration-none">QUICK LINKS</li>
-                    <li class="mb-2 text-light"><a href="{% url 'products' slug='watches' %}"
-                            class="nav-link">Watches</a></li>
+                    <li class="fs-6 fw-normal mb-3 text-white text-decoration-none text-uppercase">Unrols</li>
+                    <li class="mb-2 text-light"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
                     <li class="mb-2 text-light"><a href="{% url 'products' slug='sunglasses' %}"
                             class="nav-link">Sunglasses</a></li>
+                    <li class="mb-2 text-light"><a href="{% url 'about' %}" class="nav-link">The Brand</a></li>
 
-                    <!-- <li class="mb-2 text-light"><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li> -->
+
+                     {% comment %} <li class="mb-2 text-light"><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li>  {% endcomment %}
                 </ul>
-                <br>
+                <hr class="d-lg-none">
                 <ul style="padding-left: 0px;">
-                    <li class="fs-5 fw-medium mb-3 text-white text-decoration-none">INFORMATION</li>
+                    <li class="fs-6 fw-normal mb-3 text-white text-decoration-none text-uppercase">Support</li>
+                    <li class="mb-2 text-light"><a href="{% url 'faqs' %}" class="nav-link">FAQ</a></li>
+                    <li class="mb-2 text-light"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
                     <li class="mb-2 text-light"><a href="{% url 'refund_policy' %}" class="nav-link">Return/Refund
                             Policy</a></li>
                     <li class="mb-2 text-light"><a href="{% url 'shipping_information' %}" class="nav-link">Shipping
                             Policy</a></li>
                     {% comment %} <li class="mb-2 text-light"><a href="" class="nav-link">Blog</a></li> {% endcomment %}
                 </ul>
-                <br>
                 <ul style="padding-left: 0px;">
-                    <li class="fs-5 fw-medium mb-3 text-white text-decoration-none">CUSTOMER SERVICE</li>
-                    <li class="mb-2 text-light"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-                    <li class="mb-2 text-light"><a href="{% url 'about' %}" class="nav-link">About</a></li>
+                    <li class="fs-6 fw-normal mb-3 text-white text-decoration-none text-uppercase">About Unrols</li>
+                    <li class="mb-2 text-light text-decoration-none">Your journey to unveiling timeless style - where fashion and accessories unite.</li>
                 </ul>
                 <br>
-                <div></div>
-                <div></div>
+                <br>
             </div>
-            {% comment %} TrustBox widget - Micro Review Count {% endcomment %}
-            <div class="trustpilot-widget ms-auto" data-locale="en-US" data-template-id="5419b6a8b0d04a076446a9ad"
-                data-businessunit-id="64fb4c0779f5cdb0dae809e6" data-style-height="24px" data-style-width="100%"
-                data-theme="dark" data-min-review-count="20" data-without-reviews-preferred-string-id="1"
-                data-style-alignment="start">
-                <a href="https://www.trustpilot.com/review/unrols.com" target="_blank" rel="noopener">Trustpilot</a>
-            </div>
-            {% comment %} End TrustBox widget {% endcomment %}
             <br><br>
             <!-- NEWSLETTER -->
             <div class="container-fluid d-lg-flex flex-row justify-content-between align-items-center ps-0">
 
                 <form class="container mt-4 px-0" id="newsletter">
                     {% csrf_token %}
-                    <p class="text-light">Subscribe to our emails</p>
+                    <p class="fs-6 text-white text-uppercase">Sign up and Save</p>
+                    <p class="text-light">Subscribe to get special offers, free giveaways, and once-in-a-lifetime
+                        offers.</p>
                     <div class="form-floating mb-3 text-dark position-relative">
                         <input type="email" class="form-control newsletter" name="email" id="floatingInput"
                             placeholder="name@example.com" style="border-radius: 0;">
@@ -266,6 +266,9 @@
 </body>
 {% block js %}{% endblock js %}
 <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/index.js' %}"></script>
+<script src="{% static 'js/ig_feed.js' %}"></script>
+<!-- TrustBox script -->
+<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+<!-- End TrustBox script -->
 
 </html>

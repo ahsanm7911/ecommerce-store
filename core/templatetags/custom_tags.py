@@ -1,6 +1,7 @@
 from django import template
 from core.models import Order, OrderItem
 import json
+from api.models import IGPost
 
 register = template.Library()
 
@@ -26,6 +27,21 @@ def items_count_guest(request):
 def format_price(price):
     return "{:,.0f}".format(price)
 
+@register.inclusion_tag('partials/ig_feed_embed.html')
+def ig_data():
+    posts = IGPost.objects.all()[:6]
+    context = {
+        'posts': posts
+    }
+    return context
+
+@register.inclusion_tag('partials/ig_feed_embed.html')
+def ig_data_lg():
+    posts = IGPost.objects.all()[:10]
+    context = {
+        'posts': posts
+    }
+    return context
 
 register.filter('items_count', items_count)
 register.filter('items_count_guest', items_count_guest)

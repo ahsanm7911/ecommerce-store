@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
-from .models import Product, ProductVariant, ProductImage, Color, Stock, Order, OrderItem, ConfirmedOrder, ShippingAddress, RefundPolicy, ClientEnquiry, CustomerReview
+from .models import Product, ProductVariant, ProductImage, Color, Stock, Order, OrderItem, ConfirmedOrder, ShippingAddress, RefundPolicy, ClientEnquiry, CustomerReview, FAQ
 from accounts.models import Address
 from django.http import JsonResponse, HttpResponse
 from django.contrib.sites.models import Site
@@ -444,3 +444,10 @@ def about(request):
     }
 
     return render(request, 'core/about.html', context)
+
+def faqs(request):
+    faqs = FAQ.objects.all()
+    context = {
+        'faqs': faqs
+    }
+    return render(request, 'core/faqs.html', context)

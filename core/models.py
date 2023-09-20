@@ -487,8 +487,14 @@ class CustomerReview(models.Model):
     def __str__(self):
         return f'{self.author} | {self.content[:20]}'
 
+class FAQ(models.Model):
+    question = models.CharField(max_length=500)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-
+    def __str__(self):
+        return self.question
 
     
 

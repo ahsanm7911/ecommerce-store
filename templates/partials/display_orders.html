@@ -1,0 +1,124 @@
+<style>
+    #popup-container {
+    display: none;
+    position: fixed;
+    width: 350px;
+    bottom: 8px;
+    left: 8px;
+    color: white;
+    transform: translateX(-100%); /* Start off-screen */
+    transition: transform 0.5s ease-in-out; /* Animation duration and easing */
+    z-index: 999;
+}
+
+#popup-content {
+    display: flex;
+    flex-direction: row;
+    background: #111;
+    font-size: small;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    animation: slideIn 0.5s forwards; /* Animation for sliding in */
+}
+.popup-image-wrapper img{
+    height: 70px;
+    width: 70px;
+    object-fit: cover;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(100%); /* Start off-screen */
+    }
+    100% {
+        transform: translateY(0); /* End position */
+    }
+}
+
+#close-popup {
+    margin-top: 10px;
+    cursor: pointer;
+}
+.name-para{
+    font-size: small;
+}
+</style>
+
+<div id="popup-container">
+    <div id="popup-content">
+        <div class="popup-image-wrapper">
+            <img src="" alt="">
+        </div>
+        <div class="d-flex flex-column align-items-start ms-2">
+            <p class="name-para mb-0 text-light"><span class="popup-name"></span>&nbsp;purchased</p> 
+            <p class="popup-item fw-semibold fs-5 mb-1 text-light"></p> 
+            <span class="time text-primary">A while ago</span>
+        </div>
+    </div>
+</div>
+
+{% block js %}
+<script>
+
+    $(document).ready(function(){
+
+        // Saving orders information to a list.
+        $orders = []
+        $.ajax({
+            type: 'GET',
+            url : 'api/display_orders/',
+            success: function(res){
+                $orders = res
+            }
+        })
+
+        // Order Index
+        $orderIndex = 0
+        // Function to show the popup 
+        function showPopup() {
+        
+        var popupContainer = document.getElementById("popup-container");
+        popupContainer.style.transform = "translateX(0)"; // Slide in from left
+        popupContainer.style.display = "block";
+        $('.popup-image-wrapper img').attr('src', $orders[$orderIndex]['image'])
+        $('.popup-name').text($orders[$orderIndex]['name'])
+        $('.popup-item').text(truncateChars($orders[$orderIndex]['item'], 15))   
+        // Increasing order index by one.
+        if ($orderIndex < ($orders.length - 1)){
+            $orderIndex += 1
+        } else {
+            $orderIndex = 0
+        }
+        // Automatically close the popup after 5 seconds
+        setTimeout(closePopup, 5000);
+    }
+
+    function truncateChars(str, maxLength){
+        if(str.length > maxLength){
+            return str.slice(0, maxLength) + '...'
+        } else {
+            return str
+        }
+    }
+    // Function to close the popup
+    function closePopup() {
+        var popupContainer = document.getElementById("popup-container");
+        popupContainer.style.transform = "translateX(-100%)"; // Slide out to left
+        setTimeout(function () {
+            popupContainer.style.display = "none";
+        }, 500); // Wait for the animation to complete before hiding
+    }
+    
+    // Show the popup initially
+    setTimeout(showPopup, 15000);
+    
+    // Set an interval to show the popup every 30 seconds
+    setInterval(showPopup, 30000);
+    
+})
+    
+</script>
+
+{% endblock js %}

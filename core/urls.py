@@ -31,6 +31,7 @@ urlpatterns = [
     path('policies/shipping-information/', views.shipping_policy, name='shipping_information'),
 
     # Contact pages
-    path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
+    path('faqs/', views.faqs, name='faqs')
 ]

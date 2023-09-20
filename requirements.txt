@@ -6,7 +6,9 @@ botocore==1.31.17
 cffi==1.15.1
 colorama==0.4.6
 Django==4.2.1
+django-instagram-profile==1.0.3
 django-storages==1.13.2
+djangorestframework==3.14.0
 DjangoSEO==1.0
 gunicorn==20.1.0
 jmespath==1.0.1
@@ -17,6 +19,7 @@ pycparser==2.21
 python-dateutil==2.8.2
 python-decouple==3.8
 python-dotenv==1.0.0
+pytz==2023.3.post1
 s3transfer==0.6.1
 six==1.16.0
 sorl-thumbnail==12.9.0

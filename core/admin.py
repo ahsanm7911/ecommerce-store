@@ -18,17 +18,18 @@ from .models import (Product,
                     ShippingPolicy, 
                     ClientEnquiry,
                     CustomerReview, 
-                    About)
+                    About,
+                    FAQ)
 # Register your models here.
 
 admin.site.register((ProductImage, Color, Cart, CartItem, Order, OrderItem, ShippingAddress ,ConfirmedOrder, ClientEnquiry, CustomerReview))
 
-@admin.register(Category, RefundPolicy, ShippingPolicy, About)
+@admin.register(Category, RefundPolicy, ShippingPolicy, About, FAQ)
 class PostAdmin(admin.ModelAdmin):
     class Media:
         js = ('js/tiny.js',)
 
-    
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'image_tag', 'view_variants_link',)
