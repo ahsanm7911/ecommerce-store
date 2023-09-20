@@ -49,11 +49,11 @@ def home(request):
     
     products = ProductVariant.objects.filter(product__category__slug='sunglasses', display=True)
     try:
-        mobile_banner_image = ProductVariant.objects.get(product__code='UNW-001', color__name='Beaver')
+        mobile_banner_image = ProductVariant.objects.get(product__code='UNS-011', color__name='Red')
     except ProductVariant.DoesNotExist:
         mobile_banner_image = ''
     try:
-        desktop_banner_image = ProductVariant.objects.get(product__code='UNW-001',color__name='Beaver')
+        desktop_banner_image = ProductVariant.objects.get(product__code='UNS-011',color__name='Red')
     except ProductVariant.DoesNotExist:
         desktop_banner_image = ''
 
