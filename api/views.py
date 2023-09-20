@@ -29,6 +29,7 @@ def display_orders(request):
             try:
                 name = full_name.split(' ')[0] + ' ' + full_name.split(' ')[1][0].capitalize() + '.'
             except Exception as e:
+                name = ''
                 print(f'Name: {e}')
             try:
                 item = order.order_details.split('\n')[0].split('|')[0].split(' x ')[0].strip()
@@ -41,13 +42,13 @@ def display_orders(request):
             print(item)
             print(color)
             try:
-                item_image = ProductVariant.objects.get(product__name=item, color__name=color)
+                item_image = ProductVariant.objects.get(product__name=item, color__name=color).thumbnail
             except ProductVariant.DoesNotExist:
                 item_image = ''
             order_data = {
                 'name': name,
                 'item': item,
-                'image': item_image.thumbnail
+                'image': item_image
             }
             all_orders.append(order_data)
         return Response(all_orders)
