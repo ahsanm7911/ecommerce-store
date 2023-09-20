@@ -203,4 +203,5 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5 MB
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:5500',
+    'https://unrols.com',
 )
