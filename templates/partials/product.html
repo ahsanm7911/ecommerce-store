@@ -8,6 +8,10 @@
     .product-image-container:hover img{
         transform: scale(1.1); /* Zoom in effect when hover */
     }
+    .product-title{
+        letter-spacing: 2px;
+        font-weight: lighter;
+    }
 </style>
 <a class="product col page-link" href="{% url 'product' cat=variant.product.category.slug slug=variant.product.slug  %}">
     <div class="product-image-container position-relative">
@@ -18,8 +22,8 @@
         <!-- <span class="text-bg-danger position-absolute px-2 py-1 fw-semibold" style="right: 0px;">Sold</span> -->
     </div>
     <div class="product-info">
-        <p class="product-title mt-2 mb-1 fw-bold">{{ variant.product.name }}</p>
-        <p class="product-old-price ps-1 mb-0 text-decoration-line-through text-start">Rs. {{ variant.old_price }}</p>
-        <p class="product-price text-start fw-medium text-danger">Rs. {{ variant.price }} </p>
+        <p class="product-title mt-2 mb-1 fw-bold">{{ variant.product.name | upper}}</p>
+        <p class="product-old-price ps-1 mb-0 text-decoration-line-through text-start">RS. {{ variant.old_price |format_price }}</p>
+        <p class="product-price text-start fw-light text-secondary">RS. {{ variant.price |format_price }} </p>
     </div>
 </a>

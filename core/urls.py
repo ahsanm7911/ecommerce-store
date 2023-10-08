@@ -22,13 +22,11 @@ urlpatterns = [
     path('cart/unauth-cart/', views.unauth_cart, name='unauth_cart'),
     path('cart/updating-cart-total/', views.updating_cart_total, name='updating_cart_total'),
     path('checkout/process-checkout/', views.process_checkout, name='process_checkout'),
-    path('newsletter/', account_views.newsletter, name='newsletter'),
 
 
     # Policy pages
-    path('policy/', views.store_policy, name='policy'),
-    path('policies/refund-policy/', views.refund_policy, name='refund_policy'),
-    path('policies/shipping-information/', views.shipping_policy, name='shipping_information'),
+    path('shipping-and-returns/', views.shipping_and_returns, name='shipping-and-returns'),
+    path('terms-and-conditions/', views.terms_and_conditions, name='terms-and-conditions'),
 
     # Contact pages
     path('about/', views.about, name='about'),

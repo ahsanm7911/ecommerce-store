@@ -497,6 +497,32 @@ class FAQ(models.Model):
         return self.question
 
     
+class HomePage(models.Model):
+    desktop_banner = models.ImageField(upload_to='main_page/')
+    mobile_banner = models.ImageField(upload_to='main_page/')
+    secondary_desktop_banner = models.ImageField(upload_to='main_page/', default='')
+    secondary_mobile_banner = models.ImageField(upload_to='main_page/', default='')
+    is_active = models.BooleanField(default=False)
+
+    # SEO
+    alt_tag = models.CharField(max_length=255, default='')
+
+    def __str__(self):
+        return self.alt_tag
+    
+class TermsConditions(models.Model):
+    description = models.TextField()
+    is_active = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # SEO
+    title_tag = models.CharField(max_length=255)
+    meta_description = models.TextField()
+
+    def __str__(self):
+        return self.description[:20]
+    
 
 
 

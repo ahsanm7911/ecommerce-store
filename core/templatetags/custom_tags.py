@@ -25,7 +25,7 @@ def items_count_guest(request):
     return itemCount
 
 def format_price(price):
-    return "{:,.0f}".format(price)
+    return "{:,.2f}".format(price)
 
 @register.inclusion_tag('partials/ig_feed_embed.html')
 def ig_data():

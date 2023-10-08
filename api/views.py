@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.decorators import api_view
 from .models import IGPost
 from core.models import ConfirmedOrder, ProductVariant
-from .serializers import IGPostSerializer, ConfirmedOrderSerializer
+from .serializers import IGPostSerializer, ConfirmedOrderSerializer, NewsletterSerializer
 # Create your views here.
 
 @api_view(['GET'])
@@ -56,3 +57,18 @@ def display_orders(request):
         print(f'Main Exception: {e}')
 
 
+@api_view(['POST'])
+def subscribe_to_newsletter(request):
+    method = request.method
+
+    if method == 'POST':
+        serializer = NewsletterSerializer(data=request.data)
+
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            print(email)
+            serializer.save()
+
+            return Response({'message': 'Thankyou for subscribing.'}, status=status.HTTP_201_CREATED)
+        
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

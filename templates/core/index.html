@@ -24,6 +24,9 @@
         #customerReview p{
             width: 60% !important;
         }
+        #top-banner{
+            margin-top: -88px;
+        }
     }
 </style>
 {% endblock css %}
@@ -33,25 +36,28 @@
 {% block content %}
 
 
+{% comment "Newsletter" %}  
+{% include "partials/newsletter_popup.html" %}
+{% endcomment %}
 
 <!-- TOP BANNER CONTAINER -->
-<div class="container-fluid px-0" id="top-banner">
+<div class="container-fluid px-0 bg-dark" id="top-banner">
     <div class="top-banner-image position-relative text-light">
-        <img src="{{ mobile_banner_image.medium }}" alt="{{ mobile_banner_image.alt_tag }}"
-            class="w-100 h-100 d-md-none" style="height: 350px; object-fit: cover;">
-        <img src="{{ desktop_banner_image.original }}" class="w-100 d-none d-md-block"
+        <img src="{{ mobile_banner_image }}" alt="{{ mobile_banner_image.alt_tag }}"
+            class="w-100 h-100 d-md-none opacity-75" style="height: 350px; object-fit: cover;">
+        <img src="{{ desktop_banner_image }}" class="w-100 d-none d-md-block opacity-75"
             alt="{{ desktop_banner_image.alt_tag }}" style="height: 600px; object-fit: cover;">
         <div
-            class="container position-absolute top-banner-info translate-middle-x d-flex flex-column align-items-center">
-            <h1 class="text-center mb-3 fw-bold lh-base fs-3">Introducing the Ultimate Style Destination for Fashion
+            class="container position-absolute top-banner-info translate-middle-x d-flex flex-column align-items-center d-none">
+            <h1 class="text-center mb-3 fw-bold text-dark lh-base fs-3 w-50 text-uppercase">Introducing the Ultimate Style Destination for Fashion
                 Accessories!</h1>
-            <p class="w-75 text-center d-none d-md-block text-light fw-semibold">Welcome to Unrols, your one-stop shop
+            <p class="w-75 text-center d-none d-md-block fw-semibold">Welcome to Unrols, your one-stop shop
                 for exquisite fashion accessories that will elevate your style to new heights. We believe that every
                 outfit deserves the perfect finishing touch, and our curated collection of accessories promises to
                 dazzle and delight.
             </p>
             <a href="{% url 'products' slug='sunglasses' %}"
-                class="customBtn text-center px-4 py-2 text-decoration-none">Discover Our Collection</a>
+                class="customBtnBlack text-center px-4 py-2 text-decoration-none text-uppercase">Our Collection</a>
         </div>
     </div>
 </div>
@@ -87,7 +93,19 @@
 
 </div>
 
-<div class="container-fluid text-light py-5" id="latestProducts" style="background-color: #111;">
+
+<!-- Banner -->
+<div class="container-fluid">
+    <div class="img-wrapper">
+        <!-- Secondary Desktop Banner -->
+        <img src="{{ secondary_desktop_banner }}" alt="" class="w-100 d-none d-md-block">
+        <!-- Secondary Mobile Banner -->
+        <img src="{{ secondary_mobile_banner }}" alt="" class="w-100 d-md-none">
+    </div>
+</div>
+
+
+<div class="container-fluid text-light py-5 d-none" id="latestProducts" style="background-color: #111;">
     <h3 class="text-center">New Releases</h2>
         <p class="text-center text-light">Step into a realm of captivating style as we proudly present our New Products
             Arrival at Unrols. Prepare to be dazzled by a handpicked selection of fashion accessories that exude

@@ -168,15 +168,3 @@ def delete_address(request):
         return JsonResponse({'message': 'Address deleted successfullly.'})
 
 
-def newsletter(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        try:
-            newsletter = Newsletter.objects.get_or_create(email=email)
-            # newsletter.save()
-            message = "Thanks for subscribing to our newsletter."
-            print(f'{email} added to newsletter.', Fore.GREEN)
-        except Exception as e:
-            message = "There was some error adding your email to our newsletter."
-            print(e, Fore.RED)
-        return HttpResponse(message)

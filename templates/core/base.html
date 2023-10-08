@@ -22,7 +22,7 @@
     <meta name="title" content="{{ title_tag }}">
     <meta name="description" content="{{ meta_description }}">
     <meta name="keywords" content="{{ meta_keywords }}">
-
+    <meta name="theme-color" content="#ffffff">
     <link rel="canonical" href="{{ request.path }}">
     <link rel="home" href="{% url 'home' %}">
 
@@ -74,98 +74,10 @@
 <body class="bg-white">
     {% comment "Display orders" %} {% endcomment %}
     {% include "partials/display_orders.html" %}
-    <!-- MAIN HEADER INFO -->
-    <div
-        class="top-display-text container-fluid px-0 header-info d-flex flex-row justify-content-center align-items-center border-bottom border-light-subtle">
-        <p class="mt-2 mb-2 fw-light">Free shipping on all orders!</p>
-    </div>
 
-    <div class="container sidebar text-light py-2 d-none" id="sidebarContainer">
-        <ul class="d-flex flex-row justify-content-between align-items-center ps-0 mb-0">
-            <li></li>
-            <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img
-                        src="{% static 'logos/logo.png' %}" alt="Unrols"></a></li>
-            <li class="fs-4" onclick="toggleSidebar()"><i class="bi bi-x"></i></li>
-        </ul>
-
-        <ul class="d-flex flex-column ps-0 mt-5" id="sidebarUl">
-            {% comment %} <li class="fs-4 py-3"><a href="{% url 'products' slug='watches' %}"
-                    class="nav-link">Watches</a></li> {% endcomment %}
-            <li class="fs-4 py-3"><a href="{% url 'products' slug='sunglasses' %}" class="nav-link">Sunglasses</a></li>
-            {% comment %} <li class="fs-4 py-3"><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li> {% endcomment %}
-        </ul>
-    </div>
-
-    <!-- Navbar for large screens -->
-    <div class="container-fluid text-light d-none d-lg-block py-2" style="background-color: #111;">
-        <div class="container d-flex flex-row align-items-center justify-content-between">
-
-            <ul class="d-flex flex-row mb-0 ps-0" id="nav-links">
-                {% comment %} <li class="me-4"><a href="{% url 'products' slug='watches' %}"
-                        class="nav-link">Watches</a></li> {% endcomment %}
-                <li class="me-4"><a href="{% url 'products' slug='sunglasses' %}" class="nav-link">Sunglasses</a></li>
-                {% comment %} <li class=""><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li> {% endcomment %}
-            </ul>
-
-            <div class="brand-logo fs-2 fw-semibold align-self-baseline">
-                <a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/logo.png' %}" alt="Unrols Logo"
-                        title="logo"></a>
-            </div>
-
-
-            <div class="cart-search-container">
-                <ul class="d-flex flex-row d-flex flex-row align-items-center mb-0">
-                    {% comment %} <li class="fs-4 searchBar"><a href="" class="nav-link"><i
-                                class="bi bi-search"></i></a></li> {% endcomment %}
-                    <li class="ms-4 fs-2">
-                        <a class="cart" id="cart-item-count" href="{% url 'cart' %}">
-                            <span class="count">
-                                {{ request | items_count_guest }}
-                            </span>
-                            {% comment %} <!--   <span class="count">1</span> --> {% endcomment %}
-                            <i class="material-icons bi bi-handbag"></i>
-                        </a>
-                    </li>
-                    {% comment "" %}
-                    {% if request.user.is_authenticated %}
-                    <li class="ms-2 fs-6 d-flex flex-row"><a href="{% url 'logout' %}" class="nav-link">Logout</a>
-                        &nbsp;|&nbsp; <a href="{% url 'myaccount' %}" class="nav-link">My account</a></li>
-
-                    {% else %}
-
-                    <li class="ms-0 fs-3"><a href="{% url 'login' %}" class="nav-link"><i class="bi bi-person"></i></a>
-                    </li>
-
-                    {% endif %}
-                    {% endcomment %}
-                </ul>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Navbar for small screens -->
-    <div class="container-fluid text-light py-2 d-lg-none px-1" id="navbarContainer" style="background-color: #111;">
-        <ul class="d-flex flex-row justify-content-between align-items-center list-style-none ps-2 mb-0 main-bar"
-            style="height: 70px;">
-            <li class="fs-1" onclick="toggleSidebar()"><i class="bi bi-list"></i></li>
-            <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img
-                        src="{% static 'logos/logo.png' %}" alt="Unrols"></a></li>
-            <div class="d-flex flex-row align-items-center justify-content-end flex-shrink-1">
-                {% comment %} <li class="fs-4 searchBar"><i class="bi bi-search"></i></li>  {% endcomment %}
-                <li class="ms-2 fs-4">
-                    <a class="cart" id="cart-item-count" href="{% url 'cart' %}">
-                        <span class="count">
-                            {{ request | items_count_guest }}
-                        </span>
-                        {% comment %}   <span class="count">1</span>  {% endcomment %}
-                        <i class="material-icons bi bi-handbag"></i>
-                    </a>
-                </li>
-
-            </div>
-        </ul>
-    </div>
+    {% include "partials/top_header.html" %}
+    {% include "partials/navbar.html" %}
+    
 
     {% block content %}
 
@@ -179,89 +91,7 @@
         {% ig_data_lg%}
     </div>
     <!-- FOOTER -->
-    <br>
-    <div class="container-fluid text-light py-3 px-2" id="footer" style="background-color: #111;">
-        <div class="container-fluid d-flex flex-column justify-content-start">
-            <div class="container-fluid d-lg-flex flex-row justify-content-between ps-0">
-
-                <ul style="padding-left: 0px;">
-                    <li class="fs-6 fw-normal mb-3 text-white text-decoration-none text-uppercase">Unrols</li>
-                    <li class="mb-2 text-light"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-                    <li class="mb-2 text-light"><a href="{% url 'products' slug='sunglasses' %}"
-                            class="nav-link">Sunglasses</a></li>
-                    <li class="mb-2 text-light"><a href="{% url 'about' %}" class="nav-link">The Brand</a></li>
-
-
-                     {% comment %} <li class="mb-2 text-light"><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li>  {% endcomment %}
-                </ul>
-                <hr class="d-lg-none">
-                <ul style="padding-left: 0px;">
-                    <li class="fs-6 fw-normal mb-3 text-white text-decoration-none text-uppercase">Support</li>
-                    <li class="mb-2 text-light"><a href="{% url 'faqs' %}" class="nav-link">FAQ</a></li>
-                    <li class="mb-2 text-light"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-                    <li class="mb-2 text-light"><a href="{% url 'refund_policy' %}" class="nav-link">Return/Refund
-                            Policy</a></li>
-                    <li class="mb-2 text-light"><a href="{% url 'shipping_information' %}" class="nav-link">Shipping
-                            Policy</a></li>
-                    {% comment %} <li class="mb-2 text-light"><a href="" class="nav-link">Blog</a></li> {% endcomment %}
-                </ul>
-                <ul style="padding-left: 0px;">
-                    <li class="fs-6 fw-normal mb-3 text-white text-decoration-none text-uppercase">About Unrols</li>
-                    <li class="mb-2 text-light text-decoration-none">Your journey to unveiling timeless style - where fashion and accessories unite.</li>
-                </ul>
-                <br>
-                <br>
-            </div>
-            <br><br>
-            <!-- NEWSLETTER -->
-            <div class="container-fluid d-lg-flex flex-row justify-content-between align-items-center ps-0">
-
-                <form class="container mt-4 px-0" id="newsletter">
-                    {% csrf_token %}
-                    <p class="fs-6 text-white text-uppercase">Sign up and Save</p>
-                    <p class="text-light">Subscribe to get special offers, free giveaways, and once-in-a-lifetime
-                        offers.</p>
-                    <div class="form-floating mb-3 text-dark position-relative">
-                        <input type="email" class="form-control newsletter" name="email" id="floatingInput"
-                            placeholder="name@example.com" style="border-radius: 0;">
-                        <label for="floatingInput">Email address</label>
-                        <span class="position-absolute">
-                            <button class="bg-white border-none" type="submit">
-                                <i id="newsletterBtn" class="bi bi-arrow-right text-dark fs-3"></i>
-                            </button>
-                        </span>
-                        <p class="message-div mt-2 fw-semibold text-success">
-                            <i class="bi bi-check-circle"></i>
-                            <span>Thanks for subscribing.</span>
-                        </p>
-                    </div>
-                </form>
-
-                <div class="container mt-4" id="social-icons">
-                    <p class="text-light text-center">Follow us on social media</p>
-                    <ul class="d-flex flex-row justify-content-between ps-0">
-                        <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-twitter"></i></a>
-                        </li>
-                        <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-youtube"></i></a>
-                        </li>
-                        <li><a href="https://www.instagram.com/unrolspk/" title="Instagram" class="nav-link"><i
-                                    class="icon fs-5 bi bi-instagram"></i></a></li>
-                        <li><a href="https://www.facebook.com/unrols/" title="Facebook" class="nav-link"><i
-                                    class="icon fs-5 bi bi-facebook"></i></a></li>
-                        <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-pinterest"></i></a>
-                        </li>
-                        <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-tiktok"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid m-0" style="background-color: #111;" id='footer-bottom'>
-        <p class="text-center text-lg-end py-3 mb-0" style="font-size: small; color: lightgrey;">
-            &copy; 2023 Unrols. All Rights Reserved
-        </p>
-    </div>
+    {% include "partials/footer.html" %}
 
 </body>
 {% block js %}{% endblock js %}

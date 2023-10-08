@@ -2,8 +2,6 @@
     box-sizing: border-box;
 }
 
-
-
 .heading-spaced{
     text-transform: uppercase;
     letter-spacing: 3px;
@@ -395,7 +393,7 @@ div.products-wrapper a:nth-child(even){
 /* Laptop (1024px) */
 @media only screen and (min-width: 1024px) {
     .brand-logo a img{
-        width: 160px;
+        width: 200px;
         height: 80px;
         object-fit: cover;
     }

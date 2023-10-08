@@ -1,0 +1,84 @@
+{% load static %}
+
+
+<br>
+    <div class="container-fluid text-light py-3 px-2" id="footer" style="background-color: #111;">
+        <div class="container-fluid d-flex flex-column justify-content-start">
+            <div class="container-fluid d-lg-flex flex-row justify-content-between ps-0">
+
+                <ul style="padding-left: 0px;">
+                    <li class="fs-6 fw-normal mb-3 text-white text-decoration-none text-uppercase">Unrols</li>
+                    <li class="mb-2 text-light"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+                    <li class="mb-2 text-light"><a href="{% url 'products' slug='sunglasses' %}"
+                            class="nav-link">Collection</a></li>
+                    <li class="mb-2 text-light"><a href="{% url 'about' %}" class="nav-link">The Brand</a></li>
+
+
+                     {% comment %} <li class="mb-2 text-light"><a href="{% url 'lookbook' %}" class="nav-link">Lookbook</a></li>  {% endcomment %}
+                </ul>
+                <hr class="d-lg-none">
+                <ul style="padding-left: 0px;">
+                    <li class="fs-6 fw-normal mb-3 text-white text-decoration-none text-uppercase">Support</li>
+                    <li class="mb-2 text-light"><a href="{% url 'faqs' %}" class="nav-link">FAQ</a></li>
+                    <li class="mb-2 text-light"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
+                    <li class="mb-2 text-light"><a href="{% url 'shipping-and-returns' %}" class="nav-link">Shipping & Returns</a></li>
+                    <li class="mb-2 text-light"><a href="{% url 'terms-and-conditions' %}" class="nav-link">Terms & Conditions</a></li>
+                    {% comment %} <li class="mb-2 text-light"><a href="" class="nav-link">Blog</a></li> {% endcomment %}
+                </ul>
+                <ul style="padding-left: 0px;">
+                    <li class="fs-6 fw-normal mb-3 text-white text-decoration-none text-uppercase">About Unrols</li>
+                    <li class="mb-2 text-light text-decoration-none">Your journey to unveiling timeless style - where fashion and accessories unite.</li>
+                </ul>
+                <br>
+                <br>
+            </div>
+            <br><br>
+            <!-- NEWSLETTER -->
+            <div class="container-fluid d-lg-flex flex-row justify-content-between align-items-center ps-0">
+
+                <form class="container mt-4 px-0" id="newsletter">
+                    {% csrf_token %}
+                    <p class="fs-6 text-white text-uppercase">Sign up and Save</p>
+                    <p class="text-light">Subscribe to get special offers, free giveaways, and once-in-a-lifetime
+                        offers.</p>
+                    <div class="form-floating mb-3 text-dark position-relative">
+                        <input type="email" class="form-control newsletter" name="email" id="floatingInput"
+                            placeholder="name@example.com" style="border-radius: 0;">
+                        <label for="floatingInput">Email address</label>
+                        <span class="position-absolute">
+                            <button class="bg-white border-none" type="submit">
+                                <i id="newsletterBtn" class="bi bi-arrow-right text-dark fs-3"></i>
+                            </button>
+                        </span>
+                        <p class="message-div mt-2 fw-semibold text-success">
+                            <i class="bi bi-check-circle"></i>
+                            <span>Thanks for subscribing.</span>
+                        </p>
+                    </div>
+                </form>
+
+                <div class="container mt-4" id="social-icons">
+                    <p class="text-light text-center">Follow us on social media</p>
+                    <ul class="d-flex flex-row justify-content-between ps-0">
+                        <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-twitter"></i></a>
+                        </li>
+                        <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-youtube"></i></a>
+                        </li>
+                        <li><a href="https://www.instagram.com/unrolspk/" title="Instagram" class="nav-link"><i
+                                    class="icon fs-5 bi bi-instagram"></i></a></li>
+                        <li><a href="https://www.facebook.com/unrols/" title="Facebook" class="nav-link"><i
+                                    class="icon fs-5 bi bi-facebook"></i></a></li>
+                        <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-pinterest"></i></a>
+                        </li>
+                        <li class="opacity-0"><a href="" class="nav-link"><i class="icon fs-5 bi bi-tiktok"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid m-0" style="background-color: #111;" id='footer-bottom'>
+        <p class="text-center text-lg-end py-3 mb-0" style="font-size: small; color: lightgrey;">
+            &copy; 2023 Unrols. All Rights Reserved
+        </p>
+    </div>

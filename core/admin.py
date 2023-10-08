@@ -19,12 +19,14 @@ from .models import (Product,
                     ClientEnquiry,
                     CustomerReview, 
                     About,
-                    FAQ)
+                    FAQ, 
+                    HomePage,
+                    TermsConditions)
 # Register your models here.
 
-admin.site.register((ProductImage, Color, Cart, CartItem, Order, OrderItem, ShippingAddress ,ConfirmedOrder, ClientEnquiry, CustomerReview))
+admin.site.register((ProductImage, Color, Cart, CartItem, Order, OrderItem, ShippingAddress ,ConfirmedOrder, ClientEnquiry, CustomerReview, HomePage))
 
-@admin.register(Category, RefundPolicy, ShippingPolicy, About, FAQ)
+@admin.register(Category, RefundPolicy, ShippingPolicy, About, FAQ, TermsConditions)
 class PostAdmin(admin.ModelAdmin):
     class Media:
         js = ('js/tiny.js',)

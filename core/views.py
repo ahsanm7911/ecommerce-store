@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
-from .models import Product, ProductVariant, ProductImage, Color, Stock, Order, OrderItem, ConfirmedOrder, ShippingAddress, RefundPolicy, ClientEnquiry, CustomerReview, FAQ
+from .models import Product, ProductVariant, ProductImage, Color, Stock, Order, OrderItem, ConfirmedOrder, ShippingAddress, RefundPolicy, ClientEnquiry, CustomerReview, FAQ, HomePage, TermsConditions
 from accounts.models import Address
 from django.http import JsonResponse, HttpResponse
 from django.contrib.sites.models import Site
@@ -49,15 +49,21 @@ def home(request):
     
     products = ProductVariant.objects.filter(product__category__slug='sunglasses', display=True)
     try:
-        mobile_banner_image = ProductVariant.objects.get(product__code='UNS-011', color__name='Red')
-    except ProductVariant.DoesNotExist:
+        mobile_banner_image = HomePage.objects.filter(is_active=True).first().mobile_banner.url
+    except:
         mobile_banner_image = ''
     try:
-        desktop_banner_image = ProductVariant.objects.get(product__code='UNS-011',color__name='Red')
-    except ProductVariant.DoesNotExist:
+        desktop_banner_image = HomePage.objects.filter(is_active=True).first().desktop_banner.url
+    except:
         desktop_banner_image = ''
-
-
+    try:
+        secondary_desktop_banner = HomePage.objects.filter(is_active=True).first().secondary_desktop_banner.url
+    except:
+        secondary_desktop_banner = ''
+    try:
+        secondary_mobile_banner = HomePage.objects.filter(is_active=True).first().secondary_mobile_banner.url
+    except:
+        secondary_mobile_banner = ''
     try:
         sunglasses_category = Category.objects.get(slug='sunglasses')
     except Category.DoesNotExist:
@@ -79,6 +85,8 @@ def home(request):
         'sunglasses': sunglasses,
         'mobile_banner_image': mobile_banner_image,
         'desktop_banner_image': desktop_banner_image,
+        'secondary_desktop_banner': secondary_desktop_banner,
+        'secondary_mobile_banner': secondary_mobile_banner,
         'reviews': customer_reviews,
         # SEO
         'title_tag': title_tag,
@@ -332,67 +340,54 @@ def checkout(request):
     return render(request, 'core/checkout.html', context)
 
 
-def refund_policy(request):
+def shipping_and_returns(request):
     context = {}
     try:
         refund_policy = RefundPolicy.objects.get(is_active=True)
-        title_tag = refund_policy.title_tag
-        meta_description = refund_policy.meta_description
-        keywords = refund_policy.keywords
-        description = refund_policy.description
+        refund_description = refund_policy.description
     except:
-        title_tag = ''
-        meta_description = ''
-        keywords = ''
-        description = ''
+        refund_description = ''
 
-    context = {
-        'title_tag': title_tag,
-        'meta_description': meta_description, 
-        'meta_keywords': keywords,
-        'description': description
-    }
-
-    return render(request, 'core/refund_policy.html', context)
-
-def shipping_policy(request):
     try:
         shipping_policy = ShippingPolicy.objects.get(is_active=True)
-        title_tag = shipping_policy.title_tag
-        meta_description = shipping_policy.meta_description
-        keywords = shipping_policy.keywords
-        description = shipping_policy.description
+        shipping_description = shipping_policy.description
     except:
+        refund_description = ''
+    
+    # SEO
+    title_tag = 'Shipping & Returns'
+    meta_description = 'Discover our hassle-free shipping and easy returns policy at Unrols. Get your favorite products delivered swiftly and shop worry-free with our flexible return options. Explore now!'
+    context = {
+        'title_tag': title_tag,
+        'meta_description': meta_description, 
+        'refund_description': refund_description,
+        'shipping_description': shipping_description
+    }
+
+    return render(request, 'core/shipping_returns.html', context)
+
+def terms_and_conditions(request):
+    try:
+        terms = TermsConditions.objects.filter(is_active=True).first()
+    except TermsConditions.DoesNotExist:
+        terms = None
+
+    try:
+        description = terms.description
+        title_tag = terms.title_tag
+        meta_description = terms.meta_description
+    except:
+        description = ''
         title_tag = ''
         meta_description = ''
-        keywords = ''
-        description = ''
-
+    
     context = {
-        'title_tag': title_tag,
-        'meta_description': meta_description, 
-        'meta_keywords': keywords,
-        'description': description
+        'description': description,
+        'title_tag' : title_tag,
+        'meta_description': meta_description
     }
-    return render(request, 'core/shipping_policy.html', context)
-
-def store_policy(request):
-    page = 'Policy'
-    context = {}
-
-    # SEO 
-    title_tag = 'Refund Policy'
-    meta_description = 'This is our policy page.'
-    keywords = 'unrols policy'
-
-    context['page'] = page
-    context = {
-        'title_tag': title_tag,
-        'meta_description': meta_description, 
-        'meta_keywords': keywords
-    }
-
-    return render(request, 'core/store_policy.html', context)
+    
+    return render(request, 'core/terms_conditions.html', context)
 
 def contact(request):
     page = 'Contact'

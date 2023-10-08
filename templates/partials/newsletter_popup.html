@@ -1,0 +1,99 @@
+{% block css %}
+<style>
+    /* Popup Styles */
+    .popup {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+    }
+
+    .popup-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .popup h2 {
+        font-size: 1.5rem;
+    }
+
+    .popup-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 1.2rem;
+    }
+
+    /* Other styles for the form inputs and button */
+</style>
+{% endblock css %}
+
+<!-- Popup Email Newsletter Form -->
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="popup-close text-bg-danger px-2 fs-5" onclick="closePopup()">&times;</span>
+        <h2 class="text-center">Subscribe to our Newsletter</h2>
+        <p>Get special offers, free giveaways, and once-in-a-lifetime offers.</p>
+        <form id="newsletter-form" class="d-flex flex-column" method="post">
+            <input type="email" placeholder="Your Email" class="form-control mb-2" name='email' required>
+            <div class="mb-2">
+                <input type="checkbox" name="terms_and_conditions" id="" required>
+                <label for=""><p>I have read and agree to <a href="">terms & conditions</a>. </p></label>
+            </div>
+            <button type="submit" class="customBtnBlack py-2 mx-auto w-50">Subscribe</button>
+        </form>
+    </div>
+</div>
+
+{% block js %}
+<script>
+    // Function to display the popup
+    function displayPopup() {
+        var popup = document.getElementById("popup");
+        popup.style.display = "block";
+    }
+
+    // Function to close the popup
+    function closePopup() {
+        var popup = document.getElementById("popup");
+        popup.style.display = "none";
+    }
+
+    // Check if this is the first-time user (using cookies, localStorage, or other methods)
+    var isFirstTimeUser = !localStorage.getItem("visited");
+
+    // If it's a first-time user, show the popup after 10 seconds
+    if (isFirstTimeUser) {
+        setTimeout(displayPopup, 10000); // 10 seconds
+        localStorage.setItem("visited", "true"); // Set a flag to indicate that the user has visited
+    }
+
+</script>
+<script>
+    $(document).ready(function(){
+        $newsletterForm = $('#newsletter-form').submit(function(e){
+            e.preventDefault()
+            $formData = $(this).serialize()
+            $.ajax({
+                url: '/api/subscribe/',
+                type: 'POST',
+                data: $formData,
+                success: function(response){
+                    console.log(response['message'])
+                }
+
+            })
+        })
+    })
+</script>
+{% endblock js %}

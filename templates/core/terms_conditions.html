@@ -1,0 +1,11 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <div class="container my-5">
+        <h1 class="text-center">Terms & Condtions</h1>
+        <br><br>
+        {% autoescape off %}
+            {{ description }}
+        {% endautoescape %}
+    </div>
+{% endblock content %}
