@@ -2,42 +2,53 @@
 {% load custom_tags %}
 
 {% block css %}
-    <style>
-        #navbarContainer, #nav-lg{
-            background-color: transparent;
-            position: sticky;
-            top: -1;
-            z-index: 5;
-            transition: background-color 0.3s ease-in; /* Apply ease-in effect to background color change */
-        }
-        #navbarContainer:hover, #nav-lg:hover{
-            background-color: #ffffff;
-        }
-        #nav-lg.scrolled{
-            background-color: #ffffff;
-        }
-        #navbarContainer.scrolled{
-            background-color: #ffffff;
-        }
-        #nav-lg ul li {
-            letter-spacing: 2px;
-        }
-    </style>
+<style>
+    #navbarContainer,
+    #nav-lg {
+        background-color: transparent;
+        position: sticky;
+        top: -1;
+        z-index: 5;
+        transition: background-color 0.3s ease-in;
+        /* Apply ease-in effect to background color change */
+    }
+
+    #navbarContainer:hover,
+    #nav-lg:hover {
+        background-color: #ffffff;
+    }
+
+    #nav-lg.scrolled {
+        background-color: #ffffff;
+    }
+
+    #navbarContainer.scrolled {
+        background-color: #ffffff;
+    }
+
+    #nav-lg ul li {
+        letter-spacing: 2px;
+    }
+</style>
 {% endblock css %}
 
 <!-- Sidebar -->
 <div class="container sidebar text-light pt-2 d-none" id="sidebarContainer">
     <ul class="d-flex flex-row justify-content-between align-items-center ps-0 mb-0">
-        <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img
-                    src="{% static 'logos/logo.png' %}" alt="Unrols"></a></li>
+        <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/logo.png' %}"
+                    alt="Unrols"></a></li>
         <li class="fs-4" onclick="toggleSidebar()"><i class="bi bi-x"></i></li>
     </ul>
 
     <ul class="d-flex flex-column ps-0" id="sidebarUl">
-        <li class="me-4 text-uppercase mb-4 border-bottom pb-4"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-        <li class="me-4 text-uppercase mb-4 border-bottom pb-4"><a href="{% url 'products' slug='sunglasses' %}" class="nav-link">Collection</a></li>
-        <li class="me-4 text-uppercase mb-4 border-bottom pb-4"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
-        <li class="me-4 text-uppercase mb-4 border-bottom pb-4"><a href="{% url 'about' %}" class="nav-link">About Us</a></li>
+        <li class="me-4 text-uppercase mb-4 border-bottom pb-4"><a href="{% url 'home' %}" class="nav-link">Home</a>
+        </li>
+        <li class="me-4 text-uppercase mb-4 border-bottom pb-4"><a href="{% url 'products' slug='sunglasses' %}"
+                class="nav-link">Collection</a></li>
+        <li class="me-4 text-uppercase mb-4 border-bottom pb-4"><a href="{% url 'contact' %}"
+                class="nav-link">Contact</a></li>
+        <li class="me-4 text-uppercase mb-4 border-bottom pb-4"><a href="{% url 'about' %}" class="nav-link">About
+                Us</a></li>
     </ul>
 
     <div class="cart-search-container">
@@ -73,22 +84,23 @@
 
         <ul class="d-flex flex-row mb-0 ps-0 text-dark" id="nav-links" style="font-size: small;">
             <li class="me-4 text-uppercase"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
-            <li class="me-4 text-uppercase"><a href="{% url 'products' slug='sunglasses' %}" class="nav-link">Collection</a></li>
+            <li class="me-4 text-uppercase"><a href="{% url 'products' slug='sunglasses' %}"
+                    class="nav-link">Collection</a></li>
             <li class="me-4 text-uppercase"><a href="{% url 'contact' %}" class="nav-link">Contact</a></li>
             <li class="me-4 text-uppercase"><a href="{% url 'about' %}" class="nav-link">About Us</a></li>
         </ul>
 
         <div class="brand-logo fs-2 fw-semibold">
-            <a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/unrols-logo.png' %}" alt="Unrols Logo"
-                    title="logo" class="w-100"></a>
+            <a href="{% url 'home' %}" class="nav-link"><img src="{% static 'logos/unrols-logo.png' %}"
+                    alt="Unrols Logo" title="logo" class="w-100"></a>
         </div>
 
         <div></div>
-
+        <div></div>
         <div class="cart-search-container">
             <ul class="d-flex flex-row d-flex flex-row align-items-center mb-0">
-                {% comment %} <li class="fs-4 searchBar"><a href="" class="nav-link"><i
-                            class="bi bi-search"></i></a></li> {% endcomment %}
+                {% comment %} <li class="fs-4 searchBar"><a href="" class="nav-link"><i class="bi bi-search"></i></a>
+                </li> {% endcomment %}
                 <li class="ms-4 fs-2">
                     <a class="cart" id="cart-item-count" href="{% url 'cart' %}">
                         <span class="count">
@@ -124,13 +136,13 @@
         <li class="fs-3 brand-logo"><a href="{% url 'home' %}" class="nav-link"><img
                     src="{% static 'logos/unrols-logo.png' %}" alt="Unrols"></a></li>
         <div class="d-flex flex-row align-items-center justify-content-end flex-shrink-1">
-            {% comment %} <li class="fs-4 searchBar"><i class="bi bi-search"></i></li>  {% endcomment %}
+            {% comment %} <li class="fs-4 searchBar"><i class="bi bi-search"></i></li> {% endcomment %}
             <li class="ms-2 fs-4">
                 <a class="cart" id="cart-item-count" href="{% url 'cart' %}">
                     <span class="count">
                         {{ request | items_count_guest }}
                     </span>
-                    {% comment %}   <span class="count">1</span>  {% endcomment %}
+                    {% comment %} <span class="count">1</span> {% endcomment %}
                     <i class="material-icons bi bi-handbag text-dark"></i>
                 </a>
             </li>
@@ -143,15 +155,28 @@
     let navbar = document.querySelector('#nav-lg')
     let secondNavbar = document.querySelector('#navbarContainer')
 
+    let sidebarContainer = document.getElementById('sidebarContainer')
+    let navbarContainer = document.getElementById('navbarContainer')
+
+    function toggleSidebar() {
+        if (navbarContainer.classList.contains("d-none")) {
+            navbarContainer.classList.remove("d-none")
+            sidebarContainer.classList.add("d-none")
+        } else {
+            navbarContainer.classList.add("d-none")
+            sidebarContainer.classList.remove("d-none")
+        }
+    }
+
     // Add a scroll event listener to the window
     window.addEventListener("scroll", () => {
         changeNavDisplay()
     })
 
 
-    function changeNavDisplay(){
+    function changeNavDisplay() {
         // Check if the user has scrolled beyond a certain point (e.g., 100px from the top)
-        if(window.scrollY > 100){
+        if (window.scrollY > 100) {
             // If scrolled, add the "scrolled" class to change the background color
             navbar.classList.add('scrolled')
             secondNavbar.classList.add('scrolled')

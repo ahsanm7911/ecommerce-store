@@ -41,23 +41,17 @@
 {% endcomment %}
 
 <!-- TOP BANNER CONTAINER -->
-<div class="container-fluid px-0 bg-dark" id="top-banner">
+<div class="container-fluid px-0 bg-secondary" id="top-banner">
     <div class="top-banner-image position-relative text-light">
         <img src="{{ mobile_banner_image }}" alt="{{ mobile_banner_image.alt_tag }}"
-            class="w-100 h-100 d-md-none opacity-75" style="height: 350px; object-fit: cover;">
+            class="w-100 h-100 d-md-none" style="height: 350px; object-fit: cover;">
         <img src="{{ desktop_banner_image }}" class="w-100 d-none d-md-block opacity-75"
             alt="{{ desktop_banner_image.alt_tag }}" style="height: 600px; object-fit: cover;">
         <div
-            class="container position-absolute top-banner-info translate-middle-x d-flex flex-column align-items-center d-none">
-            <h1 class="text-center mb-3 fw-bold text-dark lh-base fs-3 w-50 text-uppercase">Introducing the Ultimate Style Destination for Fashion
-                Accessories!</h1>
-            <p class="w-75 text-center d-none d-md-block fw-semibold">Welcome to Unrols, your one-stop shop
-                for exquisite fashion accessories that will elevate your style to new heights. We believe that every
-                outfit deserves the perfect finishing touch, and our curated collection of accessories promises to
-                dazzle and delight.
-            </p>
+            class="container position-absolute top-banner-info translate-middle-x d-flex flex-column align-items-center d-md-none" style="margin-top: 100px;">
+            <h1 class="text-center mb-3 fw-bold text-light lh-base fs-3 w-75 text-uppercase opacity-75">Shade your Style with our Exclusive Sunglasses Collection.</h1>
             <a href="{% url 'products' slug='sunglasses' %}"
-                class="customBtnBlack text-center px-4 py-2 text-decoration-none text-uppercase">Our Collection</a>
+                class="customBtn text-center px-4 py-2 text-decoration-none text-uppercase">Shop Now</a>
         </div>
     </div>
 </div>
