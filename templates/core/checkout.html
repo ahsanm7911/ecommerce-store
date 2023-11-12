@@ -147,7 +147,7 @@
                         </div>
                     </div>
                     <div class="row mb-2">
-                        <input type="submit" value="Proceed to payment" class="customBtnBlack py-2 border-0 w-100">
+                        <input type="submit" id="proceed_to_payment"value="Proceed to payment" class="customBtnBlack py-2 border-0 w-100">
                     </div>
                 </form>
             </div>
@@ -171,4 +171,10 @@
 {% endblock content %}
 {% block js %}
     <script src="{% static 'js/checkout.js' %}"></script>
+    <script type="text/javascript">
+        $('#proceed_to_payment').click(function(){
+            const bill = "{{ order_total|escapejs }}"
+            fbq('track', 'Purchase', {currency: "PKR", value: bill })
+        })
+    </script>
 {% endblock js %}
