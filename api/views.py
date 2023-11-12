@@ -17,7 +17,7 @@ def ig_feed(request):
 def display_orders(request):
     try:
         try:
-            orders = ConfirmedOrder.objects.all()
+            orders = ConfirmedOrder.objects.all().order_by('-created_at')[:5]
         except ConfirmedOrder.DoesNotExist as e:
             print(e)
         all_orders = []
