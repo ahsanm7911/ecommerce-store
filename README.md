@@ -1,1 +1,1 @@
-Fully Functional Shopify Inspired Ecommerce Store.
+Fully Functional E-Commerce Store with Shopify Inspired Frontend Design.
